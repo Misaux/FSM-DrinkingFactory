@@ -30,6 +30,13 @@ public class DrinkFactoryMachine extends JFrame {
 	 */
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
+	
+	public enum Drink{
+		expresso,
+		tea,
+		coffee
+	}
+	
 	/**
 	 * @wbp.nonvisual location=311,475
 	 */

@@ -39,20 +39,27 @@ public class Order {
 	
 	public void addMoney(double moneyAdded) {
 		this.moneyInserted += moneyAdded;
-		this.moneyDifference = this.moneyInserted - drink.getPrice();
+		if(this.drink != null) {
+			this.moneyDifference = this.moneyInserted - drink.getPrice();
+		}
 	}
 	
 	public boolean isEnoughMoney() {
-		this.moneyDifference = this.moneyInserted - drink.getPrice();
-		if(this.moneyDifference>0.00000001) {
-			this.paybackMoney = this.moneyDifference;
-			return true;
-		}
-		else if(this.moneyDifference<0.00000001) {
+		if(drink == null) {
 			return false;
 		}
 		else {
-			return true;
+			this.moneyDifference = this.moneyInserted - drink.getPrice();
+			if(this.moneyDifference>0.00000001) {
+				this.paybackMoney = this.moneyDifference;
+				return true;
+			}
+			else if(this.moneyDifference<0.00000001) {
+				return false;
+			}
+			else {
+				return true;
+			}
 		}
 	}
 	

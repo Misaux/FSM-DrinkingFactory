@@ -1,0 +1,11 @@
+GeneratorModel for yakindu::java {
+
+	statechart drinkingfactory {
+
+		feature Outlet {
+			targetProject = "Drinkingfactory"
+			targetFolder = "src-gen"
+			libraryTargetFolder = "src"
+		}
+	}
+}

@@ -1,5 +1,10 @@
 package fr.univcotedazur.polytech.si4.fsm.project.main;
 
+import drinkingfactory.TimerService;
+import drinkingfactory.drinkingfactory.DrinkingfactoryStatemachine;
+import drinkingfactory.drinkingfactory.IDrinkingfactoryStatemachine;
+import drinks.Drink;
+
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -23,13 +28,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
-public class DrinkFactoryMachine extends JFrame {
+public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryStatemachine.SCInterfaceListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
+	private DrinkingfactoryStatemachine theFSM;
 	
 	
 	/**
@@ -57,6 +63,14 @@ public class DrinkFactoryMachine extends JFrame {
 	 * Create the frame.
 	 */
 	public DrinkFactoryMachine() {
+		theFSM = new DrinkingfactoryStatemachine();
+		TimerService timer = new TimerService();
+		theFSM.setTimer(timer);
+		theFSM.init();
+		theFSM.enter();
+
+		theFSM.getSCInterface().getListeners().add(this);
+
 		setForeground(Color.WHITE);
 		setFont(new Font("Cantarell", Font.BOLD, 22));
 		setBackground(Color.DARK_GRAY);
@@ -270,6 +284,76 @@ public class DrinkFactoryMachine extends JFrame {
 				labelForPictures.setIcon(new ImageIcon(myPicture));
 			}
 		});
+
+	}
+
+	@Override
+	public void onDoResetMoneyRaised() {
+
+	}
+
+	@Override
+	public void onDoResetDrinkSettingRaised() {
+
+	}
+
+	@Override
+	public void onDoResetMachineRaised() {
+
+	}
+
+	@Override
+	public void onDoCleaningRaised() {
+
+	}
+
+	@Override
+	public void onGrindBeansRaised() {
+
+	}
+
+	@Override
+	public void onTakeTeaBagRaised() {
+
+	}
+
+	@Override
+	public void onTakeOffTeaBagRaised() {
+
+	}
+
+	@Override
+	public void onTakeCoffeePodRaised() {
+
+	}
+
+	@Override
+	public void onHeatWaterRaised() {
+
+	}
+
+	@Override
+	public void onPutCupRaised() {
+
+	}
+
+	@Override
+	public void onAddSugarRaised() {
+
+	}
+
+	@Override
+	public void onPourWaterRaised() {
+
+	}
+
+	@Override
+	public void onGetDrinkRaised() {
+
+	}
+
+	@Override
+	public void onPutBeansRaised() {
 
 	}
 }

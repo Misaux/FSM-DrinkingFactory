@@ -7,16 +7,12 @@ public enum Drink {
 	Soup("Soup",0.5);
 	
 	private String name;
-	private int sugarLevel;
 	private double price;
 	private DrinkSize size;
 	private DrinkTemperature temperature;
 	
 	Drink(String name, double price){
 		this.name = name;
-		if(name.equals("Soup")) {
-			this.sugarLevel = 0;
-		}
 		this.price = price;
 	}
 
@@ -26,14 +22,6 @@ public enum Drink {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getSugarLevel() {
-		return sugarLevel;
-	}
-
-	public void setSugarLevel(int sugarLevel) {
-		this.sugarLevel = sugarLevel;
 	}
 
 	public double getPrice() {

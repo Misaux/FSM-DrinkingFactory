@@ -8,6 +8,8 @@ import drinks.Drink;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -27,6 +29,8 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryStatemachine.SCInterfaceListener {
 
@@ -35,7 +39,14 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 	 */
 	private static final long serialVersionUID = 2030629304432075314L;
 	private JPanel contentPane;
+	private JLabel messagesToUser;
 	private DrinkingfactoryStatemachine theFSM;
+
+	private Drink currentDrinkSelected = Drink.Coffee;
+	private int currentSugarLevel;
+	private int currentSizeLevel;
+	private int currentTemperatureLevel;
+	private float currentMoneyInserted = 0;
 	
 	
 	/**
@@ -83,7 +94,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel messagesToUser = new JLabel("<html>This is<br>place to communicate <br> with the user");
+		messagesToUser = new JLabel("<html>This is<br>place to communicate <br> with the user");
 		messagesToUser.setForeground(Color.WHITE);
 		messagesToUser.setHorizontalAlignment(SwingConstants.LEFT);
 		messagesToUser.setVerticalAlignment(SwingConstants.TOP);
@@ -102,29 +113,33 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 		coffeeButton.setForeground(Color.WHITE);
 		coffeeButton.setBackground(Color.DARK_GRAY);
 		coffeeButton.setBounds(12, 34, 96, 25);
+		coffeeButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Coffee));
 		contentPane.add(coffeeButton);
 
-		JButton expressoButton = new JButton("Expresso");
-		expressoButton.setForeground(Color.WHITE);
-		expressoButton.setBackground(Color.DARK_GRAY);
-		expressoButton.setBounds(12, 71, 96, 25);
-		contentPane.add(expressoButton);
+		JButton espressoButton = new JButton("Espresso");
+		espressoButton.setForeground(Color.WHITE);
+		espressoButton.setBackground(Color.DARK_GRAY);
+		espressoButton.setBounds(12, 71, 96, 25);
+		espressoButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Espresso));
+		contentPane.add(espressoButton);
 
 		JButton teaButton = new JButton("Tea");
 		teaButton.setForeground(Color.WHITE);
 		teaButton.setBackground(Color.DARK_GRAY);
 		teaButton.setBounds(12, 108, 96, 25);
+		teaButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Tea));
 		contentPane.add(teaButton);
 
 		JButton soupButton = new JButton("Soup");
 		soupButton.setForeground(Color.WHITE);
 		soupButton.setBackground(Color.DARK_GRAY);
 		soupButton.setBounds(12, 145, 96, 25);
+		soupButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Soup));
 		contentPane.add(soupButton);
 
 		JProgressBar progressBar = new JProgressBar();
 		progressBar.setStringPainted(true);
-		progressBar.setValue(10);
+		progressBar.setValue(0);
 		progressBar.setForeground(Color.LIGHT_GRAY);
 		progressBar.setBackground(Color.DARK_GRAY);
 		progressBar.setBounds(12, 254, 622, 26);
@@ -140,6 +155,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 		sugarSlider.setMajorTickSpacing(1);
 		sugarSlider.setMaximum(4);
 		sugarSlider.setBounds(301, 51, 200, 36);
+		sugarSlider.addChangeListener(e -> setSugarLevel(sugarSlider.getValue()));
 		contentPane.add(sugarSlider);
 
 		JSlider sizeSlider = new JSlider();
@@ -152,6 +168,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 		sizeSlider.setMaximum(2);
 		sizeSlider.setMajorTickSpacing(1);
 		sizeSlider.setBounds(301, 125, 200, 36);
+		sizeSlider.addChangeListener(e -> setCurrentSizeLevel(sizeSlider.getValue()));
 		contentPane.add(sizeSlider);
 
 		JSlider temperatureSlider = new JSlider();
@@ -165,7 +182,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 		temperatureSlider.setMaximum(3);
 		temperatureSlider.setBounds(301, 188, 200, 54);
 
-		Hashtable<Integer, JLabel> temperatureTable = new Hashtable<Integer, JLabel>();
+		Hashtable<Integer, JLabel> temperatureTable = new Hashtable<>();
 		temperatureTable.put(0, new JLabel("20°C"));
 		temperatureTable.put(1, new JLabel("35°C"));
 		temperatureTable.put(2, new JLabel("60°C"));
@@ -174,6 +191,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 			l.setForeground(Color.WHITE);
 		}
 		temperatureSlider.setLabelTable(temperatureTable);
+
+		temperatureSlider.addChangeListener(e -> setCurrentTemperatureLevel(temperatureSlider.getValue()));
 
 		contentPane.add(temperatureSlider);
 
@@ -213,16 +232,19 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 		JButton money50centsButton = new JButton("0.50 €");
 		money50centsButton.setForeground(Color.WHITE);
 		money50centsButton.setBackground(Color.DARK_GRAY);
+		money50centsButton.addActionListener(e -> setCurrentMoneyInserted(getCurrentMoneyInserted() + 0.50f));
 		panel.add(money50centsButton);
 
 		JButton money25centsButton = new JButton("0.25 €");
 		money25centsButton.setForeground(Color.WHITE);
 		money25centsButton.setBackground(Color.DARK_GRAY);
+		money25centsButton.addActionListener(e -> setCurrentMoneyInserted(getCurrentMoneyInserted() + 0.25f));
 		panel.add(money25centsButton);
 
 		JButton money10centsButton = new JButton("0.10 €");
 		money10centsButton.setForeground(Color.WHITE);
 		money10centsButton.setBackground(Color.DARK_GRAY);
+		money10centsButton.addActionListener(e -> setCurrentMoneyInserted(getCurrentMoneyInserted() + 0.10f));
 		panel.add(money10centsButton);
 
 		JPanel panel_1 = new JPanel();
@@ -284,7 +306,39 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 				labelForPictures.setIcon(new ImageIcon(myPicture));
 			}
 		});
+		updateMessageToUser();
+	}
 
+	public void setCurrentDrinkSelected(Drink currentDrinkSelected) {
+		this.currentDrinkSelected = currentDrinkSelected;
+		updateMessageToUser();
+	}
+
+	public void setSugarLevel(int sugarLevel) {
+		this.currentSugarLevel = sugarLevel;
+	}
+
+	public void setCurrentSizeLevel(int currentSizeLevel) {
+		this.currentSizeLevel = currentSizeLevel;
+	}
+
+	public void setCurrentTemperatureLevel(int currentTemperatureLevel) {
+		this.currentTemperatureLevel = currentTemperatureLevel;
+	}
+
+	public void setCurrentMoneyInserted(float currentMoneyInserted) {
+		this.currentMoneyInserted = Math.round(currentMoneyInserted*100)/100f;
+		updateMessageToUser();
+	}
+
+	public float getCurrentMoneyInserted() {
+		return currentMoneyInserted;
+	}
+
+	private void updateMessageToUser() {
+		messagesToUser.setText("<html>Current amount: " + currentMoneyInserted + "€<br>" +
+				"Current Drink: " + currentDrinkSelected.getName() + "<br>" +
+				"waiting...</html>");
 	}
 
 	@Override

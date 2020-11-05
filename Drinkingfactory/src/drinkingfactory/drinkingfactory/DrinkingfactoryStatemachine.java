@@ -430,6 +430,24 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private boolean checkPayment;
+		
+		
+		public boolean isRaisedCheckPayment() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return checkPayment;
+			}
+		}
+		
+		protected void raiseCheckPayment() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				checkPayment = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onCheckPaymentRaised();
+				}
+			}
+		}
+		
 		private long drinkNum;
 		
 		public synchronized long getDrinkNum() {
@@ -471,6 +489,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		pourWater = false;
 		getDrink = false;
 		putBeans = false;
+		checkPayment = false;
 		}
 		
 	}
@@ -505,7 +524,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		drink_management_Preparation_r1_step3_r1_entry,
 		drink_management_Preparation_r1_step3_r2_General,
 		drink_management_Preparation_r1_step3_r2__final_,
-		payment_management_NoMoney,
 		payment_management_Payment,
 		activity_management_configuration,
 		$NullState$
@@ -644,9 +662,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			case drink_management_Preparation_r1_step3_r2__final_:
 				drink_management_Preparation_r1_step3_r2__final__react(true);
 				break;
-			case payment_management_NoMoney:
-				payment_management_NoMoney_react(true);
-				break;
 			case payment_management_Payment:
 				payment_management_Payment_react(true);
 				break;
@@ -776,8 +791,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			return stateVector[1] == State.drink_management_Preparation_r1_step3_r2_General;
 		case drink_management_Preparation_r1_step3_r2__final_:
 			return stateVector[1] == State.drink_management_Preparation_r1_step3_r2__final_;
-		case payment_management_NoMoney:
-			return stateVector[2] == State.payment_management_NoMoney;
 		case payment_management_Payment:
 			return stateVector[2] == State.payment_management_Payment;
 		case activity_management_configuration:
@@ -934,6 +947,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return sCInterface.isRaisedPutBeans();
 	}
 	
+	public synchronized boolean isRaisedCheckPayment() {
+		return sCInterface.isRaisedCheckPayment();
+	}
+	
 	public synchronized long getDrinkNum() {
 		return sCInterface.getDrinkNum();
 	}
@@ -979,6 +996,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raisePourWater();
 		
 		sCInterface.raiseAddSugar();
+	}
+	
+	/* Entry action for state 'Payment'. */
+	private void entryAction_payment_management_Payment() {
+		sCInterface.raiseCheckPayment();
+		
+		raiseUserActionInternal();
 	}
 	
 	/* Entry action for state 'configuration'. */
@@ -1156,14 +1180,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		stateVector[1] = State.drink_management_Preparation_r1_step3_r2__final_;
 	}
 	
-	/* 'default' enter sequence for state NoMoney */
-	private void enterSequence_payment_management_NoMoney_default() {
-		nextStateIndex = 2;
-		stateVector[2] = State.payment_management_NoMoney;
-	}
-	
 	/* 'default' enter sequence for state Payment */
 	private void enterSequence_payment_management_Payment_default() {
+		entryAction_payment_management_Payment();
 		nextStateIndex = 2;
 		stateVector[2] = State.payment_management_Payment;
 	}
@@ -1366,12 +1385,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	private void exitSequence_drink_management_Preparation_r1_step3_r2__final_() {
 		nextStateIndex = 1;
 		stateVector[1] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state NoMoney */
-	private void exitSequence_payment_management_NoMoney() {
-		nextStateIndex = 2;
-		stateVector[2] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state Payment */
@@ -1596,9 +1609,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	/* Default exit sequence for region payment management */
 	private void exitSequence_payment_management() {
 		switch (stateVector[2]) {
-		case payment_management_NoMoney:
-			exitSequence_payment_management_NoMoney();
-			break;
 		case payment_management_Payment:
 			exitSequence_payment_management_Payment();
 			break;
@@ -1660,7 +1670,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default react sequence for initial entry  */
 	private void react_payment_management__entry_Default() {
-		enterSequence_payment_management_NoMoney_default();
+		enterSequence_payment_management_Payment_default();
 	}
 	
 	/* Default react sequence for initial entry  */
@@ -2023,34 +2033,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return did_transition;
 	}
 	
-	private boolean payment_management_NoMoney_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (sCInterface.addMoney) {
-				exitSequence_payment_management_NoMoney();
-				enterSequence_payment_management_Payment_default();
-			} else {
-				did_transition = false;
-			}
-		}
-		return did_transition;
-	}
-	
 	private boolean payment_management_Payment_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.paymentValidate) {
+			if (sCInterface.addMoney) {
 				exitSequence_payment_management_Payment();
-				enterSequence_payment_management_NoMoney_default();
+				enterSequence_payment_management_Payment_default();
 			} else {
-				if (sCInterface.resetMachine) {
-					exitSequence_payment_management_Payment();
-					enterSequence_payment_management_NoMoney_default();
-				} else {
-					did_transition = false;
-				}
+				did_transition = false;
 			}
 		}
 		return did_transition;
@@ -2072,7 +2063,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 					enterSequence_activity_management_configuration_default();
 					react();
 				} else {
-					did_transition = false;
+					if (userActionInternal) {
+						exitSequence_activity_management_configuration();
+						enterSequence_activity_management_configuration_default();
+						react();
+					} else {
+						did_transition = false;
+					}
 				}
 			}
 		}

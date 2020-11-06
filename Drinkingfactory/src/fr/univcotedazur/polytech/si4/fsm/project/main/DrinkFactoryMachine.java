@@ -306,6 +306,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         nfcBiiiipButton.setBackground(Color.DARK_GRAY);
         nfcBiiiipButton.addActionListener(e -> {
             cardBiped = true;
+            theFSM.raiseAddMoney();
         });
         panel_1.add(nfcBiiiipButton);
 
@@ -379,7 +380,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void setCurrentDrinkSelected(Drink currentDrinkSelected) {
         this.currentDrinkSelected = currentDrinkSelected;
         updateMessageToUser();
-        checkPayment();
     }
 
     public void setSugarLevel(int sugarLevel) {
@@ -463,7 +463,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onDoResetMoneyRaised() {
-        cardBiped = false;
         if (currentMoneyInserted != 0) {
             moneyGivingBack = Math.round(currentMoneyInserted * 100) / 100f;
         }
@@ -473,6 +472,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onDoResetMachineRaised() {
         onDoResetMoneyRaised();
+        cardBiped = false;
         currentDrinkSelected = null;
         preparationInProgress(false);
         progressBar.setValue(0);
@@ -540,6 +540,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onCheckPaymentRaised() {
-
+        checkPayment();
     }
 }

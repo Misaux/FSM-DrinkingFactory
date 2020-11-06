@@ -73,6 +73,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     JButton cancelButton;
     JButton takeCupButton;
 
+    //Labels
+    JLabel lblSugar;
+    JLabel lblTemperature;
+
 
     /**
      * @wbp.nonvisual location=311,475
@@ -139,6 +143,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         coffeeButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Coffee);
             theFSM.raiseDrinkSelected();
+            lblSugar.setText("Sugar");
+            lblTemperature.setText("Temperature");
         });
         contentPane.add(coffeeButton);
 
@@ -149,6 +155,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         espressoButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Espresso);
             theFSM.raiseDrinkSelected();
+            lblSugar.setText("Sugar");
+            lblTemperature.setText("Temperature");
         });
         contentPane.add(espressoButton);
 
@@ -159,6 +167,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         teaButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Tea);
             theFSM.raiseDrinkSelected();
+            lblSugar.setText("Sugar");
+            lblTemperature.setText("Temperature");
         });
         contentPane.add(teaButton);
 
@@ -169,6 +179,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         soupButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Soup);
             theFSM.raiseDrinkSelected();
+            lblSugar.setText("Spices");
+            lblTemperature.setText("Temperature");
         });
         contentPane.add(soupButton);
 
@@ -244,9 +256,15 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         icedTeaButton.setForeground(Color.WHITE);
         icedTeaButton.setBackground(Color.DARK_GRAY);
         icedTeaButton.setBounds(12, 182, 96, 25);
+        icedTeaButton.addActionListener(e -> {
+            setCurrentDrinkSelected(Drink.IcedTea);
+            theFSM.raiseDrinkSelected();
+            lblSugar.setText("Sugar");
+            lblTemperature.setText("Freshness");
+        });
         contentPane.add(icedTeaButton);
 
-        JLabel lblSugar = new JLabel("Sugar");
+        lblSugar = new JLabel("Sugar");
         lblSugar.setForeground(Color.WHITE);
         lblSugar.setBackground(Color.DARK_GRAY);
         lblSugar.setHorizontalAlignment(SwingConstants.CENTER);
@@ -260,7 +278,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         lblSize.setBounds(380, 113, 44, 15);
         contentPane.add(lblSize);
 
-        JLabel lblTemperature = new JLabel("Temperature");
+        lblTemperature = new JLabel("Temperature");
         lblTemperature.setForeground(Color.WHITE);
         lblTemperature.setBackground(Color.DARK_GRAY);
         lblTemperature.setHorizontalAlignment(SwingConstants.CENTER);

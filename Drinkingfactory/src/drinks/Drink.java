@@ -4,7 +4,8 @@ public enum Drink {
 	Tea("Tea",0.40f),
 	Espresso("Espresso",0.50f),
 	Coffee("Coffee",0.35f),
-	Soup("Soup",0.5f);
+	Soup("Soup",0.75f),
+	IcedTea("Iced Tea",0.50f);
 	
 	private String name;
 	private float price;

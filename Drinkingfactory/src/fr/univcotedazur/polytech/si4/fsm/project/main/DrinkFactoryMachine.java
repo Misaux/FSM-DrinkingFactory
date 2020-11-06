@@ -430,16 +430,17 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         if (currentDrinkSelected != null) {
             if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
                 setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
-                preparationInProgress(false);
+                preparationInProgress(true);
                 theFSM.raisePaymentValidate();
             } else if (cardBiped) {
-                preparationInProgress(false);
+                preparationInProgress(true);
                 theFSM.raisePaymentValidate();
             }
         }
     }
 
     private void preparationInProgress(boolean state) {
+        state = !state;
         money10centsButton.setEnabled(state);
         money25centsButton.setEnabled(state);
         money50centsButton.setEnabled(state);
@@ -470,7 +471,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void onDoResetMachineRaised() {
         onDoResetMoneyRaised();
         currentDrinkSelected = null;
-        preparationInProgress(true);
+        preparationInProgress(false);
         progressBar.setValue(0);
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);

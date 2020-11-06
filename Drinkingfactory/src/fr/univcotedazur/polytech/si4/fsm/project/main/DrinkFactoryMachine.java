@@ -4,14 +4,14 @@ import drinkingfactory.TimerService;
 import drinkingfactory.drinkingfactory.DrinkingfactoryStatemachine;
 import drinkingfactory.drinkingfactory.IDrinkingfactoryStatemachine;
 import drinks.Drink;
+import drinks.DrinkSize;
 import orders.Order;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +39,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private static final long serialVersionUID = 2030629304432075314L;
     private JPanel contentPane;
     private JLabel messagesToUser;
+    private JLabel currentPicture;
     private DrinkingfactoryStatemachine theFSM;
     private boolean heaterState = false;
+    private boolean pouringState = false;
     private int count = 0;
     private boolean cardBiped = false;
     private boolean cupPlaced = false;
@@ -53,6 +55,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private float currentMoneyInserted = 0;
     private float moneyGivingBack = 0;
     private int currentHeatedWaterTemp = 20;
+    private int currentWaterVolume=0;
 
     private JButton money50centsButton;
     private JButton money25centsButton;
@@ -336,9 +339,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JLabel labelForPictures = new JLabel(new ImageIcon(myPicture));
-        labelForPictures.setBounds(175, 319, 286, 260);
-        contentPane.add(labelForPictures);
+        currentPicture = new JLabel(new ImageIcon(myPicture));
+        currentPicture.setBounds(175, 319, 286, 260);
+        contentPane.add(currentPicture);
 
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(Color.DARK_GRAY);
@@ -363,12 +366,15 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 } catch (IOException ee) {
                     ee.printStackTrace();
                 }
-                labelForPictures.setIcon(new ImageIcon(myPicture));
+                currentPicture.setIcon(new ImageIcon(myPicture));
             }
         });
         updateMessageToUser();
 
-        ActionListener doOnTimer = e -> simulateWaterTemp();
+        ActionListener doOnTimer = (e -> {
+            simulateWaterTemp();
+            simulateWaterPouring();
+        });
 
         //timers
         Timer waterHeatTimer = new Timer(200, doOnTimer);
@@ -425,6 +431,18 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         if (currentHeatedWaterTemp >= Integer.parseInt(temperatureTable.get(temperatureSlider.getValue()).getText().substring(0,2))){
             heaterState = false;
             theFSM.raiseHeatReached();
+        }
+        updateMessageToUser();
+    }
+
+    private void simulateWaterPouring(){
+        if(pouringState){
+            System.out.println(currentWaterVolume);
+            currentWaterVolume += 1;
+        }
+        if (currentWaterVolume >= this.getSize(sizeSlider.getValue())){
+            pouringState = false;
+            theFSM.raiseCupFilled();
         }
         updateMessageToUser();
     }
@@ -498,12 +516,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onTakeOffTeaBagRaised() {
-        
+        //TeaBagRaised
     }
 
     @Override
     public void onTakeCoffeePodRaised() {
-
+        //TeaCoffeeRaised
     }
 
     @Override
@@ -515,6 +533,13 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void onPutCupRaised() {
         if(!cupPlaced){
             cupPlaced = true;
+            BufferedImage myPicture = null;
+            try {
+                myPicture = ImageIO.read(new File("./picts/gobeletPolluant.jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            currentPicture.setIcon(new ImageIcon(myPicture));
         }
     }
 
@@ -525,7 +550,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onPourWaterRaised() {
-
+        if(cupPlaced){
+            pouringState = true;
+        }
     }
 
     @Override
@@ -542,4 +569,24 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void onCheckPaymentRaised() {
         checkPayment();
     }
+
+    public int getTemperature(int sliderValue){
+        return switch (sliderValue) {
+            case 0 -> 20;
+            case 1 -> 35;
+            case 2 -> 60;
+            case 3 -> 85;
+            default -> 0;
+        };
+    }
+
+    public int getSize(int sliderValue){
+        return switch (sliderValue) {
+            case 0 -> 10;
+            case 1 -> 25;
+            case 2 -> 50;
+            default -> 0;
+        };
+    }
+    
 }

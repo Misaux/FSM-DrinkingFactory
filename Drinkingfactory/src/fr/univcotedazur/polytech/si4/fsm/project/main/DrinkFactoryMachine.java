@@ -71,6 +71,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     JButton icedTeaButton;
     JButton nfcBiiiipButton;
     JButton cancelButton;
+    JButton takeCupButton;
 
 
     /**
@@ -343,6 +344,24 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         currentPicture.setBounds(175, 319, 286, 260);
         contentPane.add(currentPicture);
 
+        takeCupButton = new JButton("Take cup");
+        takeCupButton.setForeground(Color.WHITE);
+        takeCupButton.setBackground(Color.DARK_GRAY);
+        takeCupButton.setBounds(495, 336, 115, 25);
+        takeCupButton.addActionListener(e -> {
+            onDoResetMachineRaised();
+            updateMessageToUser();
+            BufferedImage emptyPicture = null;
+            try {
+                emptyPicture = ImageIO.read(new File("./picts/vide2.jpg"));
+            } catch (IOException ee) {
+                ee.printStackTrace();
+            }
+            currentPicture.setIcon(new ImageIcon(emptyPicture));
+        });
+        contentPane.add(takeCupButton);
+        takeCupButton.setVisible(false);
+
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(Color.DARK_GRAY);
         panel_2.setBounds(538, 217, 96, 33);
@@ -443,6 +462,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         if (currentWaterVolume >= this.getSize(sizeSlider.getValue())){
             pouringState = false;
             theFSM.raiseCupFilled();
+            takeCupButton.setVisible(true);
         }
         updateMessageToUser();
     }
@@ -490,6 +510,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onDoResetMachineRaised() {
         onDoResetMoneyRaised();
+        takeCupButton.setVisible(false);
         cardBiped = false;
         currentDrinkSelected = null;
         preparationInProgress(false);
@@ -497,6 +518,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);
         temperatureSlider.setValue(2);
+
     }
 
     @Override
@@ -571,22 +593,22 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     }
 
     public int getTemperature(int sliderValue){
-        return switch (sliderValue) {
-            case 0 -> 20;
-            case 1 -> 35;
-            case 2 -> 60;
-            case 3 -> 85;
-            default -> 0;
-        };
+        switch (sliderValue) {
+            case 0: return 20;
+            case 1: return 35;
+            case 2: return 60;
+            case 3: return 85;
+            default: return 0;
+        }
     }
 
     public int getSize(int sliderValue){
-        return switch (sliderValue) {
-            case 0 -> 10;
-            case 1 -> 25;
-            case 2 -> 50;
-            default -> 0;
-        };
+        switch(sliderValue){
+            case 0: return 10;
+            case 1: return 25;
+            case 2: return 50;
+            default: return 0;
+        }
     }
-    
+
 }

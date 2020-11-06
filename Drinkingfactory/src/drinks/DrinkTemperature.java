@@ -17,6 +17,14 @@ public enum DrinkTemperature {
 	}
 
 	public int getTemperature(int sliderValue){
+		switch (sliderValue) {
+			case 0: return 20;
+			case 1: return 35;
+			case 2: return 60;
+			case 3: return 85;
+			default: return 0;
+		}
+		/*
 		return switch (sliderValue) {
 			case 0 -> 20;
 			case 1 -> 35;
@@ -24,6 +32,7 @@ public enum DrinkTemperature {
 			case 3 -> 85;
 			default -> 0;
 		};
+		 */
 	}
 	
 }

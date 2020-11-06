@@ -8,14 +8,12 @@ import drinks.Drink;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.Hashtable;
 import javax.swing.Timer;
 
@@ -31,8 +29,6 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryStatemachine.SCInterfaceListener {
 
@@ -64,6 +60,13 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     JSlider sizeSlider;
     JSlider sugarSlider;
     JProgressBar progressBar;
+    JButton coffeeButton;
+    JButton espressoButton;
+    JButton teaButton;
+    JButton soupButton;
+    JButton icedTeaButton;
+    JButton nfcBiiiipButton;
+    JButton cancelButton;
 
 
     /**
@@ -124,7 +127,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         lblCoins.setBounds(538, 12, 44, 15);
         contentPane.add(lblCoins);
 
-        JButton coffeeButton = new JButton("Coffee");
+        coffeeButton = new JButton("Coffee");
         coffeeButton.setForeground(Color.WHITE);
         coffeeButton.setBackground(Color.DARK_GRAY);
         coffeeButton.setBounds(12, 34, 96, 25);
@@ -134,7 +137,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         });
         contentPane.add(coffeeButton);
 
-        JButton espressoButton = new JButton("Espresso");
+        espressoButton = new JButton("Espresso");
         espressoButton.setForeground(Color.WHITE);
         espressoButton.setBackground(Color.DARK_GRAY);
         espressoButton.setBounds(12, 71, 96, 25);
@@ -144,7 +147,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         });
         contentPane.add(espressoButton);
 
-        JButton teaButton = new JButton("Tea");
+        teaButton = new JButton("Tea");
         teaButton.setForeground(Color.WHITE);
         teaButton.setBackground(Color.DARK_GRAY);
         teaButton.setBounds(12, 108, 96, 25);
@@ -154,7 +157,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         });
         contentPane.add(teaButton);
 
-        JButton soupButton = new JButton("Soup");
+        soupButton = new JButton("Soup");
         soupButton.setForeground(Color.WHITE);
         soupButton.setBackground(Color.DARK_GRAY);
         soupButton.setBounds(12, 145, 96, 25);
@@ -232,7 +235,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
         contentPane.add(temperatureSlider);
 
-        JButton icedTeaButton = new JButton("Iced Tea");
+        icedTeaButton = new JButton("Iced Tea");
         icedTeaButton.setForeground(Color.WHITE);
         icedTeaButton.setBackground(Color.DARK_GRAY);
         icedTeaButton.setBounds(12, 182, 96, 25);
@@ -297,7 +300,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         panel_1.setBounds(538, 154, 96, 40);
         contentPane.add(panel_1);
 
-        JButton nfcBiiiipButton = new JButton("biiip");
+        nfcBiiiipButton = new JButton("biiip");
         nfcBiiiipButton.setForeground(Color.WHITE);
         nfcBiiiipButton.setBackground(Color.DARK_GRAY);
         nfcBiiiipButton.addActionListener(e -> {
@@ -340,7 +343,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         panel_2.setBounds(538, 217, 96, 33);
         contentPane.add(panel_2);
 
-        JButton cancelButton = new JButton("Cancel");
+        cancelButton = new JButton("Cancel");
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setBackground(Color.DARK_GRAY);
         cancelButton.addActionListener(e -> {
@@ -391,7 +394,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void setCurrentMoneyInserted(float currentMoneyInserted) {
         this.currentMoneyInserted = Math.round(currentMoneyInserted * 100) / 100f;
         updateMessageToUser();
-        checkPayment();
     }
 
     public float getCurrentMoneyInserted() {
@@ -428,19 +430,31 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         if (currentDrinkSelected != null) {
             if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
                 setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
-                acceptMoney(false);
+                preparationInProgress(false);
                 theFSM.raisePaymentValidate();
             } else if (cardBiped) {
-                acceptMoney(false);
+                preparationInProgress(false);
                 theFSM.raisePaymentValidate();
             }
         }
     }
 
-    private void acceptMoney(boolean state) {
+    private void preparationInProgress(boolean state) {
         money10centsButton.setEnabled(state);
         money25centsButton.setEnabled(state);
         money50centsButton.setEnabled(state);
+
+        temperatureSlider.setEnabled(state);
+        sizeSlider.setEnabled(state);
+        sugarSlider.setEnabled(state);
+
+        coffeeButton.setEnabled(state);
+        espressoButton.setEnabled(state);
+        teaButton.setEnabled(state);
+        soupButton.setEnabled(state);
+        icedTeaButton.setEnabled(state);
+        nfcBiiiipButton.setEnabled(state);
+        cancelButton.setEnabled(state);
     }
 
     @Override
@@ -456,7 +470,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void onDoResetMachineRaised() {
         onDoResetMoneyRaised();
         currentDrinkSelected = null;
-        acceptMoney(true);
+        preparationInProgress(true);
         progressBar.setValue(0);
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);

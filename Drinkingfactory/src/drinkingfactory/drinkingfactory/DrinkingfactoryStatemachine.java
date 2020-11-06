@@ -196,24 +196,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
-		private boolean doResetDrinkSetting;
-		
-		
-		public boolean isRaisedDoResetDrinkSetting() {
-			synchronized(DrinkingfactoryStatemachine.this) {
-				return doResetDrinkSetting;
-			}
-		}
-		
-		protected void raiseDoResetDrinkSetting() {
-			synchronized(DrinkingfactoryStatemachine.this) {
-				doResetDrinkSetting = true;
-				for (SCInterfaceListener listener : listeners) {
-					listener.onDoResetDrinkSettingRaised();
-				}
-			}
-		}
-		
 		private boolean doResetMachine;
 		
 		
@@ -476,7 +458,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		protected void clearOutEvents() {
 		
 		doResetMoney = false;
-		doResetDrinkSetting = false;
 		doResetMachine = false;
 		doCleaning = false;
 		grindBeans = false;
@@ -893,10 +874,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	public synchronized boolean isRaisedDoResetMoney() {
 		return sCInterface.isRaisedDoResetMoney();
-	}
-	
-	public synchronized boolean isRaisedDoResetDrinkSetting() {
-		return sCInterface.isRaisedDoResetDrinkSetting();
 	}
 	
 	public synchronized boolean isRaisedDoResetMachine() {

@@ -32,8 +32,6 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public boolean isRaisedDoResetMoney();
 		
-		public boolean isRaisedDoResetDrinkSetting();
-		
 		public boolean isRaisedDoResetMachine();
 		
 		public boolean isRaisedDoCleaning();
@@ -70,7 +68,6 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 	public interface SCInterfaceListener {
 	
 		public void onDoResetMoneyRaised();
-		public void onDoResetDrinkSettingRaised();
 		public void onDoResetMachineRaised();
 		public void onDoCleaningRaised();
 		public void onGrindBeansRaised();

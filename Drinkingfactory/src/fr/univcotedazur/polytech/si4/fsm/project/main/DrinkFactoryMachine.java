@@ -47,6 +47,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private int count = 0;
     private boolean cardBiped = false;
     private boolean cupPlaced = false;
+    private Hashtable<Integer, JLabel> temperatureTable;
 
     private Drink currentDrinkSelected;
     private int currentSugarLevel;
@@ -54,6 +55,11 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private int currentTemperatureLevel;
     private float currentMoneyInserted = 0;
     private int currentHeatedWaterTemp = 20;
+
+    private JButton money50centsButton;
+    private JButton money25centsButton;
+    private JButton money10centsButton;
+    JSlider temperatureSlider;
 
 
     /**
@@ -190,7 +196,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sizeSlider.addChangeListener(e -> setCurrentSizeLevel(sizeSlider.getValue()));
         contentPane.add(sizeSlider);
 
-        JSlider temperatureSlider = new JSlider();
+        temperatureSlider = new JSlider();
         temperatureSlider.setPaintLabels(true);
         temperatureSlider.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
         temperatureSlider.setValue(2);
@@ -201,7 +207,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         temperatureSlider.setMaximum(3);
         temperatureSlider.setBounds(301, 188, 200, 54);
 
-        Hashtable<Integer, JLabel> temperatureTable = new Hashtable<>();
+        temperatureTable = new Hashtable<>();
         temperatureTable.put(0, new JLabel("20°C"));
         temperatureTable.put(1, new JLabel("35°C"));
         temperatureTable.put(2, new JLabel("60°C"));
@@ -248,7 +254,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         panel.setBounds(538, 25, 96, 97);
         contentPane.add(panel);
 
-        JButton money50centsButton = new JButton("0.50 €");
+        money50centsButton = new JButton("0.50 €");
         money50centsButton.setForeground(Color.WHITE);
         money50centsButton.setBackground(Color.DARK_GRAY);
         money50centsButton.addActionListener(e -> {
@@ -257,7 +263,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         });
         panel.add(money50centsButton);
 
-        JButton money25centsButton = new JButton("0.25 €");
+        money25centsButton = new JButton("0.25 €");
         money25centsButton.setForeground(Color.WHITE);
         money25centsButton.setBackground(Color.DARK_GRAY);
         money25centsButton.addActionListener(e -> {
@@ -266,7 +272,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         });
         panel.add(money25centsButton);
 
-        JButton money10centsButton = new JButton("0.10 €");
+        money10centsButton = new JButton("0.10 €");
         money10centsButton.setForeground(Color.WHITE);
         money10centsButton.setBackground(Color.DARK_GRAY);
         money10centsButton.addActionListener(e -> {
@@ -326,6 +332,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setBackground(Color.DARK_GRAY);
+        cancelButton.addActionListener(e -> {
+            onDoResetMachineRaised();
+        });
         panel_2.add(cancelButton);
 
         // listeners
@@ -382,6 +391,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         messagesToUser.setText("<html>Current amount: " + currentMoneyInserted + "€<br>" +
                 "Current Drink: " + ((currentDrinkSelected != null) ? currentDrinkSelected.getName() : "none") + "<br>" +
                 ((cupPlaced) ? "Cup OK" : "No Cup") + "<br>" +
+                "Water Temp: " + currentHeatedWaterTemp + "<br>" +
                 "waiting...</html>");
     }
 
@@ -389,40 +399,49 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         if (heaterState) {
             currentHeatedWaterTemp += 1;
         } else {
-            count = (count + 1) % 5;
-            if (count == 0) {
+            count = (count + 1) % 10;
+            if (count == 0 && currentHeatedWaterTemp > 20) {
                 currentHeatedWaterTemp -= 1;
             }
         }
+        if (currentHeatedWaterTemp >= Integer.parseInt(temperatureTable.get(temperatureSlider.getValue()).getText().substring(0,2))){
+            heaterState = false;
+            theFSM.raiseHeatReached();
+        }
+        updateMessageToUser();
     }
 
     private void checkPayment() {
         if (currentDrinkSelected != null) {
             if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
-                theFSM.raisePaymentValidate();
                 setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
+                acceptMoney(false);
+                theFSM.raisePaymentValidate();
             } else if (cardBiped) {
+                acceptMoney(false);
                 theFSM.raisePaymentValidate();
             }
         }
+    }
+
+    private void acceptMoney(boolean state) {
+        money10centsButton.setEnabled(state);
+        money25centsButton.setEnabled(state);
+        money50centsButton.setEnabled(state);
     }
 
     @Override
     public void onDoResetMoneyRaised() {
         cardBiped = false;
         if (currentMoneyInserted != 0) {
-            messagesToUser.setText(messagesToUser.getText() + "<br> Giving back" + currentMoneyInserted + "€");
+            messagesToUser.setText(messagesToUser.getText().substring(0, messagesToUser.getText().indexOf("</html>")) + "<br> Giving back: " + currentMoneyInserted + "€</html>");
         }
     }
 
     @Override
-    public void onDoResetDrinkSettingRaised() {
-
-    }
-
-    @Override
     public void onDoResetMachineRaised() {
-
+        onDoResetMoneyRaised();
+        acceptMoney(true);
     }
 
     @Override
@@ -452,7 +471,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onHeatWaterRaised() {
-
+        heaterState = true;
     }
 
     @Override

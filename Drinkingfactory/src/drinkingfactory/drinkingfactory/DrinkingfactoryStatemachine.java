@@ -186,7 +186,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				return doResetMoney;
 			}
 		}
-		
+
+		public boolean isRaisedDoResetDrinkSetting() {
+			return false;
+		}
+
 		protected void raiseDoResetMoney() {
 			synchronized(DrinkingfactoryStatemachine.this) {
 				doResetMoney = true;

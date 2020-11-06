@@ -39,8 +39,19 @@ public enum Drink {
 	public void setSize(DrinkSize size) {
 		this.size = size;
 	}
-	
-	
-	
-	
+
+	public void setSize(int size){
+		switch(size){
+			case 0:
+				setSize(DrinkSize.Short);
+			case 1:
+				setSize(DrinkSize.Normal);
+			case 2:
+				setSize(DrinkSize.Long);
+		}
+	}
+
+	public void setSugar(int sugarLevel){
+
+	}
 }

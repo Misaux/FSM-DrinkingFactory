@@ -4,6 +4,7 @@ import drinkingfactory.TimerService;
 import drinkingfactory.drinkingfactory.DrinkingfactoryStatemachine;
 import drinkingfactory.drinkingfactory.IDrinkingfactoryStatemachine;
 import drinks.Drink;
+import orders.Order;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -371,6 +372,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         //timers
         Timer waterHeatTimer = new Timer(200, doOnTimer);
         waterHeatTimer.start();
+
+
     }
 
     public void setCurrentDrinkSelected(Drink currentDrinkSelected) {
@@ -495,7 +498,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onTakeOffTeaBagRaised() {
-
+        
     }
 
     @Override
@@ -510,7 +513,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onPutCupRaised() {
-
+        if(!cupPlaced){
+            cupPlaced = true;
+        }
     }
 
     @Override

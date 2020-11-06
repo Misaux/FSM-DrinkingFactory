@@ -120,28 +120,40 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         coffeeButton.setForeground(Color.WHITE);
         coffeeButton.setBackground(Color.DARK_GRAY);
         coffeeButton.setBounds(12, 34, 96, 25);
-        coffeeButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Coffee));
+        coffeeButton.addActionListener(e -> {
+            setCurrentDrinkSelected(Drink.Coffee);
+            theFSM.raiseDrinkSelected();
+        });
         contentPane.add(coffeeButton);
 
         JButton espressoButton = new JButton("Espresso");
         espressoButton.setForeground(Color.WHITE);
         espressoButton.setBackground(Color.DARK_GRAY);
         espressoButton.setBounds(12, 71, 96, 25);
-        espressoButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Espresso));
+        espressoButton.addActionListener(e -> {
+            setCurrentDrinkSelected(Drink.Espresso);
+            theFSM.raiseDrinkSelected();
+        });
         contentPane.add(espressoButton);
 
         JButton teaButton = new JButton("Tea");
         teaButton.setForeground(Color.WHITE);
         teaButton.setBackground(Color.DARK_GRAY);
         teaButton.setBounds(12, 108, 96, 25);
-        teaButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Tea));
+        teaButton.addActionListener(e -> {
+            setCurrentDrinkSelected(Drink.Tea);
+            theFSM.raiseDrinkSelected();
+        });
         contentPane.add(teaButton);
 
         JButton soupButton = new JButton("Soup");
         soupButton.setForeground(Color.WHITE);
         soupButton.setBackground(Color.DARK_GRAY);
         soupButton.setBounds(12, 145, 96, 25);
-        soupButton.addActionListener(e -> setCurrentDrinkSelected(Drink.Soup));
+        soupButton.addActionListener(e -> {
+            setCurrentDrinkSelected(Drink.Soup);
+            theFSM.raiseDrinkSelected();
+        });
         contentPane.add(soupButton);
 
         JProgressBar progressBar = new JProgressBar();
@@ -331,15 +343,11 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         });
         updateMessageToUser();
 
-        ActionListener doOnTimer = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                simulateWaterTemp();
-            }
-        };
+        ActionListener doOnTimer = e -> simulateWaterTemp();
 
         //timers
         Timer waterHeatTimer = new Timer(200, doOnTimer);
+        waterHeatTimer.start();
     }
 
     public void setCurrentDrinkSelected(Drink currentDrinkSelected) {
@@ -373,7 +381,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private void updateMessageToUser() {
         messagesToUser.setText("<html>Current amount: " + currentMoneyInserted + "€<br>" +
                 "Current Drink: " + ((currentDrinkSelected != null) ? currentDrinkSelected.getName() : "none") + "<br>" +
-                ((cupPlaced)?"Cup OK":"No Cup") + "<br>" +
+                ((cupPlaced) ? "Cup OK" : "No Cup") + "<br>" +
                 "waiting...</html>");
     }
 
@@ -389,17 +397,22 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     }
 
     private void checkPayment() {
-        if (currentMoneyInserted >= currentDrinkSelected.getPrice()){
-            theFSM.raisePaymentValidate();
-            currentMoneyInserted -= currentDrinkSelected.getPrice();
-        } else if (cardBiped){
-            theFSM.raisePaymentValidate();
+        if (currentDrinkSelected != null) {
+            if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
+                theFSM.raisePaymentValidate();
+                setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
+            } else if (cardBiped) {
+                theFSM.raisePaymentValidate();
+            }
         }
     }
 
     @Override
     public void onDoResetMoneyRaised() {
-
+        cardBiped = false;
+        if (currentMoneyInserted != 0) {
+            messagesToUser.setText(messagesToUser.getText() + "<br> Giving back" + currentMoneyInserted + "€");
+        }
     }
 
     @Override

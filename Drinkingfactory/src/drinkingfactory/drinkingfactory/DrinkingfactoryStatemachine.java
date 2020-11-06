@@ -969,6 +969,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		timer.setTimer(this, 0, (10 * 1000), false);
 	}
 	
+	/* Entry action for state 'checkingPayment'. */
+	private void entryAction_drink_management_checkingPayment() {
+		sCInterface.raiseCheckPayment();
+	}
+	
 	/* Entry action for state 'Expresso'. */
 	private void entryAction_drink_management_Preparation_r1_step1_r1_Expresso() {
 		timer.setTimer(this, 1, (10 * 1000), false);
@@ -1046,6 +1051,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state checkingPayment */
 	private void enterSequence_drink_management_checkingPayment_default() {
+		entryAction_drink_management_checkingPayment();
 		nextStateIndex = 0;
 		stateVector[0] = State.drink_management_checkingPayment;
 	}
@@ -1690,7 +1696,12 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				exitSequence_drink_management_Standby();
 				enterSequence_drink_management_checkingPayment_default();
 			} else {
-				did_transition = false;
+				if (sCInterface.addMoney) {
+					exitSequence_drink_management_Standby();
+					enterSequence_drink_management_checkingPayment_default();
+				} else {
+					did_transition = false;
+				}
 			}
 		}
 		return did_transition;
@@ -1716,13 +1727,20 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		if (try_transition) {
 			if (sCInterface.paymentValidate) {
 				exitSequence_drink_management_checkingPayment();
+				sCInterface.raiseDoResetMoney();
+				
 				enterSequence_drink_management_Preparation_default();
 			} else {
 				if (resetMachineInternal) {
 					exitSequence_drink_management_checkingPayment();
 					enterSequence_drink_management_Standby_default();
 				} else {
-					did_transition = false;
+					if (sCInterface.drinkSelected) {
+						exitSequence_drink_management_checkingPayment();
+						enterSequence_drink_management_checkingPayment_default();
+					} else {
+						did_transition = false;
+					}
 				}
 			}
 		}

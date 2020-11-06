@@ -1,17 +1,17 @@
 package drinks;
 
 public enum Drink {
-	Tea("Tea",0.40), 
-	Espresso("Espresso",0.50),
-	Coffee("Coffee",0.35),
-	Soup("Soup",0.5);
+	Tea("Tea",0.40f),
+	Espresso("Espresso",0.50f),
+	Coffee("Coffee",0.35f),
+	Soup("Soup",0.5f);
 	
 	private String name;
-	private double price;
+	private float price;
 	private DrinkSize size;
 	private DrinkTemperature temperature;
 	
-	Drink(String name, double price){
+	Drink(String name, float price){
 		this.name = name;
 		this.price = price;
 	}
@@ -24,11 +24,11 @@ public enum Drink {
 		this.name = name;
 	}
 
-	public double getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 

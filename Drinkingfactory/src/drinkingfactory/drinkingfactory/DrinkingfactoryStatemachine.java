@@ -989,7 +989,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'configuration'. */
 	private void entryAction_activity_management_configuration() {
-		timer.setTimer(this, 3, (45 * 1000), false);
+		timer.setTimer(this, 3, (10 * 1000), false);
 	}
 	
 	/* Exit action for state 'Cleaning'. */
@@ -1671,13 +1671,20 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		if (try_transition) {
 			if (sCInterface.drinkSelected) {
 				exitSequence_drink_management_Standby();
+				sCInterface.raiseUserAction();
+				
 				enterSequence_drink_management_checkingPayment_default();
 			} else {
 				if (sCInterface.addMoney) {
 					exitSequence_drink_management_Standby();
 					enterSequence_drink_management_checkingPayment_default();
 				} else {
-					did_transition = false;
+					if (resetMachineInternal) {
+						exitSequence_drink_management_Standby();
+						enterSequence_drink_management_Standby_default();
+					} else {
+						did_transition = false;
+					}
 				}
 			}
 		}
@@ -1714,6 +1721,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				} else {
 					if (sCInterface.drinkSelected) {
 						exitSequence_drink_management_checkingPayment();
+						raiseUserActionInternal();
+						
 						enterSequence_drink_management_checkingPayment_default();
 					} else {
 						did_transition = false;

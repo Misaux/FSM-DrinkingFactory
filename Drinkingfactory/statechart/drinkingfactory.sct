@@ -6,7 +6,7 @@
         <outgoingTransitions xmi:id="_dbeclQn_Eeumf_ctpfPVNg" target="_dbdOdwn_Eeumf_ctpfPVNg"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_dbdOdwn_Eeumf_ctpfPVNg" specification="entry / raise doResetMachine" name="Standby" incomingTransitions="_dbeclQn_Eeumf_ctpfPVNg _g6O9QAoREeuuiIvXtIA_fQ _yG4IEAoUEeuuiIvXtIA_fQ">
-        <outgoingTransitions xmi:id="_WzQl4AoUEeuuiIvXtIA_fQ" specification="drinkSelected" target="_tePQYAoREeuuiIvXtIA_fQ"/>
+        <outgoingTransitions xmi:id="_WzQl4AoUEeuuiIvXtIA_fQ" specification="drinkSelected / raise userAction" target="_tePQYAoREeuuiIvXtIA_fQ"/>
         <outgoingTransitions xmi:id="_IsHVkB_MEeuxtZ5Q_XympQ" specification="addMoney" target="_tePQYAoREeuuiIvXtIA_fQ"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_9G4vUAoIEeudecawTU06hQ" specification="" name="Cleaning" incomingTransitions="_FRugCg9-Eeu6AqkWw7Fp6A">
@@ -15,7 +15,7 @@
       <vertices xsi:type="sgraph:State" xmi:id="_tePQYAoREeuuiIvXtIA_fQ" specification="entry / raise checkPayment" name="checkingPayment" incomingTransitions="_WzQl4AoUEeuuiIvXtIA_fQ _jt8BUB_FEeuxtZ5Q_XympQ _IsHVkB_MEeuxtZ5Q_XympQ">
         <outgoingTransitions xmi:id="_FRsq0A9-Eeu6AqkWw7Fp6A" specification="paymentValidate / raise doResetMoney" target="_F1waIA9-Eeu6AqkWw7Fp6A"/>
         <outgoingTransitions xmi:id="_yG4IEAoUEeuuiIvXtIA_fQ" specification="resetMachineInternal" target="_dbdOdwn_Eeumf_ctpfPVNg"/>
-        <outgoingTransitions xmi:id="_jt8BUB_FEeuxtZ5Q_XympQ" specification="drinkSelected" target="_tePQYAoREeuuiIvXtIA_fQ"/>
+        <outgoingTransitions xmi:id="_jt8BUB_FEeuxtZ5Q_XympQ" specification="drinkSelected / raise userActionInternal" target="_tePQYAoREeuuiIvXtIA_fQ"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_F1waIA9-Eeu6AqkWw7Fp6A" specification="" name="Preparation" incomingTransitions="_FRsq0A9-Eeu6AqkWw7Fp6A">
         <outgoingTransitions xmi:id="_FRugCg9-Eeu6AqkWw7Fp6A" specification="cupGrabbed / raise doCleaning" target="_9G4vUAoIEeudecawTU06hQ"/>
@@ -119,7 +119,7 @@
     </regions>
     <regions xmi:id="_dVcV8AoTEeuuiIvXtIA_fQ" name="activity management">
       <vertices xsi:type="sgraph:State" xmi:id="_iBLFQAoTEeuuiIvXtIA_fQ" name="configuration" incomingTransitions="_jHsocAoTEeuuiIvXtIA_fQ _pN9cEAoTEeuuiIvXtIA_fQ _TPHUQAoVEeuuiIvXtIA_fQ _jzoUQB-yEeuPsdENHe6I6g">
-        <outgoingTransitions xmi:id="_jHsocAoTEeuuiIvXtIA_fQ" specification="after 45s / raise resetMachineInternal" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
+        <outgoingTransitions xmi:id="_jHsocAoTEeuuiIvXtIA_fQ" specification="after 10s / raise resetMachineInternal; raise doResetMachine" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
         <outgoingTransitions xmi:id="_pN9cEAoTEeuuiIvXtIA_fQ" specification="userAction" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
         <outgoingTransitions xmi:id="_jzoUQB-yEeuPsdENHe6I6g" specification="userActionInternal" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
       </vertices>

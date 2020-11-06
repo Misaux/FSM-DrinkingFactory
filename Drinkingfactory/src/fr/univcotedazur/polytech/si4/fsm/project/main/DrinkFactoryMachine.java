@@ -54,12 +54,16 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private int currentSizeLevel;
     private int currentTemperatureLevel;
     private float currentMoneyInserted = 0;
+    private float moneyGivingBack = 0;
     private int currentHeatedWaterTemp = 20;
 
     private JButton money50centsButton;
     private JButton money25centsButton;
     private JButton money10centsButton;
     JSlider temperatureSlider;
+    JSlider sizeSlider;
+    JSlider sugarSlider;
+    JProgressBar progressBar;
 
 
     /**
@@ -71,14 +75,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
      * Launch the application.
      */
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    DrinkFactoryMachine frame = new DrinkFactoryMachine();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        EventQueue.invokeLater(() -> {
+            try {
+                DrinkFactoryMachine frame = new DrinkFactoryMachine();
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
@@ -162,7 +164,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         });
         contentPane.add(soupButton);
 
-        JProgressBar progressBar = new JProgressBar();
+        progressBar = new JProgressBar();
         progressBar.setStringPainted(true);
         progressBar.setValue(0);
         progressBar.setForeground(Color.LIGHT_GRAY);
@@ -170,7 +172,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         progressBar.setBounds(12, 254, 622, 26);
         contentPane.add(progressBar);
 
-        JSlider sugarSlider = new JSlider();
+        sugarSlider = new JSlider();
         sugarSlider.setValue(1);
         sugarSlider.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
         sugarSlider.setBackground(Color.DARK_GRAY);
@@ -180,10 +182,13 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sugarSlider.setMajorTickSpacing(1);
         sugarSlider.setMaximum(4);
         sugarSlider.setBounds(301, 51, 200, 36);
-        sugarSlider.addChangeListener(e -> setSugarLevel(sugarSlider.getValue()));
+        sugarSlider.addChangeListener(e -> {
+            setSugarLevel(sugarSlider.getValue());
+            theFSM.raiseUserAction();
+        });
         contentPane.add(sugarSlider);
 
-        JSlider sizeSlider = new JSlider();
+        sizeSlider = new JSlider();
         sizeSlider.setPaintTicks(true);
         sizeSlider.setValue(1);
         sizeSlider.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -193,7 +198,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sizeSlider.setMaximum(2);
         sizeSlider.setMajorTickSpacing(1);
         sizeSlider.setBounds(301, 125, 200, 36);
-        sizeSlider.addChangeListener(e -> setCurrentSizeLevel(sizeSlider.getValue()));
+        sizeSlider.addChangeListener(e -> {
+            setCurrentSizeLevel(sizeSlider.getValue());
+            theFSM.raiseUserAction();
+        });
         contentPane.add(sizeSlider);
 
         temperatureSlider = new JSlider();
@@ -206,6 +214,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         temperatureSlider.setMajorTickSpacing(1);
         temperatureSlider.setMaximum(3);
         temperatureSlider.setBounds(301, 188, 200, 54);
+        temperatureSlider.addChangeListener(e -> {
+            theFSM.raiseUserAction();
+        });
 
         temperatureTable = new Hashtable<>();
         temperatureTable.put(0, new JLabel("20°C"));
@@ -389,9 +400,11 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     private void updateMessageToUser() {
         messagesToUser.setText("<html>Current amount: " + currentMoneyInserted + "€<br>" +
+                "Card Biped: " + cardBiped + "<br>" +
                 "Current Drink: " + ((currentDrinkSelected != null) ? currentDrinkSelected.getName() : "none") + "<br>" +
                 ((cupPlaced) ? "Cup OK" : "No Cup") + "<br>" +
                 "Water Temp: " + currentHeatedWaterTemp + "<br>" +
+                "Giving back: " + moneyGivingBack + "€<br>" +
                 "waiting...</html>");
     }
 
@@ -434,14 +447,20 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void onDoResetMoneyRaised() {
         cardBiped = false;
         if (currentMoneyInserted != 0) {
-            messagesToUser.setText(messagesToUser.getText().substring(0, messagesToUser.getText().indexOf("</html>")) + "<br> Giving back: " + currentMoneyInserted + "€</html>");
+            moneyGivingBack = Math.round(currentMoneyInserted * 100) / 100f;
         }
+        setCurrentMoneyInserted(0);
     }
 
     @Override
     public void onDoResetMachineRaised() {
         onDoResetMoneyRaised();
+        currentDrinkSelected = null;
         acceptMoney(true);
+        progressBar.setValue(0);
+        sugarSlider.setValue(1);
+        sizeSlider.setValue(1);
+        temperatureSlider.setValue(2);
     }
 
     @Override

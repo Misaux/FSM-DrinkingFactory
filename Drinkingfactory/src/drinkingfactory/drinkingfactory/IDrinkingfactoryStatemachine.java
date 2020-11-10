@@ -30,6 +30,12 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public void raiseCupFilled();
 		
+		public void raiseCoffeeSelected();
+		
+		public void raiseTeaSelected();
+		
+		public void raiseEspressoSelected();
+		
 		public boolean isRaisedDoResetMoney();
 		
 		public boolean isRaisedDoResetMachine();
@@ -51,8 +57,6 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public boolean isRaisedAddSugar();
 		
 		public boolean isRaisedPourWater();
-		
-		public boolean isRaisedGetDrink();
 		
 		public boolean isRaisedPutBeans();
 		
@@ -78,7 +82,6 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public void onPutCupRaised();
 		public void onAddSugarRaised();
 		public void onPourWaterRaised();
-		public void onGetDrinkRaised();
 		public void onPutBeansRaised();
 		public void onCheckPaymentRaised();
 		}

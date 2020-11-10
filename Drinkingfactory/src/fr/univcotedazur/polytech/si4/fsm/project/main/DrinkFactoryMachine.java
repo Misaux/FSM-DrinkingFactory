@@ -72,6 +72,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     JButton nfcBiiiipButton;
     JButton cancelButton;
     JButton takeCupButton;
+    JButton takeMoneyButton;
 
     //Labels
     JLabel lblSugar;
@@ -367,18 +368,21 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         takeCupButton.setBackground(Color.DARK_GRAY);
         takeCupButton.setBounds(495, 336, 115, 25);
         takeCupButton.addActionListener(e -> {
-            onDoResetMachineRaised();
-            updateMessageToUser();
-            BufferedImage emptyPicture = null;
-            try {
-                emptyPicture = ImageIO.read(new File("./picts/vide2.jpg"));
-            } catch (IOException ee) {
-                ee.printStackTrace();
-            }
-            currentPicture.setIcon(new ImageIcon(emptyPicture));
+            takeCup();
         });
         contentPane.add(takeCupButton);
         takeCupButton.setVisible(false);
+
+        takeMoneyButton = new JButton("Take money");
+        takeMoneyButton.setForeground(Color.WHITE);
+        takeMoneyButton.setBackground(Color.DARK_GRAY);
+        takeMoneyButton.setBounds(495, 366, 115, 25);
+        takeMoneyButton.addActionListener(e -> {
+            takeBackMoney();
+            updateMessageToUser();
+        });
+        contentPane.add(takeMoneyButton);
+        takeMoneyButton.setVisible(false);
 
         JPanel panel_2 = new JPanel();
         panel_2.setBackground(Color.DARK_GRAY);
@@ -521,6 +525,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void onDoResetMoneyRaised() {
         if (currentMoneyInserted != 0) {
             moneyGivingBack = Math.round(currentMoneyInserted * 100) / 100f;
+            takeMoneyButton.setVisible(true);
         }
         setCurrentMoneyInserted(0);
     }
@@ -536,7 +541,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);
         temperatureSlider.setValue(2);
-
     }
 
     @Override
@@ -627,6 +631,26 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             case 2: return 50;
             default: return 0;
         }
+    }
+
+    public void takeBackMoney(){
+        moneyGivingBack = 0;
+        takeMoneyButton.setVisible(false);
+    }
+
+    public void takeCup(){
+        onDoResetMachineRaised();
+        updateMessageToUser();
+        BufferedImage emptyPicture = null;
+        try {
+            emptyPicture = ImageIO.read(new File("./picts/vide2.jpg"));
+        } catch (IOException ee) {
+            ee.printStackTrace();
+        }
+        currentPicture.setIcon(new ImageIcon(emptyPicture));
+        currentWaterVolume = 0;
+        takeCupButton.setVisible(false);
+        System.out.println("Cup taken");
     }
 
 }

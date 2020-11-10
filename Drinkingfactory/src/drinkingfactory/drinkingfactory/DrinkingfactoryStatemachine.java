@@ -841,6 +841,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	public synchronized void raiseDrinkSelected() {
+		System.out.println("Drink Raised");
 		sCInterface.raiseDrinkSelected();
 	}
 	

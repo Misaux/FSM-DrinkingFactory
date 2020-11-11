@@ -522,11 +522,13 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     private void checkPayment() {
         if (currentDrinkSelected != null) {
-            if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
-                setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
+            if (cardBiped) {
+                System.out.println("card biped");
                 preparationInProgress(true);
                 theFSM.raisePaymentValidate();
-            } else if (cardBiped) {
+            } else if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
+                System.out.println("card not biped and money taken from money inserted");
+                setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
                 preparationInProgress(true);
                 theFSM.raisePaymentValidate();
             }

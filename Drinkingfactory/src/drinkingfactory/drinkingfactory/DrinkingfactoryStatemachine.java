@@ -4,9 +4,6 @@ package drinkingfactory.drinkingfactory;
 import drinkingfactory.ITimer;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine {
 	protected class SCInterfaceImpl implements SCInterface {
@@ -21,16 +18,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseDrinkSelected() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							drinkSelected = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				drinkSelected = true;
 			}
 		}
 		
@@ -39,16 +27,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseAddMoney() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							addMoney = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				addMoney = true;
 			}
 		}
 		
@@ -57,16 +36,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raisePaying() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							paying = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				paying = true;
 			}
 		}
 		
@@ -75,16 +45,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raisePaymentValidate() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							paymentValidate = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				paymentValidate = true;
 			}
 		}
 		
@@ -93,16 +54,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseResetMachine() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							resetMachine = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				resetMachine = true;
 			}
 		}
 		
@@ -111,16 +63,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseUserAction() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							userAction = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				userAction = true;
 			}
 		}
 		
@@ -129,16 +72,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseCupGrabbed() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							cupGrabbed = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				cupGrabbed = true;
 			}
 		}
 		
@@ -147,16 +81,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseHeatReached() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							heatReached = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				heatReached = true;
 			}
 		}
 		
@@ -165,16 +90,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseCupFilled() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							cupFilled = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				cupFilled = true;
 			}
 		}
 		
@@ -183,16 +99,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseCoffeeSelected() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							coffeeSelected = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				coffeeSelected = true;
 			}
 		}
 		
@@ -201,16 +108,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseTeaSelected() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							teaSelected = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				teaSelected = true;
 			}
 		}
 		
@@ -219,16 +117,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		public void raiseEspressoSelected() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				inEventQueue.add(
-					new Runnable() {
-						@Override
-						public void run() {
-							espressoSelected = true;
-							singleCycle();
-						}
-					}
-				);
-				runCycle();
+				espressoSelected = true;
 			}
 		}
 		
@@ -466,17 +355,17 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
-		private long drinkNum;
+		private String drinkName;
 		
-		public synchronized long getDrinkNum() {
+		public synchronized String getDrinkName() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				return drinkNum;
+				return drinkName;
 			}
 		}
 		
-		public void setDrinkNum(long value) {
+		public void setDrinkName(String value) {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				this.drinkNum = value;
+				this.drinkName = value;
 			}
 		}
 		
@@ -519,31 +408,29 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	private boolean initialized = false;
 	
 	public enum State {
+		payment_management_Payment,
+		activity_management_configuration,
+		drink_management_configuration,
 		machine_management_Standby,
 		machine_management_Cleaning,
 		machine_management_checkingPayment,
 		machine_management_Preparation,
 		machine_management_Preparation_r1_step1,
 		machine_management_Preparation_r1_step1_r1_Expresso,
-		machine_management_Preparation_r1_step1_r1_entry,
 		machine_management_Preparation_r1_step1_r1_sync,
 		machine_management_Preparation_r1_step1_r2_General,
 		machine_management_Preparation_r1_step1_r2_sync,
 		machine_management_Preparation_r1_step2,
 		machine_management_Preparation_r1_step2_r1_Expresso,
-		machine_management_Preparation_r1_step2_r1_entry,
 		machine_management_Preparation_r1_step2_r1_sync,
 		machine_management_Preparation_r1_step2_r2_General,
 		machine_management_Preparation_r1_step3,
-		machine_management_Preparation_r1_step3_r1_Tea,
-		machine_management_Preparation_r1_step3_r1_entry,
+		machine_management_Preparation_r1_step3_r1_Tea1,
 		machine_management_Preparation_r1_step3_r1_sync,
+		machine_management_Preparation_r1_step3_r1_tea2,
 		machine_management_Preparation_r1_step3_r2_General,
 		machine_management_Preparation_r1_step3_r2_sync,
 		machine_management_Preparation_r1_sync,
-		payment_management_Payment,
-		activity_management_configuration,
-		drink_management_configuration,
 		$NullState$
 	};
 	
@@ -555,9 +442,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	private final boolean[] timeEvents = new boolean[4];
 	
-	private Queue<Runnable> internalEventQueue = new LinkedList<Runnable>();
-	private BlockingQueue<Runnable> inEventQueue = new LinkedBlockingQueue<Runnable>();
-	private boolean isRunningCycle = false;
 	private boolean resetMachineInternal;
 	private boolean userActionInternal;
 	public DrinkingfactoryStatemachine() {
@@ -574,7 +458,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		}
 		clearEvents();
 		clearOutEvents();
-		sCInterface.setDrinkNum(0);
+		sCInterface.setDrinkName("");
 	}
 	
 	public synchronized void enter() {
@@ -586,41 +470,28 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		if (timer == null) {
 			throw new IllegalStateException("timer not set.");
 		}
-		enterSequence_machine_management_default();
 		enterSequence_payment_management_default();
 		enterSequence_activity_management_default();
 		enterSequence_drink_management_default();
+		enterSequence_machine_management_default();
 	}
 	
 	public synchronized void runCycle() {
 		if (!initialized)
 			throw new IllegalStateException(
 					"The state machine needs to be initialized first by calling the init() function.");
-		
-		if (isRunningCycle) {
-			return;
-		}
-		isRunningCycle = true;
-		
 		clearOutEvents();
-	
-		Runnable task = getNextEvent();
-		if (task == null) {
-			task = getDefaultEvent();
-		}
-		
-		while (task != null) {
-			task.run();
-			clearEvents();
-			task = getNextEvent();
-		}
-		
-		isRunningCycle = false;
-	}
-	
-	protected synchronized void singleCycle() {
 		for (nextStateIndex = 0; nextStateIndex < stateVector.length; nextStateIndex++) {
 			switch (stateVector[nextStateIndex]) {
+			case payment_management_Payment:
+				payment_management_Payment_react(true);
+				break;
+			case activity_management_configuration:
+				activity_management_configuration_react(true);
+				break;
+			case drink_management_configuration:
+				drink_management_configuration_react(true);
+				break;
 			case machine_management_Standby:
 				machine_management_Standby_react(true);
 				break;
@@ -632,9 +503,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				break;
 			case machine_management_Preparation_r1_step1_r1_Expresso:
 				machine_management_Preparation_r1_step1_r1_Expresso_react(true);
-				break;
-			case machine_management_Preparation_r1_step1_r1_entry:
-				machine_management_Preparation_r1_step1_r1_entry_react(true);
 				break;
 			case machine_management_Preparation_r1_step1_r1_sync:
 				machine_management_Preparation_r1_step1_r1_sync_react(true);
@@ -648,23 +516,20 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			case machine_management_Preparation_r1_step2_r1_Expresso:
 				machine_management_Preparation_r1_step2_r1_Expresso_react(true);
 				break;
-			case machine_management_Preparation_r1_step2_r1_entry:
-				machine_management_Preparation_r1_step2_r1_entry_react(true);
-				break;
 			case machine_management_Preparation_r1_step2_r1_sync:
 				machine_management_Preparation_r1_step2_r1_sync_react(true);
 				break;
 			case machine_management_Preparation_r1_step2_r2_General:
 				machine_management_Preparation_r1_step2_r2_General_react(true);
 				break;
-			case machine_management_Preparation_r1_step3_r1_Tea:
-				machine_management_Preparation_r1_step3_r1_Tea_react(true);
-				break;
-			case machine_management_Preparation_r1_step3_r1_entry:
-				machine_management_Preparation_r1_step3_r1_entry_react(true);
+			case machine_management_Preparation_r1_step3_r1_Tea1:
+				machine_management_Preparation_r1_step3_r1_Tea1_react(true);
 				break;
 			case machine_management_Preparation_r1_step3_r1_sync:
 				machine_management_Preparation_r1_step3_r1_sync_react(true);
+				break;
+			case machine_management_Preparation_r1_step3_r1_tea2:
+				machine_management_Preparation_r1_step3_r1_tea2_react(true);
 				break;
 			case machine_management_Preparation_r1_step3_r2_General:
 				machine_management_Preparation_r1_step3_r2_General_react(true);
@@ -675,45 +540,17 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			case machine_management_Preparation_r1_sync:
 				machine_management_Preparation_r1_sync_react(true);
 				break;
-			case payment_management_Payment:
-				payment_management_Payment_react(true);
-				break;
-			case activity_management_configuration:
-				activity_management_configuration_react(true);
-				break;
-			case drink_management_configuration:
-				drink_management_configuration_react(true);
-				break;
 			default:
 				// $NullState$
 			}
 		}
+		clearEvents();
 	}
-	
-	protected Runnable getNextEvent() {
-		if(!internalEventQueue.isEmpty()) {
-			return internalEventQueue.poll();
-		}
-		if(!inEventQueue.isEmpty()) {
-			return inEventQueue.poll();
-		}
-		return null;
-	}
-	
-	protected Runnable getDefaultEvent() {
-		return new Runnable() {
-			@Override
-			public void run() {
-				singleCycle();
-			}
-		};
-	}
-	
 	public synchronized void exit() {
-		exitSequence_machine_management();
 		exitSequence_payment_management();
 		exitSequence_activity_management();
 		exitSequence_drink_management();
+		exitSequence_machine_management();
 	}
 	
 	/**
@@ -756,60 +593,56 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	public synchronized boolean isStateActive(State state) {
 	
 		switch (state) {
-		case machine_management_Standby:
-			return stateVector[0] == State.machine_management_Standby;
-		case machine_management_Cleaning:
-			return stateVector[0] == State.machine_management_Cleaning;
-		case machine_management_checkingPayment:
-			return stateVector[0] == State.machine_management_checkingPayment;
-		case machine_management_Preparation:
-			return stateVector[0].ordinal() >= State.
-					machine_management_Preparation.ordinal()&& stateVector[0].ordinal() <= State.machine_management_Preparation_r1_sync.ordinal();
-		case machine_management_Preparation_r1_step1:
-			return stateVector[0].ordinal() >= State.
-					machine_management_Preparation_r1_step1.ordinal()&& stateVector[0].ordinal() <= State.machine_management_Preparation_r1_step1_r2_sync.ordinal();
-		case machine_management_Preparation_r1_step1_r1_Expresso:
-			return stateVector[0] == State.machine_management_Preparation_r1_step1_r1_Expresso;
-		case machine_management_Preparation_r1_step1_r1_entry:
-			return stateVector[0] == State.machine_management_Preparation_r1_step1_r1_entry;
-		case machine_management_Preparation_r1_step1_r1_sync:
-			return stateVector[0] == State.machine_management_Preparation_r1_step1_r1_sync;
-		case machine_management_Preparation_r1_step1_r2_General:
-			return stateVector[1] == State.machine_management_Preparation_r1_step1_r2_General;
-		case machine_management_Preparation_r1_step1_r2_sync:
-			return stateVector[1] == State.machine_management_Preparation_r1_step1_r2_sync;
-		case machine_management_Preparation_r1_step2:
-			return stateVector[0].ordinal() >= State.
-					machine_management_Preparation_r1_step2.ordinal()&& stateVector[0].ordinal() <= State.machine_management_Preparation_r1_step2_r2_General.ordinal();
-		case machine_management_Preparation_r1_step2_r1_Expresso:
-			return stateVector[0] == State.machine_management_Preparation_r1_step2_r1_Expresso;
-		case machine_management_Preparation_r1_step2_r1_entry:
-			return stateVector[0] == State.machine_management_Preparation_r1_step2_r1_entry;
-		case machine_management_Preparation_r1_step2_r1_sync:
-			return stateVector[0] == State.machine_management_Preparation_r1_step2_r1_sync;
-		case machine_management_Preparation_r1_step2_r2_General:
-			return stateVector[1] == State.machine_management_Preparation_r1_step2_r2_General;
-		case machine_management_Preparation_r1_step3:
-			return stateVector[0].ordinal() >= State.
-					machine_management_Preparation_r1_step3.ordinal()&& stateVector[0].ordinal() <= State.machine_management_Preparation_r1_step3_r2_sync.ordinal();
-		case machine_management_Preparation_r1_step3_r1_Tea:
-			return stateVector[0] == State.machine_management_Preparation_r1_step3_r1_Tea;
-		case machine_management_Preparation_r1_step3_r1_entry:
-			return stateVector[0] == State.machine_management_Preparation_r1_step3_r1_entry;
-		case machine_management_Preparation_r1_step3_r1_sync:
-			return stateVector[0] == State.machine_management_Preparation_r1_step3_r1_sync;
-		case machine_management_Preparation_r1_step3_r2_General:
-			return stateVector[1] == State.machine_management_Preparation_r1_step3_r2_General;
-		case machine_management_Preparation_r1_step3_r2_sync:
-			return stateVector[1] == State.machine_management_Preparation_r1_step3_r2_sync;
-		case machine_management_Preparation_r1_sync:
-			return stateVector[0] == State.machine_management_Preparation_r1_sync;
 		case payment_management_Payment:
-			return stateVector[2] == State.payment_management_Payment;
+			return stateVector[0] == State.payment_management_Payment;
 		case activity_management_configuration:
-			return stateVector[3] == State.activity_management_configuration;
+			return stateVector[1] == State.activity_management_configuration;
 		case drink_management_configuration:
-			return stateVector[4] == State.drink_management_configuration;
+			return stateVector[2] == State.drink_management_configuration;
+		case machine_management_Standby:
+			return stateVector[3] == State.machine_management_Standby;
+		case machine_management_Cleaning:
+			return stateVector[3] == State.machine_management_Cleaning;
+		case machine_management_checkingPayment:
+			return stateVector[3] == State.machine_management_checkingPayment;
+		case machine_management_Preparation:
+			return stateVector[3].ordinal() >= State.
+					machine_management_Preparation.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_sync.ordinal();
+		case machine_management_Preparation_r1_step1:
+			return stateVector[3].ordinal() >= State.
+					machine_management_Preparation_r1_step1.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_step1_r2_sync.ordinal();
+		case machine_management_Preparation_r1_step1_r1_Expresso:
+			return stateVector[3] == State.machine_management_Preparation_r1_step1_r1_Expresso;
+		case machine_management_Preparation_r1_step1_r1_sync:
+			return stateVector[3] == State.machine_management_Preparation_r1_step1_r1_sync;
+		case machine_management_Preparation_r1_step1_r2_General:
+			return stateVector[4] == State.machine_management_Preparation_r1_step1_r2_General;
+		case machine_management_Preparation_r1_step1_r2_sync:
+			return stateVector[4] == State.machine_management_Preparation_r1_step1_r2_sync;
+		case machine_management_Preparation_r1_step2:
+			return stateVector[3].ordinal() >= State.
+					machine_management_Preparation_r1_step2.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_step2_r2_General.ordinal();
+		case machine_management_Preparation_r1_step2_r1_Expresso:
+			return stateVector[3] == State.machine_management_Preparation_r1_step2_r1_Expresso;
+		case machine_management_Preparation_r1_step2_r1_sync:
+			return stateVector[3] == State.machine_management_Preparation_r1_step2_r1_sync;
+		case machine_management_Preparation_r1_step2_r2_General:
+			return stateVector[4] == State.machine_management_Preparation_r1_step2_r2_General;
+		case machine_management_Preparation_r1_step3:
+			return stateVector[3].ordinal() >= State.
+					machine_management_Preparation_r1_step3.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_step3_r2_sync.ordinal();
+		case machine_management_Preparation_r1_step3_r1_Tea1:
+			return stateVector[3] == State.machine_management_Preparation_r1_step3_r1_Tea1;
+		case machine_management_Preparation_r1_step3_r1_sync:
+			return stateVector[3] == State.machine_management_Preparation_r1_step3_r1_sync;
+		case machine_management_Preparation_r1_step3_r1_tea2:
+			return stateVector[3] == State.machine_management_Preparation_r1_step3_r1_tea2;
+		case machine_management_Preparation_r1_step3_r2_General:
+			return stateVector[4] == State.machine_management_Preparation_r1_step3_r2_General;
+		case machine_management_Preparation_r1_step3_r2_sync:
+			return stateVector[4] == State.machine_management_Preparation_r1_step3_r2_sync;
+		case machine_management_Preparation_r1_sync:
+			return stateVector[3] == State.machine_management_Preparation_r1_sync;
 		default:
 			return false;
 		}
@@ -836,14 +669,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	public synchronized void timeElapsed(int eventID) {
-		inEventQueue.add(new Runnable() {
-			@Override
-			public void run() {
-				timeEvents[eventID] = true;
-				singleCycle();
-			}
-		});
-		runCycle();
+		timeEvents[eventID] = true;
 	}
 	
 	public SCInterface getSCInterface() {
@@ -851,23 +677,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	private void raiseResetMachineInternal() {
-	
-		internalEventQueue.add( new Runnable() {
-			@Override public void run() {
-				resetMachineInternal = true;					
-				singleCycle();
-			}
-		});
+		synchronized(DrinkingfactoryStatemachine.this) {
+			resetMachineInternal = true;
+		}
 	}
 	
 	private void raiseUserActionInternal() {
-	
-		internalEventQueue.add( new Runnable() {
-			@Override public void run() {
-				userActionInternal = true;					
-				singleCycle();
-			}
-		});
+		synchronized(DrinkingfactoryStatemachine.this) {
+			userActionInternal = true;
+		}
 	}
 	
 	public synchronized void raiseDrinkSelected() {
@@ -970,17 +788,128 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return sCInterface.isRaisedCheckPayment();
 	}
 	
-	public synchronized long getDrinkNum() {
-		return sCInterface.getDrinkNum();
+	public synchronized String getDrinkName() {
+		return sCInterface.getDrinkName();
 	}
 	
-	public synchronized void setDrinkNum(long value) {
-		sCInterface.setDrinkNum(value);
+	public synchronized void setDrinkName(String value) {
+		sCInterface.setDrinkName(value);
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr0_tr0() {
+		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr1_tr1() {
+		return (sCInterface.getDrinkName()== null?"coffee" ==null :sCInterface.getDrinkName().equals("coffee"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr2_tr2() {
+		return (sCInterface.getDrinkName()== null?"espresso" ==null :sCInterface.getDrinkName().equals("espresso"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr0_tr0() {
+		return (sCInterface.getDrinkName()== null?"coffee" ==null :sCInterface.getDrinkName().equals("coffee"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr1_tr1() {
+		return (sCInterface.getDrinkName()== null?"espresso" ==null :sCInterface.getDrinkName().equals("espresso"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr2_tr2() {
+		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr0_tr0() {
+		return (sCInterface.getDrinkName()== null?"espresso" ==null :sCInterface.getDrinkName().equals("espresso"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr1_tr1() {
+		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr2_tr2() {
+		return (sCInterface.getDrinkName()== null?"coffee" ==null :sCInterface.getDrinkName().equals("coffee"));
 	}
 	
 	private void effect_machine_management_Preparation_tr0() {
 		exitSequence_machine_management_Preparation();
 		enterSequence_machine_management_Cleaning_default();
+		react();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr0() {
+		sCInterface.raiseTakeTeaBag();
+		
+		enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr1() {
+		sCInterface.raiseTakeCoffeePod();
+		
+		enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr2() {
+		enterSequence_machine_management_Preparation_r1_step1_r1_Expresso_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr3() {
+		exitSequence_machine_management_Preparation_r1_step1();
+		react_machine_management_Preparation_r1_e();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step2_r1__choice_0_tr0() {
+		enterSequence_machine_management_Preparation_r1_step2_r1_sync_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step2_r1__choice_0_tr1() {
+		enterSequence_machine_management_Preparation_r1_step2_r1_Expresso_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step2_r1__choice_0_tr2() {
+		enterSequence_machine_management_Preparation_r1_step2_r1_sync_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step2_r1__choice_0_tr3() {
+		exitSequence_machine_management_Preparation_r1_step2();
+		react_machine_management_Preparation_r1_e();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step3_r1__choice_0_tr0() {
+		enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step3_r1__choice_0_tr1() {
+		enterSequence_machine_management_Preparation_r1_step3_r1_Tea1_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step3_r1__choice_0_tr2() {
+		enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step3_r1__choice_0_tr3() {
+		exitSequence_machine_management_Preparation_r1_step3();
+		react_machine_management_Preparation_r1_e();
+	}
+	
+	/* Entry action for state 'Payment'. */
+	private void entryAction_payment_management_Payment() {
+		sCInterface.raiseCheckPayment();
+		
+		raiseUserActionInternal();
+	}
+	
+	/* Entry action for state 'configuration'. */
+	private void entryAction_activity_management_configuration() {
+		timer.setTimer(this, 0, (10 * 1000), false);
+	}
+	
+	/* Entry action for state 'configuration'. */
+	private void entryAction_drink_management_configuration() {
+		sCInterface.raiseCheckPayment();
+		
+		raiseUserActionInternal();
 	}
 	
 	/* Entry action for state 'Standby'. */
@@ -990,19 +919,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'Cleaning'. */
 	private void entryAction_machine_management_Cleaning() {
-		timer.setTimer(this, 0, (10 * 1000), false);
+		timer.setTimer(this, 1, (10 * 1000), false);
 		
-		sCInterface.setDrinkNum(0);
-	}
-	
-	/* Entry action for state 'checkingPayment'. */
-	private void entryAction_machine_management_checkingPayment() {
-		sCInterface.raiseCheckPayment();
+		sCInterface.setDrinkName("none");
 	}
 	
 	/* Entry action for state 'Expresso'. */
 	private void entryAction_machine_management_Preparation_r1_step1_r1_Expresso() {
-		timer.setTimer(this, 1, (10 * 1000), false);
+		timer.setTimer(this, 2, (10 * 1000), false);
 		
 		sCInterface.raiseGrindBeans();
 	}
@@ -1017,9 +941,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raisePutCup();
 	}
 	
-	/* Entry action for state 'Tea'. */
-	private void entryAction_machine_management_Preparation_r1_step3_r1_Tea() {
-		timer.setTimer(this, 2, (20 * 1000), false);
+	/* Entry action for state 'tea2'. */
+	private void entryAction_machine_management_Preparation_r1_step3_r1_tea2() {
+		timer.setTimer(this, 3, (20 * 1000), false);
 	}
 	
 	/* Entry action for state 'General'. */
@@ -1029,57 +953,65 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raiseAddSugar();
 	}
 	
-	/* Entry action for state 'Payment'. */
-	private void entryAction_payment_management_Payment() {
-		sCInterface.raiseCheckPayment();
-		
-		raiseUserActionInternal();
-	}
-	
-	/* Entry action for state 'configuration'. */
-	private void entryAction_activity_management_configuration() {
-		timer.setTimer(this, 3, (10 * 1000), false);
+	/* Exit action for state 'configuration'. */
+	private void exitAction_activity_management_configuration() {
+		timer.unsetTimer(this, 0);
 	}
 	
 	/* Exit action for state 'Cleaning'. */
 	private void exitAction_machine_management_Cleaning() {
-		timer.unsetTimer(this, 0);
+		timer.unsetTimer(this, 1);
 	}
 	
 	/* Exit action for state 'Expresso'. */
 	private void exitAction_machine_management_Preparation_r1_step1_r1_Expresso() {
-		timer.unsetTimer(this, 1);
-	}
-	
-	/* Exit action for state 'Tea'. */
-	private void exitAction_machine_management_Preparation_r1_step3_r1_Tea() {
 		timer.unsetTimer(this, 2);
 	}
 	
-	/* Exit action for state 'configuration'. */
-	private void exitAction_activity_management_configuration() {
+	/* Exit action for state 'tea2'. */
+	private void exitAction_machine_management_Preparation_r1_step3_r1_tea2() {
 		timer.unsetTimer(this, 3);
+	}
+	
+	/* 'default' enter sequence for state Payment */
+	private void enterSequence_payment_management_Payment_default() {
+		entryAction_payment_management_Payment();
+		nextStateIndex = 0;
+		stateVector[0] = State.payment_management_Payment;
+	}
+	
+	/* 'default' enter sequence for state configuration */
+	private void enterSequence_activity_management_configuration_default() {
+		entryAction_activity_management_configuration();
+		nextStateIndex = 1;
+		stateVector[1] = State.activity_management_configuration;
+	}
+	
+	/* 'default' enter sequence for state configuration */
+	private void enterSequence_drink_management_configuration_default() {
+		entryAction_drink_management_configuration();
+		nextStateIndex = 2;
+		stateVector[2] = State.drink_management_configuration;
 	}
 	
 	/* 'default' enter sequence for state Standby */
 	private void enterSequence_machine_management_Standby_default() {
 		entryAction_machine_management_Standby();
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Standby;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Standby;
 	}
 	
 	/* 'default' enter sequence for state Cleaning */
 	private void enterSequence_machine_management_Cleaning_default() {
 		entryAction_machine_management_Cleaning();
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Cleaning;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Cleaning;
 	}
 	
 	/* 'default' enter sequence for state checkingPayment */
 	private void enterSequence_machine_management_checkingPayment_default() {
-		entryAction_machine_management_checkingPayment();
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_checkingPayment;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_checkingPayment;
 	}
 	
 	/* 'default' enter sequence for state Preparation */
@@ -1096,33 +1028,27 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	/* 'default' enter sequence for state Expresso */
 	private void enterSequence_machine_management_Preparation_r1_step1_r1_Expresso_default() {
 		entryAction_machine_management_Preparation_r1_step1_r1_Expresso();
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step1_r1_Expresso;
-	}
-	
-	/* 'default' enter sequence for state entry */
-	private void enterSequence_machine_management_Preparation_r1_step1_r1_entry_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step1_r1_entry;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step1_r1_Expresso;
 	}
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step1_r1_sync_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step1_r1_sync;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step1_r1_sync;
 	}
 	
 	/* 'default' enter sequence for state General */
 	private void enterSequence_machine_management_Preparation_r1_step1_r2_General_default() {
 		entryAction_machine_management_Preparation_r1_step1_r2_General();
-		nextStateIndex = 1;
-		stateVector[1] = State.machine_management_Preparation_r1_step1_r2_General;
+		nextStateIndex = 4;
+		stateVector[4] = State.machine_management_Preparation_r1_step1_r2_General;
 	}
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step1_r2_sync_default() {
-		nextStateIndex = 1;
-		stateVector[1] = State.machine_management_Preparation_r1_step1_r2_sync;
+		nextStateIndex = 4;
+		stateVector[4] = State.machine_management_Preparation_r1_step1_r2_sync;
 	}
 	
 	/* 'default' enter sequence for state step2 */
@@ -1133,27 +1059,21 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state Expresso */
 	private void enterSequence_machine_management_Preparation_r1_step2_r1_Expresso_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step2_r1_Expresso;
-	}
-	
-	/* 'default' enter sequence for state entry */
-	private void enterSequence_machine_management_Preparation_r1_step2_r1_entry_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step2_r1_entry;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step2_r1_Expresso;
 	}
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step2_r1_sync_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step2_r1_sync;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step2_r1_sync;
 	}
 	
 	/* 'default' enter sequence for state General */
 	private void enterSequence_machine_management_Preparation_r1_step2_r2_General_default() {
 		entryAction_machine_management_Preparation_r1_step2_r2_General();
-		nextStateIndex = 1;
-		stateVector[1] = State.machine_management_Preparation_r1_step2_r2_General;
+		nextStateIndex = 4;
+		stateVector[4] = State.machine_management_Preparation_r1_step2_r2_General;
 	}
 	
 	/* 'default' enter sequence for state step3 */
@@ -1162,62 +1082,57 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		enterSequence_machine_management_Preparation_r1_step3_r2_default();
 	}
 	
-	/* 'default' enter sequence for state Tea */
-	private void enterSequence_machine_management_Preparation_r1_step3_r1_Tea_default() {
-		entryAction_machine_management_Preparation_r1_step3_r1_Tea();
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step3_r1_Tea;
-	}
-	
-	/* 'default' enter sequence for state entry */
-	private void enterSequence_machine_management_Preparation_r1_step3_r1_entry_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step3_r1_entry;
+	/* 'default' enter sequence for state Tea1 */
+	private void enterSequence_machine_management_Preparation_r1_step3_r1_Tea1_default() {
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_Tea1;
 	}
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step3_r1_sync_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_step3_r1_sync;
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_sync;
+	}
+	
+	/* 'default' enter sequence for state tea2 */
+	private void enterSequence_machine_management_Preparation_r1_step3_r1_tea2_default() {
+		entryAction_machine_management_Preparation_r1_step3_r1_tea2();
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_tea2;
 	}
 	
 	/* 'default' enter sequence for state General */
 	private void enterSequence_machine_management_Preparation_r1_step3_r2_General_default() {
 		entryAction_machine_management_Preparation_r1_step3_r2_General();
-		nextStateIndex = 1;
-		stateVector[1] = State.machine_management_Preparation_r1_step3_r2_General;
+		nextStateIndex = 4;
+		stateVector[4] = State.machine_management_Preparation_r1_step3_r2_General;
 	}
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step3_r2_sync_default() {
-		nextStateIndex = 1;
-		stateVector[1] = State.machine_management_Preparation_r1_step3_r2_sync;
+		nextStateIndex = 4;
+		stateVector[4] = State.machine_management_Preparation_r1_step3_r2_sync;
 	}
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_sync_default() {
-		nextStateIndex = 0;
-		stateVector[0] = State.machine_management_Preparation_r1_sync;
-	}
-	
-	/* 'default' enter sequence for state Payment */
-	private void enterSequence_payment_management_Payment_default() {
-		entryAction_payment_management_Payment();
-		nextStateIndex = 2;
-		stateVector[2] = State.payment_management_Payment;
-	}
-	
-	/* 'default' enter sequence for state configuration */
-	private void enterSequence_activity_management_configuration_default() {
-		entryAction_activity_management_configuration();
 		nextStateIndex = 3;
-		stateVector[3] = State.activity_management_configuration;
+		stateVector[3] = State.machine_management_Preparation_r1_sync;
 	}
 	
-	/* 'default' enter sequence for state configuration */
-	private void enterSequence_drink_management_configuration_default() {
-		nextStateIndex = 4;
-		stateVector[4] = State.drink_management_configuration;
+	/* 'default' enter sequence for region payment management */
+	private void enterSequence_payment_management_default() {
+		react_payment_management__entry_Default();
+	}
+	
+	/* 'default' enter sequence for region activity management */
+	private void enterSequence_activity_management_default() {
+		react_activity_management__entry_Default();
+	}
+	
+	/* 'default' enter sequence for region drink management */
+	private void enterSequence_drink_management_default() {
+		react_drink_management__entry_Default();
 	}
 	
 	/* 'default' enter sequence for region machine management */
@@ -1260,39 +1175,44 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		react_machine_management_Preparation_r1_step3_r2__entry_Default();
 	}
 	
-	/* 'default' enter sequence for region payment management */
-	private void enterSequence_payment_management_default() {
-		react_payment_management__entry_Default();
+	/* Default exit sequence for state Payment */
+	private void exitSequence_payment_management_Payment() {
+		nextStateIndex = 0;
+		stateVector[0] = State.$NullState$;
 	}
 	
-	/* 'default' enter sequence for region activity management */
-	private void enterSequence_activity_management_default() {
-		react_activity_management__entry_Default();
+	/* Default exit sequence for state configuration */
+	private void exitSequence_activity_management_configuration() {
+		nextStateIndex = 1;
+		stateVector[1] = State.$NullState$;
+		
+		exitAction_activity_management_configuration();
 	}
 	
-	/* 'default' enter sequence for region drink management */
-	private void enterSequence_drink_management_default() {
-		react_drink_management__entry_Default();
+	/* Default exit sequence for state configuration */
+	private void exitSequence_drink_management_configuration() {
+		nextStateIndex = 2;
+		stateVector[2] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state Standby */
 	private void exitSequence_machine_management_Standby() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state Cleaning */
 	private void exitSequence_machine_management_Cleaning() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 		
 		exitAction_machine_management_Cleaning();
 	}
 	
 	/* Default exit sequence for state checkingPayment */
 	private void exitSequence_machine_management_checkingPayment() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state Preparation */
@@ -1308,34 +1228,28 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for state Expresso */
 	private void exitSequence_machine_management_Preparation_r1_step1_r1_Expresso() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 		
 		exitAction_machine_management_Preparation_r1_step1_r1_Expresso();
 	}
 	
-	/* Default exit sequence for state entry */
-	private void exitSequence_machine_management_Preparation_r1_step1_r1_entry() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
-	}
-	
 	/* Default exit sequence for state sync */
 	private void exitSequence_machine_management_Preparation_r1_step1_r1_sync() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state General */
 	private void exitSequence_machine_management_Preparation_r1_step1_r2_General() {
-		nextStateIndex = 1;
-		stateVector[1] = State.$NullState$;
+		nextStateIndex = 4;
+		stateVector[4] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state sync */
 	private void exitSequence_machine_management_Preparation_r1_step1_r2_sync() {
-		nextStateIndex = 1;
-		stateVector[1] = State.$NullState$;
+		nextStateIndex = 4;
+		stateVector[4] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state step2 */
@@ -1346,26 +1260,20 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for state Expresso */
 	private void exitSequence_machine_management_Preparation_r1_step2_r1_Expresso() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state entry */
-	private void exitSequence_machine_management_Preparation_r1_step2_r1_entry() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state sync */
 	private void exitSequence_machine_management_Preparation_r1_step2_r1_sync() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state General */
 	private void exitSequence_machine_management_Preparation_r1_step2_r2_General() {
-		nextStateIndex = 1;
-		stateVector[1] = State.$NullState$;
+		nextStateIndex = 4;
+		stateVector[4] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state step3 */
@@ -1374,67 +1282,80 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		exitSequence_machine_management_Preparation_r1_step3_r2();
 	}
 	
-	/* Default exit sequence for state Tea */
-	private void exitSequence_machine_management_Preparation_r1_step3_r1_Tea() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
-		
-		exitAction_machine_management_Preparation_r1_step3_r1_Tea();
-	}
-	
-	/* Default exit sequence for state entry */
-	private void exitSequence_machine_management_Preparation_r1_step3_r1_entry() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+	/* Default exit sequence for state Tea1 */
+	private void exitSequence_machine_management_Preparation_r1_step3_r1_Tea1() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
 	}
 	
 	/* Default exit sequence for state sync */
 	private void exitSequence_machine_management_Preparation_r1_step3_r1_sync() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+	}
+	
+	/* Default exit sequence for state tea2 */
+	private void exitSequence_machine_management_Preparation_r1_step3_r1_tea2() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+		
+		exitAction_machine_management_Preparation_r1_step3_r1_tea2();
 	}
 	
 	/* Default exit sequence for state General */
 	private void exitSequence_machine_management_Preparation_r1_step3_r2_General() {
-		nextStateIndex = 1;
-		stateVector[1] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state sync */
-	private void exitSequence_machine_management_Preparation_r1_step3_r2_sync() {
-		nextStateIndex = 1;
-		stateVector[1] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state sync */
-	private void exitSequence_machine_management_Preparation_r1_sync() {
-		nextStateIndex = 0;
-		stateVector[0] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state Payment */
-	private void exitSequence_payment_management_Payment() {
-		nextStateIndex = 2;
-		stateVector[2] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state configuration */
-	private void exitSequence_activity_management_configuration() {
-		nextStateIndex = 3;
-		stateVector[3] = State.$NullState$;
-		
-		exitAction_activity_management_configuration();
-	}
-	
-	/* Default exit sequence for state configuration */
-	private void exitSequence_drink_management_configuration() {
 		nextStateIndex = 4;
 		stateVector[4] = State.$NullState$;
 	}
 	
+	/* Default exit sequence for state sync */
+	private void exitSequence_machine_management_Preparation_r1_step3_r2_sync() {
+		nextStateIndex = 4;
+		stateVector[4] = State.$NullState$;
+	}
+	
+	/* Default exit sequence for state sync */
+	private void exitSequence_machine_management_Preparation_r1_sync() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+	}
+	
+	/* Default exit sequence for region payment management */
+	private void exitSequence_payment_management() {
+		switch (stateVector[0]) {
+		case payment_management_Payment:
+			exitSequence_payment_management_Payment();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	/* Default exit sequence for region activity management */
+	private void exitSequence_activity_management() {
+		switch (stateVector[1]) {
+		case activity_management_configuration:
+			exitSequence_activity_management_configuration();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	/* Default exit sequence for region drink management */
+	private void exitSequence_drink_management() {
+		switch (stateVector[2]) {
+		case drink_management_configuration:
+			exitSequence_drink_management_configuration();
+			break;
+		default:
+			break;
+		}
+	}
+	
 	/* Default exit sequence for region machine management */
 	private void exitSequence_machine_management() {
-		switch (stateVector[0]) {
+		switch (stateVector[3]) {
 		case machine_management_Standby:
 			exitSequence_machine_management_Standby();
 			break;
@@ -1447,29 +1368,23 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_step1_r1_Expresso:
 			exitSequence_machine_management_Preparation_r1_step1_r1_Expresso();
 			break;
-		case machine_management_Preparation_r1_step1_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step1_r1_entry();
-			break;
 		case machine_management_Preparation_r1_step1_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step1_r1_sync();
 			break;
 		case machine_management_Preparation_r1_step2_r1_Expresso:
 			exitSequence_machine_management_Preparation_r1_step2_r1_Expresso();
 			break;
-		case machine_management_Preparation_r1_step2_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step2_r1_entry();
-			break;
 		case machine_management_Preparation_r1_step2_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step2_r1_sync();
 			break;
-		case machine_management_Preparation_r1_step3_r1_Tea:
-			exitSequence_machine_management_Preparation_r1_step3_r1_Tea();
-			break;
-		case machine_management_Preparation_r1_step3_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step3_r1_entry();
+		case machine_management_Preparation_r1_step3_r1_Tea1:
+			exitSequence_machine_management_Preparation_r1_step3_r1_Tea1();
 			break;
 		case machine_management_Preparation_r1_step3_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step3_r1_sync();
+			break;
+		case machine_management_Preparation_r1_step3_r1_tea2:
+			exitSequence_machine_management_Preparation_r1_step3_r1_tea2();
 			break;
 		case machine_management_Preparation_r1_sync:
 			exitSequence_machine_management_Preparation_r1_sync();
@@ -1478,7 +1393,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			break;
 		}
 		
-		switch (stateVector[1]) {
+		switch (stateVector[4]) {
 		case machine_management_Preparation_r1_step1_r2_General:
 			exitSequence_machine_management_Preparation_r1_step1_r2_General();
 			break;
@@ -1501,12 +1416,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for region r1 */
 	private void exitSequence_machine_management_Preparation_r1() {
-		switch (stateVector[0]) {
+		switch (stateVector[3]) {
 		case machine_management_Preparation_r1_step1_r1_Expresso:
 			exitSequence_machine_management_Preparation_r1_step1_r1_Expresso();
-			break;
-		case machine_management_Preparation_r1_step1_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step1_r1_entry();
 			break;
 		case machine_management_Preparation_r1_step1_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step1_r1_sync();
@@ -1514,20 +1426,17 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_step2_r1_Expresso:
 			exitSequence_machine_management_Preparation_r1_step2_r1_Expresso();
 			break;
-		case machine_management_Preparation_r1_step2_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step2_r1_entry();
-			break;
 		case machine_management_Preparation_r1_step2_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step2_r1_sync();
 			break;
-		case machine_management_Preparation_r1_step3_r1_Tea:
-			exitSequence_machine_management_Preparation_r1_step3_r1_Tea();
-			break;
-		case machine_management_Preparation_r1_step3_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step3_r1_entry();
+		case machine_management_Preparation_r1_step3_r1_Tea1:
+			exitSequence_machine_management_Preparation_r1_step3_r1_Tea1();
 			break;
 		case machine_management_Preparation_r1_step3_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step3_r1_sync();
+			break;
+		case machine_management_Preparation_r1_step3_r1_tea2:
+			exitSequence_machine_management_Preparation_r1_step3_r1_tea2();
 			break;
 		case machine_management_Preparation_r1_sync:
 			exitSequence_machine_management_Preparation_r1_sync();
@@ -1536,7 +1445,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			break;
 		}
 		
-		switch (stateVector[1]) {
+		switch (stateVector[4]) {
 		case machine_management_Preparation_r1_step1_r2_General:
 			exitSequence_machine_management_Preparation_r1_step1_r2_General();
 			break;
@@ -1559,12 +1468,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for region r1 */
 	private void exitSequence_machine_management_Preparation_r1_step1_r1() {
-		switch (stateVector[0]) {
+		switch (stateVector[3]) {
 		case machine_management_Preparation_r1_step1_r1_Expresso:
 			exitSequence_machine_management_Preparation_r1_step1_r1_Expresso();
-			break;
-		case machine_management_Preparation_r1_step1_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step1_r1_entry();
 			break;
 		case machine_management_Preparation_r1_step1_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step1_r1_sync();
@@ -1576,7 +1482,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for region r2 */
 	private void exitSequence_machine_management_Preparation_r1_step1_r2() {
-		switch (stateVector[1]) {
+		switch (stateVector[4]) {
 		case machine_management_Preparation_r1_step1_r2_General:
 			exitSequence_machine_management_Preparation_r1_step1_r2_General();
 			break;
@@ -1590,12 +1496,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for region r1 */
 	private void exitSequence_machine_management_Preparation_r1_step2_r1() {
-		switch (stateVector[0]) {
+		switch (stateVector[3]) {
 		case machine_management_Preparation_r1_step2_r1_Expresso:
 			exitSequence_machine_management_Preparation_r1_step2_r1_Expresso();
-			break;
-		case machine_management_Preparation_r1_step2_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step2_r1_entry();
 			break;
 		case machine_management_Preparation_r1_step2_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step2_r1_sync();
@@ -1607,7 +1510,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for region r2 */
 	private void exitSequence_machine_management_Preparation_r1_step2_r2() {
-		switch (stateVector[1]) {
+		switch (stateVector[4]) {
 		case machine_management_Preparation_r1_step2_r2_General:
 			exitSequence_machine_management_Preparation_r1_step2_r2_General();
 			break;
@@ -1618,15 +1521,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for region r1 */
 	private void exitSequence_machine_management_Preparation_r1_step3_r1() {
-		switch (stateVector[0]) {
-		case machine_management_Preparation_r1_step3_r1_Tea:
-			exitSequence_machine_management_Preparation_r1_step3_r1_Tea();
-			break;
-		case machine_management_Preparation_r1_step3_r1_entry:
-			exitSequence_machine_management_Preparation_r1_step3_r1_entry();
+		switch (stateVector[3]) {
+		case machine_management_Preparation_r1_step3_r1_Tea1:
+			exitSequence_machine_management_Preparation_r1_step3_r1_Tea1();
 			break;
 		case machine_management_Preparation_r1_step3_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step3_r1_sync();
+			break;
+		case machine_management_Preparation_r1_step3_r1_tea2:
+			exitSequence_machine_management_Preparation_r1_step3_r1_tea2();
 			break;
 		default:
 			break;
@@ -1635,7 +1538,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for region r2 */
 	private void exitSequence_machine_management_Preparation_r1_step3_r2() {
-		switch (stateVector[1]) {
+		switch (stateVector[4]) {
 		case machine_management_Preparation_r1_step3_r2_General:
 			exitSequence_machine_management_Preparation_r1_step3_r2_General();
 			break;
@@ -1647,77 +1550,55 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		}
 	}
 	
-	/* Default exit sequence for region payment management */
-	private void exitSequence_payment_management() {
-		switch (stateVector[2]) {
-		case payment_management_Payment:
-			exitSequence_payment_management_Payment();
-			break;
-		default:
-			break;
+	/* The reactions of state null. */
+	private void react_machine_management_Preparation_r1_step1_r1__choice_0() {
+		if (check_machine_management_Preparation_r1_step1_r1__choice_0_tr0_tr0()) {
+			effect_machine_management_Preparation_r1_step1_r1__choice_0_tr0();
+		} else {
+			if (check_machine_management_Preparation_r1_step1_r1__choice_0_tr1_tr1()) {
+				effect_machine_management_Preparation_r1_step1_r1__choice_0_tr1();
+			} else {
+				if (check_machine_management_Preparation_r1_step1_r1__choice_0_tr2_tr2()) {
+					effect_machine_management_Preparation_r1_step1_r1__choice_0_tr2();
+				} else {
+					effect_machine_management_Preparation_r1_step1_r1__choice_0_tr3();
+				}
+			}
 		}
 	}
 	
-	/* Default exit sequence for region activity management */
-	private void exitSequence_activity_management() {
-		switch (stateVector[3]) {
-		case activity_management_configuration:
-			exitSequence_activity_management_configuration();
-			break;
-		default:
-			break;
+	/* The reactions of state null. */
+	private void react_machine_management_Preparation_r1_step2_r1__choice_0() {
+		if (check_machine_management_Preparation_r1_step2_r1__choice_0_tr0_tr0()) {
+			effect_machine_management_Preparation_r1_step2_r1__choice_0_tr0();
+		} else {
+			if (check_machine_management_Preparation_r1_step2_r1__choice_0_tr1_tr1()) {
+				effect_machine_management_Preparation_r1_step2_r1__choice_0_tr1();
+			} else {
+				if (check_machine_management_Preparation_r1_step2_r1__choice_0_tr2_tr2()) {
+					effect_machine_management_Preparation_r1_step2_r1__choice_0_tr2();
+				} else {
+					effect_machine_management_Preparation_r1_step2_r1__choice_0_tr3();
+				}
+			}
 		}
 	}
 	
-	/* Default exit sequence for region drink management */
-	private void exitSequence_drink_management() {
-		switch (stateVector[4]) {
-		case drink_management_configuration:
-			exitSequence_drink_management_configuration();
-			break;
-		default:
-			break;
+	/* The reactions of state null. */
+	private void react_machine_management_Preparation_r1_step3_r1__choice_0() {
+		if (check_machine_management_Preparation_r1_step3_r1__choice_0_tr0_tr0()) {
+			effect_machine_management_Preparation_r1_step3_r1__choice_0_tr0();
+		} else {
+			if (check_machine_management_Preparation_r1_step3_r1__choice_0_tr1_tr1()) {
+				effect_machine_management_Preparation_r1_step3_r1__choice_0_tr1();
+			} else {
+				if (check_machine_management_Preparation_r1_step3_r1__choice_0_tr2_tr2()) {
+					effect_machine_management_Preparation_r1_step3_r1__choice_0_tr2();
+				} else {
+					effect_machine_management_Preparation_r1_step3_r1__choice_0_tr3();
+				}
+			}
 		}
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management__entry_Default() {
-		enterSequence_machine_management_Standby_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management_Preparation_r1_step1_r1__entry_Default() {
-		enterSequence_machine_management_Preparation_r1_step1_r1_entry_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management_Preparation_r1_step1_r2__entry_Default() {
-		enterSequence_machine_management_Preparation_r1_step1_r2_General_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management_Preparation_r1__entry_Default() {
-		enterSequence_machine_management_Preparation_r1_step1_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management_Preparation_r1_step2_r1__entry_Default() {
-		enterSequence_machine_management_Preparation_r1_step2_r1_entry_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management_Preparation_r1_step2_r2__entry_Default() {
-		enterSequence_machine_management_Preparation_r1_step2_r2_General_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management_Preparation_r1_step3_r1__entry_Default() {
-		enterSequence_machine_management_Preparation_r1_step3_r1_entry_default();
-	}
-	
-	/* Default react sequence for initial entry  */
-	private void react_machine_management_Preparation_r1_step3_r2__entry_Default() {
-		enterSequence_machine_management_Preparation_r1_step3_r2_General_default();
 	}
 	
 	/* Default react sequence for initial entry  */
@@ -1733,6 +1614,46 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	/* Default react sequence for initial entry  */
 	private void react_drink_management__entry_Default() {
 		enterSequence_drink_management_configuration_default();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management__entry_Default() {
+		enterSequence_machine_management_Standby_default();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management_Preparation_r1_step1_r1__entry_Default() {
+		react_machine_management_Preparation_r1_step1_r1__choice_0();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management_Preparation_r1_step1_r2__entry_Default() {
+		enterSequence_machine_management_Preparation_r1_step1_r2_General_default();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management_Preparation_r1__entry_Default() {
+		enterSequence_machine_management_Preparation_r1_step1_default();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management_Preparation_r1_step2_r1__entry_Default() {
+		react_machine_management_Preparation_r1_step2_r1__choice_0();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management_Preparation_r1_step2_r2__entry_Default() {
+		enterSequence_machine_management_Preparation_r1_step2_r2_General_default();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management_Preparation_r1_step3_r1__entry_Default() {
+		react_machine_management_Preparation_r1_step3_r1__choice_0();
+	}
+	
+	/* Default react sequence for initial entry  */
+	private void react_machine_management_Preparation_r1_step3_r2__entry_Default() {
+		enterSequence_machine_management_Preparation_r1_step3_r2_General_default();
 	}
 	
 	/* The reactions of exit e. */
@@ -1759,23 +1680,37 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return false;
 	}
 	
-	private boolean machine_management_Standby_react(boolean try_transition) {
+	private boolean payment_management_Payment_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.drinkSelected) {
-				exitSequence_machine_management_Standby();
-				sCInterface.raiseUserAction();
-				
-				enterSequence_machine_management_checkingPayment_default();
+			if (sCInterface.addMoney) {
+				exitSequence_payment_management_Payment();
+				enterSequence_payment_management_Payment_default();
 			} else {
-				if (sCInterface.addMoney) {
-					exitSequence_machine_management_Standby();
-					enterSequence_machine_management_checkingPayment_default();
+				did_transition = false;
+			}
+		}
+		return did_transition;
+	}
+	
+	private boolean activity_management_configuration_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (timeEvents[0]) {
+				exitSequence_activity_management_configuration();
+				raiseResetMachineInternal();
+				
+				enterSequence_activity_management_configuration_default();
+			} else {
+				if (sCInterface.userAction) {
+					exitSequence_activity_management_configuration();
+					enterSequence_activity_management_configuration_default();
 				} else {
-					if (resetMachineInternal) {
-						exitSequence_machine_management_Standby();
-						enterSequence_machine_management_Standby_default();
+					if (userActionInternal) {
+						exitSequence_activity_management_configuration();
+						enterSequence_activity_management_configuration_default();
 					} else {
 						did_transition = false;
 					}
@@ -1785,16 +1720,82 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return did_transition;
 	}
 	
+	private boolean drink_management_configuration_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (sCInterface.coffeeSelected) {
+				exitSequence_drink_management_configuration();
+				sCInterface.setDrinkName("coffee");
+				
+				enterSequence_drink_management_configuration_default();
+			} else {
+				if (sCInterface.teaSelected) {
+					exitSequence_drink_management_configuration();
+					sCInterface.setDrinkName("tea");
+					
+					enterSequence_drink_management_configuration_default();
+				} else {
+					if (sCInterface.espressoSelected) {
+						exitSequence_drink_management_configuration();
+						sCInterface.setDrinkName("espresso");
+						
+						enterSequence_drink_management_configuration_default();
+					} else {
+						did_transition = false;
+					}
+				}
+			}
+		}
+		return did_transition;
+	}
+	
+	private boolean machine_management_Standby_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (sCInterface.drinkSelected) {
+				exitSequence_machine_management_Standby();
+				sCInterface.raiseUserAction();
+				
+				enterSequence_machine_management_checkingPayment_default();
+				react();
+			} else {
+				if (sCInterface.addMoney) {
+					exitSequence_machine_management_Standby();
+					enterSequence_machine_management_checkingPayment_default();
+					react();
+				} else {
+					if (resetMachineInternal) {
+						exitSequence_machine_management_Standby();
+						enterSequence_machine_management_Standby_default();
+						react();
+					} else {
+						did_transition = false;
+					}
+				}
+			}
+		}
+		if (did_transition==false) {
+			did_transition = react();
+		}
+		return did_transition;
+	}
+	
 	private boolean machine_management_Cleaning_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (timeEvents[0]) {
+			if (timeEvents[1]) {
 				exitSequence_machine_management_Cleaning();
 				enterSequence_machine_management_Standby_default();
+				react();
 			} else {
 				did_transition = false;
 			}
+		}
+		if (did_transition==false) {
+			did_transition = react();
 		}
 		return did_transition;
 	}
@@ -1808,21 +1809,19 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				sCInterface.raiseDoResetMoney();
 				
 				enterSequence_machine_management_Preparation_default();
+				react();
 			} else {
 				if (resetMachineInternal) {
 					exitSequence_machine_management_checkingPayment();
 					enterSequence_machine_management_Standby_default();
+					react();
 				} else {
-					if (sCInterface.drinkSelected) {
-						exitSequence_machine_management_checkingPayment();
-						raiseUserActionInternal();
-						
-						enterSequence_machine_management_checkingPayment_default();
-					} else {
-						did_transition = false;
-					}
+					did_transition = false;
 				}
 			}
+		}
+		if (did_transition==false) {
+			did_transition = react();
 		}
 		return did_transition;
 	}
@@ -1832,6 +1831,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		if (try_transition) {
 			did_transition = false;
+		}
+		if (did_transition==false) {
+			did_transition = react();
 		}
 		return did_transition;
 	}
@@ -1852,39 +1854,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (timeEvents[1]) {
+			if (timeEvents[2]) {
 				exitSequence_machine_management_Preparation_r1_step1_r1_Expresso();
 				enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
 			} else {
 				did_transition = false;
-			}
-		}
-		return did_transition;
-	}
-	
-	private boolean machine_management_Preparation_r1_step1_r1_entry_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (sCInterface.getDrinkNum()==1) {
-				exitSequence_machine_management_Preparation_r1_step1_r1_entry();
-				enterSequence_machine_management_Preparation_r1_step1_r1_Expresso_default();
-			} else {
-				if (sCInterface.getDrinkNum()==2) {
-					exitSequence_machine_management_Preparation_r1_step1_r1_entry();
-					sCInterface.raiseTakeTeaBag();
-					
-					enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
-				} else {
-					if (sCInterface.getDrinkNum()==3) {
-						exitSequence_machine_management_Preparation_r1_step1_r1_entry();
-						sCInterface.raiseTakeCoffeePod();
-						
-						enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
-					} else {
-						did_transition = false;
-					}
-				}
 			}
 		}
 		return did_transition;
@@ -1963,30 +1937,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return did_transition;
 	}
 	
-	private boolean machine_management_Preparation_r1_step2_r1_entry_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (sCInterface.getDrinkNum()==2) {
-				exitSequence_machine_management_Preparation_r1_step2_r1_entry();
-				enterSequence_machine_management_Preparation_r1_step2_r1_sync_default();
-			} else {
-				if (sCInterface.getDrinkNum()==1) {
-					exitSequence_machine_management_Preparation_r1_step2_r1_entry();
-					enterSequence_machine_management_Preparation_r1_step2_r1_Expresso_default();
-				} else {
-					if (sCInterface.getDrinkNum()==3) {
-						exitSequence_machine_management_Preparation_r1_step2_r1_entry();
-						enterSequence_machine_management_Preparation_r1_step2_r1_sync_default();
-					} else {
-						did_transition = false;
-					}
-				}
-			}
-		}
-		return did_transition;
-	}
-	
 	private boolean machine_management_Preparation_r1_step2_r1_sync_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
@@ -2030,41 +1980,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return did_transition;
 	}
 	
-	private boolean machine_management_Preparation_r1_step3_r1_Tea_react(boolean try_transition) {
+	private boolean machine_management_Preparation_r1_step3_r1_Tea1_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (timeEvents[2]) {
-				exitSequence_machine_management_Preparation_r1_step3_r1_Tea();
-				sCInterface.raiseTakeOffTeaBag();
-				
-				enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
+			if (sCInterface.cupFilled) {
+				exitSequence_machine_management_Preparation_r1_step3_r1_Tea1();
+				enterSequence_machine_management_Preparation_r1_step3_r1_tea2_default();
 			} else {
 				did_transition = false;
-			}
-		}
-		return did_transition;
-	}
-	
-	private boolean machine_management_Preparation_r1_step3_r1_entry_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if ((sCInterface.getDrinkNum()==2 && sCInterface.cupFilled)) {
-				exitSequence_machine_management_Preparation_r1_step3_r1_entry();
-				enterSequence_machine_management_Preparation_r1_step3_r1_Tea_default();
-			} else {
-				if (sCInterface.getDrinkNum()==1) {
-					exitSequence_machine_management_Preparation_r1_step3_r1_entry();
-					enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
-				} else {
-					if (sCInterface.getDrinkNum()==3) {
-						exitSequence_machine_management_Preparation_r1_step3_r1_entry();
-						enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
-					} else {
-						did_transition = false;
-					}
-				}
 			}
 		}
 		return did_transition;
@@ -2077,6 +2001,22 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			if (isStateActive(State.machine_management_Preparation_r1_step3_r2_sync)) {
 				exitSequence_machine_management_Preparation_r1_step3();
 				react_machine_management_Preparation_r1__sync2();
+			} else {
+				did_transition = false;
+			}
+		}
+		return did_transition;
+	}
+	
+	private boolean machine_management_Preparation_r1_step3_r1_tea2_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (timeEvents[3]) {
+				exitSequence_machine_management_Preparation_r1_step3_r1_tea2();
+				sCInterface.raiseTakeOffTeaBag();
+				
+				enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
 			} else {
 				did_transition = false;
 			}
@@ -2134,88 +2074,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		}
 		if (did_transition==false) {
 			did_transition = machine_management_Preparation_react(try_transition);
-		}
-		return did_transition;
-	}
-	
-	private boolean payment_management_Payment_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (sCInterface.addMoney) {
-				exitSequence_payment_management_Payment();
-				enterSequence_payment_management_Payment_default();
-			} else {
-				did_transition = false;
-			}
-		}
-		return did_transition;
-	}
-	
-	private boolean activity_management_configuration_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (timeEvents[3]) {
-				exitSequence_activity_management_configuration();
-				raiseResetMachineInternal();
-				
-				enterSequence_activity_management_configuration_default();
-			} else {
-				if (sCInterface.userAction) {
-					exitSequence_activity_management_configuration();
-					enterSequence_activity_management_configuration_default();
-				} else {
-					if (userActionInternal) {
-						exitSequence_activity_management_configuration();
-						enterSequence_activity_management_configuration_default();
-					} else {
-						did_transition = false;
-					}
-				}
-			}
-		}
-		return did_transition;
-	}
-	
-	private boolean drink_management_configuration_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (sCInterface.coffeeSelected) {
-				exitSequence_drink_management_configuration();
-				sCInterface.setDrinkNum(3);
-				
-				raiseUserActionInternal();
-				
-				enterSequence_drink_management_configuration_default();
-				react();
-			} else {
-				if (sCInterface.teaSelected) {
-					exitSequence_drink_management_configuration();
-					sCInterface.setDrinkNum(2);
-					
-					raiseUserActionInternal();
-					
-					enterSequence_drink_management_configuration_default();
-					react();
-				} else {
-					if (sCInterface.espressoSelected) {
-						exitSequence_drink_management_configuration();
-						sCInterface.setDrinkNum(1);
-						
-						raiseUserActionInternal();
-						
-						enterSequence_drink_management_configuration_default();
-						react();
-					} else {
-						did_transition = false;
-					}
-				}
-			}
-		}
-		if (did_transition==false) {
-			did_transition = react();
 		}
 		return did_transition;
 	}

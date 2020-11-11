@@ -3,11 +3,7 @@ package drinkingfactory.drinkingfactory;
 
 import drinkingfactory.IStatemachine;
 import drinkingfactory.ITimerCallback;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachine {
 	public interface SCInterface {
@@ -62,9 +58,9 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public boolean isRaisedCheckPayment();
 		
-		public long getDrinkNum();
+		public String getDrinkName();
 		
-		public void setDrinkNum(long value);
+		public void setDrinkName(String value);
 		
 	public List<SCInterfaceListener> getListeners();
 	}

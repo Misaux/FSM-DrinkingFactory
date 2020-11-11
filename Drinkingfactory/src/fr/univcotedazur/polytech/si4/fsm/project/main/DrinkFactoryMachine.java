@@ -113,6 +113,21 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
         theFSM.getSCInterface().getListeners().add(this);
 
+        Runnable r = () -> {
+            while(true) {
+                theFSM.runCycle();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+
+        };
+        t = new Thread(r);
+        t.start();
+
         setForeground(Color.WHITE);
         setFont(new Font("Cantarell", Font.BOLD, 22));
         setBackground(Color.DARK_GRAY);
@@ -490,16 +505,17 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             System.out.println(currentWaterVolume);
             currentWaterVolume += 1;
         }
-        if (currentWaterVolume >= this.getSize(sizeSlider.getValue())){
+        if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState){
             pouringState = false;
-            if (theFSM.getDrinkNum() != 2) {
+            if (!theFSM.getDrinkName().equals("tea")) {
                 progressBar.setValue(100);
+                theFSM.raiseCupFilled();
+                takeCupButton.setVisible(true);
             }
             else {
                 progressBar.setValue(80);
+                theFSM.raiseCupFilled();
             }
-            theFSM.raiseCupFilled();
-            takeCupButton.setVisible(true);
         }
         updateMessageToUser();
     }
@@ -579,6 +595,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onTakeOffTeaBagRaised() {
         progressBar.setValue(100);
+        takeCupButton.setVisible(true);
     }
 
     @Override
@@ -666,5 +683,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         cupPlaced = false;
         theFSM.raiseCupGrabbed();
         System.out.println("Cup taken");
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        // TODO Auto-generated method stub
+        super.finalize();
+        t.stop();
     }
 }

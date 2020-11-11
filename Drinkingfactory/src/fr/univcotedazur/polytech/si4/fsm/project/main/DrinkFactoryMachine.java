@@ -555,7 +555,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onDoResetMoneyRaised() {
         if (currentMoneyInserted != 0) {
-            moneyGivingBack = Math.round(currentMoneyInserted * 100) / 100f;
+            moneyGivingBack = Math.round((moneyGivingBack+currentMoneyInserted)*100)/100f;
             takeMoneyButton.setVisible(true);
         }
         setCurrentMoneyInserted(0);

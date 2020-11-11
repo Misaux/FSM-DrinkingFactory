@@ -76,6 +76,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     JButton cancelButton;
     JButton takeCupButton;
     JButton takeMoneyButton;
+    JButton addCupButton;
 
     //Labels
     JLabel lblSugar;
@@ -364,12 +365,21 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         separator.setBounds(12, 292, 622, 15);
         contentPane.add(separator);
 
-        JButton addCupButton = new JButton("Add cup");
+        addCupButton = new JButton("Add cup");
         addCupButton.setForeground(Color.WHITE);
         addCupButton.setBackground(Color.DARK_GRAY);
         addCupButton.setBounds(45, 336, 96, 25);
         addCupButton.addActionListener(e -> {
+            BufferedImage myPicture = null;
+            try {
+                myPicture = ImageIO.read(new File("./picts/ownCup.jpg"));
+            } catch (IOException ee) {
+                ee.printStackTrace();
+            }
+            currentPicture.setIcon(new ImageIcon(myPicture));
             cupPlaced = true;
+            addCupButton.setVisible(false);
+            takeCupButton.setVisible(true);
             updateMessageToUser();
         });
         contentPane.add(addCupButton);
@@ -419,18 +429,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         panel_2.add(cancelButton);
 
         // listeners
-        addCupButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                BufferedImage myPicture = null;
-                try {
-                    myPicture = ImageIO.read(new File("./picts/ownCup.jpg"));
-                } catch (IOException ee) {
-                    ee.printStackTrace();
-                }
-                currentPicture.setIcon(new ImageIcon(myPicture));
-            }
-        });
         updateMessageToUser();
 
         ActionListener doOnTimer = (e -> {
@@ -566,7 +564,21 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onDoResetMachineRaised() {
         onDoResetMoneyRaised();
+        /*
+        System.out.println("reset");
+        BufferedImage myPicture = null;
+        try {
+            myPicture = ImageIO.read(new File("./picts/vide2.jpg"));
+            System.out.println("catch");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentPicture.setIcon(new ImageIcon(myPicture));
+        cupPlaced=false;
+        System.out.println("image chnaged to void");
         takeCupButton.setVisible(false);
+        addCupButton.setVisible(true);
+         */
         cardBiped = false;
         currentDrinkSelected = null;
         preparationInProgress(false);
@@ -575,6 +587,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);
         temperatureSlider.setValue(2);
+        System.out.println("params reseted");
     }
 
     @Override
@@ -608,6 +621,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onHeatWaterRaised() {
         heaterState = true;
+        addCupButton.setVisible(false);
+        takeCupButton.setVisible(false);
     }
 
     @Override
@@ -622,6 +637,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 e.printStackTrace();
             }
             currentPicture.setIcon(new ImageIcon(myPicture));
+            takeCupButton.setVisible(false);
         }
     }
 
@@ -680,10 +696,15 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             ee.printStackTrace();
         }
         currentPicture.setIcon(new ImageIcon(emptyPicture));
-        currentWaterVolume = 0;
+        if(currentWaterVolume>1){
+            currentWaterVolume = 0;
+            System.out.println("poured watered");
+            theFSM.raiseCupGrabbed();
+        }else{
+            addCupButton.setVisible(true);
+        }
         takeCupButton.setVisible(false);
         cupPlaced = false;
-        theFSM.raiseCupGrabbed();
         System.out.println("Cup taken");
     }
 

@@ -21,7 +21,7 @@
     </regions>
     <regions xmi:id="_dVcV8AoTEeuuiIvXtIA_fQ" name="activity management">
       <vertices xsi:type="sgraph:State" xmi:id="_iBLFQAoTEeuuiIvXtIA_fQ" name="configuration" incomingTransitions="_jHsocAoTEeuuiIvXtIA_fQ _pN9cEAoTEeuuiIvXtIA_fQ _TPHUQAoVEeuuiIvXtIA_fQ _jzoUQB-yEeuPsdENHe6I6g">
-        <outgoingTransitions xmi:id="_jHsocAoTEeuuiIvXtIA_fQ" specification="after 10s / raise resetMachineInternal" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
+        <outgoingTransitions xmi:id="_jHsocAoTEeuuiIvXtIA_fQ" specification="after 45s / raise resetMachineInternal" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
         <outgoingTransitions xmi:id="_pN9cEAoTEeuuiIvXtIA_fQ" specification="userAction" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
         <outgoingTransitions xmi:id="_jzoUQB-yEeuPsdENHe6I6g" specification="userActionInternal" target="_iBLFQAoTEeuuiIvXtIA_fQ"/>
       </vertices>

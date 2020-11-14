@@ -346,7 +346,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             String s = (String) JOptionPane.showInputDialog(
                     contentPane,
                     "Enter Card ID:\n",
-                    "Customized Dialog",
+                    "NFC",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     null,

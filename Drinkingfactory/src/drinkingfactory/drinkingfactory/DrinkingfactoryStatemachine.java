@@ -909,7 +909,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'configuration'. */
 	private void entryAction_activity_management_configuration() {
-		timer.setTimer(this, 0, (10 * 1000), false);
+		timer.setTimer(this, 0, (45 * 1000), false);
 	}
 	
 	/* Entry action for state 'Standby'. */

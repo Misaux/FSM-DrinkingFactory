@@ -245,6 +245,19 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sizeSlider.setMajorTickSpacing(1);
         sizeSlider.setBounds(301, 125, 200, 36);
         sizeSlider.addChangeListener(e -> {
+            switch (sizeSlider.getValue()){
+                case 0:
+                    theFSM.setDrinkSize("small");
+                    break;
+                case 1:
+                    theFSM.setDrinkSize("medium");
+                    break;
+                case 2:
+                    theFSM.setDrinkSize("big");
+                    break;
+                default:
+                    break;
+            }
             theFSM.raiseUserAction();
         });
         contentPane.add(sizeSlider);
@@ -510,7 +523,15 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             System.out.println(currentWaterVolume);
             currentWaterVolume += 1;
         }
-        if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState) {
+        if (currentDrinkSelected == Drink.Espresso){
+            if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState) {
+                pouringState = false;
+                progressBar.setValue(100);
+                theFSM.raiseCupFilled();
+                takeCupButton.setVisible(true);
+            }
+        }
+        else if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState) {
             pouringState = false;
             if (!theFSM.getDrinkName().equals("tea")) {
                 progressBar.setValue(100);
@@ -530,15 +551,15 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 System.out.println("card biped");
                 preparationInProgress(true);
                 if (clientMap.containsKey(currentCardHash)) {
-                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected), 0);
+                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced)?0.1f:0), 0);
                 } else {
                     clientMap.put(currentCardHash, new Client(currentCardHash));
-                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected), 0);
+                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced)?0.1f:0), 0);
                 }
                 takeOffStock(currentDrinkSelected);
                 theFSM.raisePaymentValidate();
             } else if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
-                payingAmount = currentDrinkSelected.getPrice();
+                payingAmount = currentDrinkSelected.getPrice() - ((cupPlaced)?0.1f:0);
                 System.out.println("card not biped and money taken from money inserted");
                 setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
                 preparationInProgress(true);

@@ -64,6 +64,10 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public void setDrinkName(String value);
 		
+		public String getDrinkSize();
+		
+		public void setDrinkSize(String value);
+		
 	public List<SCInterfaceListener> getListeners();
 	}
 	

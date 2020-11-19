@@ -46,9 +46,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private int currentHeatedWaterTemp = 20;
     private int currentWaterVolume = 0;
     private String currentCardHash;
-    private Map<String, Client> clientMap = new HashMap<>() {{
-        put("test", new Client("test"));
-    }};
+    private Map<String, Client> clientMap;
     private float payingAmount;
 
     private final JButton money50centsButton;
@@ -68,6 +66,13 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private final JButton takeCupButton;
     private final JButton takeMoneyButton;
     private final JButton addCupButton;
+
+    private int coffeeStock = 4;
+    private int espressoStock = 2;
+    private int teaStock = 8;
+    private int soupStock = 10;
+    private int iceteaStock = 10;
+
 
     //Labels
     JLabel lblSugar;
@@ -111,7 +116,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -119,6 +123,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         };
         t = new Thread(r);
         t.start();
+
+        clientMap = new HashMap<>() {{
+            put("test", new Client("test"));
+        }};
 
         // for test purpose
         for (int i = 0; i < 9; i++) {
@@ -474,7 +482,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                     ((cupPlaced) ? "Cup OK" : "No Cup") + "<br>" +
                     "Water Temp: " + currentHeatedWaterTemp + "<br>" +
                     "Paying: " + payingAmount + "€<br>" +
-                    ((currentDrinkSelected != null && payingAmount != currentDrinkSelected.getPrice() && theFSM.isStateActive(DrinkingfactoryStatemachine.State.machine_management_Preparation))?"Promo!!!<br>":"") +
+                    ((currentDrinkSelected != null && payingAmount != currentDrinkSelected.getPrice() && theFSM.isStateActive(DrinkingfactoryStatemachine.State.machine_management_Preparation)) ? "Promo!!!<br>" : "") +
                     "Giving back: " + moneyGivingBack + "€<br>" +
                     "</html>");
         }
@@ -527,14 +535,38 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                     clientMap.put(currentCardHash, new Client(currentCardHash));
                     payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected), 0);
                 }
+                takeOffStock(currentDrinkSelected);
                 theFSM.raisePaymentValidate();
             } else if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
                 payingAmount = currentDrinkSelected.getPrice();
                 System.out.println("card not biped and money taken from money inserted");
                 setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
                 preparationInProgress(true);
+                takeOffStock(currentDrinkSelected);
                 theFSM.raisePaymentValidate();
             }
+        }
+    }
+
+    private void takeOffStock(Drink drink) {
+        switch (drink) {
+            case Tea:
+                teaStock--;
+                break;
+            case Soup:
+                soupStock--;
+                break;
+            case Coffee:
+                coffeeStock--;
+                break;
+            case IcedTea:
+                iceteaStock--;
+                break;
+            case Espresso:
+                espressoStock--;
+                break;
+            default:
+                break;
         }
     }
 
@@ -667,6 +699,25 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onCheckPaymentRaised() {
         checkPayment();
+    }
+
+    @Override
+    public void onCheckStocksRaised() {
+        if (coffeeStock <= 0) {
+            coffeeButton.setEnabled(false);
+        }
+        if (espressoStock <= 0) {
+            espressoButton.setEnabled(false);
+        }
+        if (teaStock <= 0) {
+            teaButton.setEnabled(false);
+        }
+        if (soupStock <= 0) {
+            soupButton.setEnabled(false);
+        }
+        if (iceteaStock <= 0) {
+            icedTeaButton.setEnabled(false);
+        }
     }
 
     public int getTemperature(int sliderValue) {

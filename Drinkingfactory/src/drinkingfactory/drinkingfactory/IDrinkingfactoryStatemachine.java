@@ -58,6 +58,8 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public boolean isRaisedCheckPayment();
 		
+		public boolean isRaisedCheckStocks();
+		
 		public String getDrinkName();
 		
 		public void setDrinkName(String value);
@@ -80,6 +82,7 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public void onPourWaterRaised();
 		public void onPutBeansRaised();
 		public void onCheckPaymentRaised();
+		public void onCheckStocksRaised();
 		}
 	
 	public SCInterface getSCInterface();

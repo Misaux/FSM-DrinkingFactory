@@ -355,6 +355,24 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private boolean checkStocks;
+		
+		
+		public boolean isRaisedCheckStocks() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return checkStocks;
+			}
+		}
+		
+		protected void raiseCheckStocks() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				checkStocks = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onCheckStocksRaised();
+				}
+			}
+		}
+		
 		private String drinkName;
 		
 		public synchronized String getDrinkName() {
@@ -398,6 +416,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		pourWater = false;
 		putBeans = false;
 		checkPayment = false;
+		checkStocks = false;
 		}
 		
 	}
@@ -788,6 +807,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return sCInterface.isRaisedCheckPayment();
 	}
 	
+	public synchronized boolean isRaisedCheckStocks() {
+		return sCInterface.isRaisedCheckStocks();
+	}
+	
 	public synchronized String getDrinkName() {
 		return sCInterface.getDrinkName();
 	}
@@ -915,6 +938,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	/* Entry action for state 'Standby'. */
 	private void entryAction_machine_management_Standby() {
 		sCInterface.raiseDoResetMachine();
+		
+		sCInterface.raiseCheckStocks();
 	}
 	
 	/* Entry action for state 'Cleaning'. */

@@ -650,7 +650,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         cardBiped = false;
         currentDrinkSelected = null;
         preparationInProgress(false);
-        preparationInProgress(false);
+        optionDrink.setSelected(false);
+        optionSugar.setSelected(false);
+        optionIceCream.setSelected(false);
         progressBar.setValue(0);
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);
@@ -760,6 +762,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionDrink.setEnabled(true);
                 optionSugar.setEnabled(true);
                 optionIceCream.setEnabled(true);
+                optionDrink.setSelected(false);
+                optionSugar.setSelected(false);
+                optionIceCream.setSelected(false);
                 break;
             case Tea:
                 lblSugar.setText("Sugar");
@@ -767,6 +772,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionDrink.setEnabled(true);
                 optionSugar.setEnabled(true);
                 optionIceCream.setEnabled(false);
+                optionDrink.setSelected(false);
+                optionSugar.setSelected(false);
+                optionIceCream.setSelected(false);
                 break;
             case Soup:
                 lblSugar.setText("Spices");
@@ -774,6 +782,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionDrink.setEnabled(true);
                 optionSugar.setEnabled(false);
                 optionIceCream.setEnabled(false);
+                optionDrink.setSelected(false);
+                optionSugar.setSelected(false);
+                optionIceCream.setSelected(false);
                 break;
             case IcedTea:
                 lblSugar.setText("Sugar");
@@ -781,6 +792,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionDrink.setEnabled(false);
                 optionSugar.setEnabled(true);
                 optionIceCream.setEnabled(false);
+                optionDrink.setSelected(false);
+                optionSugar.setSelected(false);
+                optionIceCream.setSelected(false);
+                break;
+            default:
+                break;
         }
     }
 

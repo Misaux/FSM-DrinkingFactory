@@ -49,13 +49,13 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private Map<String, Client> clientMap;
     private float payingAmount;
 
-    private final JButton money50centsButton;
-    private final JButton money25centsButton;
-    private final JButton money10centsButton;
     private final JSlider temperatureSlider;
     private final JSlider sizeSlider;
     private final JSlider sugarSlider;
     private final JProgressBar progressBar;
+    private final JButton money50centsButton;
+    private final JButton money25centsButton;
+    private final JButton money10centsButton;
     private final JButton coffeeButton;
     private final JButton espressoButton;
     private final JButton teaButton;
@@ -66,6 +66,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private final JButton takeCupButton;
     private final JButton takeMoneyButton;
     private final JButton addCupButton;
+    private final JCheckBox optionDrink;
+    private final JCheckBox optionSugar;
+    private final JCheckBox optionIceCream;
 
     private int coffeeStock = 4;
     private int espressoStock = 2;
@@ -151,8 +154,29 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         messagesToUser.setVerticalAlignment(SwingConstants.TOP);
         messagesToUser.setToolTipText("message to the user");
         messagesToUser.setBackground(Color.WHITE);
-        messagesToUser.setBounds(126, 34, 165, 175);
+        messagesToUser.setBounds(126, 34, 165, 130);
         contentPane.add(messagesToUser);
+
+        optionDrink = new JCheckBox("");
+        optionDrink.setBounds(126, 175, 100,20);
+        optionDrink.setBackground(Color.DARK_GRAY);
+        optionDrink.setEnabled(false);
+        optionDrink.addActionListener(e -> theFSM.setOptionDrink(((JCheckBox)e.getSource()).isSelected()));
+        contentPane.add(optionDrink);
+
+        optionSugar = new JCheckBox("");
+        optionSugar.setBounds(126, 200, 100,20);
+        optionSugar.setBackground(Color.DARK_GRAY);
+        optionSugar.setEnabled(false);
+        optionSugar.addActionListener(e -> theFSM.setOptionSugar(((JCheckBox)e.getSource()).isSelected()));
+        contentPane.add(optionSugar);
+
+        optionIceCream = new JCheckBox("");
+        optionIceCream.setBounds(126, 230, 100,20);
+        optionIceCream.setBackground(Color.DARK_GRAY);
+        optionIceCream.setEnabled(false);
+        optionIceCream.addActionListener(e -> theFSM.setOptionIceCream(((JCheckBox)e.getSource()).isSelected()));
+        contentPane.add(optionIceCream);
 
         JLabel lblCoins = new JLabel("Coins");
         lblCoins.setForeground(Color.WHITE);
@@ -167,9 +191,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         coffeeButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Coffee);
             theFSM.raiseCoffeeSelected();
-            theFSM.raiseDrinkSelected();
-            lblSugar.setText("Sugar");
-            lblTemperature.setText("Temperature");
         });
         contentPane.add(coffeeButton);
 
@@ -180,9 +201,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         espressoButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Espresso);
             theFSM.raiseEspressoSelected();
-            theFSM.raiseDrinkSelected();
-            lblSugar.setText("Sugar");
-            lblTemperature.setText("Temperature");
         });
         contentPane.add(espressoButton);
 
@@ -193,9 +211,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         teaButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Tea);
             theFSM.raiseTeaSelected();
-            theFSM.raiseDrinkSelected();
-            lblSugar.setText("Sugar");
-            lblTemperature.setText("Temperature");
         });
         contentPane.add(teaButton);
 
@@ -205,9 +220,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         soupButton.setBounds(12, 145, 96, 25);
         soupButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Soup);
-            theFSM.raiseDrinkSelected();
-            lblSugar.setText("Spices");
-            lblTemperature.setText("Temperature");
         });
         contentPane.add(soupButton);
 
@@ -295,9 +307,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         icedTeaButton.setBounds(12, 182, 96, 25);
         icedTeaButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.IcedTea);
-            theFSM.raiseDrinkSelected();
-            lblSugar.setText("Sugar");
-            lblTemperature.setText("Freshness");
         });
         contentPane.add(icedTeaButton);
 
@@ -738,6 +747,40 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         }
         if (iceteaStock <= 0) {
             icedTeaButton.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void onDisplayOptionsRaised() {
+        switch (currentDrinkSelected){
+            case Coffee:
+            case Espresso:
+                lblSugar.setText("Sugar");
+                lblTemperature.setText("Temperature");
+                optionDrink.setEnabled(true);
+                optionSugar.setEnabled(true);
+                optionIceCream.setEnabled(true);
+                break;
+            case Tea:
+                lblSugar.setText("Sugar");
+                lblTemperature.setText("Temperature");
+                optionDrink.setEnabled(true);
+                optionSugar.setEnabled(true);
+                optionIceCream.setEnabled(false);
+                break;
+            case Soup:
+                lblSugar.setText("Spices");
+                lblTemperature.setText("Temperature");
+                optionDrink.setEnabled(true);
+                optionSugar.setEnabled(false);
+                optionIceCream.setEnabled(false);
+                break;
+            case IcedTea:
+                lblSugar.setText("Sugar");
+                lblTemperature.setText("Freshness");
+                optionDrink.setEnabled(false);
+                optionSugar.setEnabled(true);
+                optionIceCream.setEnabled(false);
         }
     }
 

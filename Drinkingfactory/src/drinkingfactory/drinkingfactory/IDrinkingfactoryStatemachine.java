@@ -8,8 +8,6 @@ import java.util.List;
 public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachine {
 	public interface SCInterface {
 	
-		public void raiseDrinkSelected();
-		
 		public void raiseAddMoney();
 		
 		public void raisePaying();
@@ -60,6 +58,16 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public boolean isRaisedCheckStocks();
 		
+		public boolean isRaisedDisplayOptions();
+		
+		public boolean isRaisedPourMilk();
+		
+		public boolean isRaisedPourSirup();
+		
+		public boolean isRaisedAddBread();
+		
+		public boolean isRaisedAddIceCream();
+		
 		public String getDrinkName();
 		
 		public void setDrinkName(String value);
@@ -67,6 +75,18 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public String getDrinkSize();
 		
 		public void setDrinkSize(String value);
+		
+		public boolean getOptionDrink();
+		
+		public void setOptionDrink(boolean value);
+		
+		public boolean getOptionSugar();
+		
+		public void setOptionSugar(boolean value);
+		
+		public boolean getOptionIceCream();
+		
+		public void setOptionIceCream(boolean value);
 		
 	public List<SCInterfaceListener> getListeners();
 	}
@@ -87,6 +107,11 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public void onPutBeansRaised();
 		public void onCheckPaymentRaised();
 		public void onCheckStocksRaised();
+		public void onDisplayOptionsRaised();
+		public void onPourMilkRaised();
+		public void onPourSirupRaised();
+		public void onAddBreadRaised();
+		public void onAddIceCreamRaised();
 		}
 	
 	public SCInterface getSCInterface();

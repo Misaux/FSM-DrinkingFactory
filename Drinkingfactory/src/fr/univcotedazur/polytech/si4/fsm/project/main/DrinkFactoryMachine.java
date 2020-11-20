@@ -801,6 +801,26 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         }
     }
 
+    @Override
+    public void onPourMilkRaised() {
+        
+    }
+
+    @Override
+    public void onPourSirupRaised() {
+
+    }
+
+    @Override
+    public void onAddBreadRaised() {
+
+    }
+
+    @Override
+    public void onAddIceCreamRaised() {
+
+    }
+
     public int getTemperature(int sliderValue) {
         switch (sliderValue) {
             case 0:

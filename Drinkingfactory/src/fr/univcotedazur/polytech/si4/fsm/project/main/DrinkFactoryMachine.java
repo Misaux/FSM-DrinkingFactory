@@ -146,21 +146,27 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionDrink = new JCheckBox("");
         optionDrink.setBounds(126, 175, 100, 20);
         optionDrink.setBackground(Color.DARK_GRAY);
-        optionDrink.setEnabled(false);
+        optionDrink.setForeground(Color.WHITE);
+        optionDrink.setEnabled(true);
+        optionDrink.setVisible(false);
         optionDrink.addActionListener(e -> theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected()));
         contentPane.add(optionDrink);
 
         optionSugar = new JCheckBox("");
         optionSugar.setBounds(126, 200, 100, 20);
         optionSugar.setBackground(Color.DARK_GRAY);
-        optionSugar.setEnabled(false);
+        optionSugar.setForeground(Color.WHITE);
+        optionSugar.setEnabled(true);
+        optionSugar.setVisible(false);
         optionSugar.addActionListener(e -> theFSM.setOptionSugar(((JCheckBox) e.getSource()).isSelected()));
         contentPane.add(optionSugar);
 
         optionIceCream = new JCheckBox("");
         optionIceCream.setBounds(126, 225, 100, 20);
         optionIceCream.setBackground(Color.DARK_GRAY);
-        optionIceCream.setEnabled(false);
+        optionIceCream.setForeground(Color.WHITE);
+        optionIceCream.setEnabled(true);
+        optionIceCream.setVisible(false);
         optionIceCream.addActionListener(e -> theFSM.setOptionIceCream(((JCheckBox) e.getSource()).isSelected()));
         contentPane.add(optionIceCream);
 
@@ -207,6 +213,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         soupButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.Soup);
         });
+        soupButton.setVisible(false);
         contentPane.add(soupButton);
 
         progressBar = new JProgressBar();
@@ -294,6 +301,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         icedTeaButton.addActionListener(e -> {
             setCurrentDrinkSelected(Drink.IcedTea);
         });
+        icedTeaButton.setVisible(false);
         contentPane.add(icedTeaButton);
 
         lblSugar = new JLabel("Sugar");
@@ -738,9 +746,13 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             case Espresso:
                 lblSugar.setText("Sugar");
                 lblTemperature.setText("Temperature");
-                optionDrink.setEnabled(true);
-                optionSugar.setEnabled(true);
-                optionIceCream.setEnabled(true);
+                optionDrink.setText("Milk");
+                optionSugar.setText("Maple Syrup");
+                optionIceCream.setText("Vanilla Ice Cream");
+
+                optionDrink.setVisible(true);
+                optionSugar.setVisible(true);
+                optionIceCream.setVisible(true);
                 optionDrink.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
@@ -748,9 +760,11 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             case Tea:
                 lblSugar.setText("Sugar");
                 lblTemperature.setText("Temperature");
-                optionDrink.setEnabled(true);
-                optionSugar.setEnabled(true);
-                optionIceCream.setEnabled(false);
+                optionDrink.setText("Milk");
+                optionSugar.setText("Maple Syrup");
+                optionDrink.setVisible(true);
+                optionSugar.setVisible(true);
+                optionIceCream.setVisible(false);
                 optionDrink.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
@@ -758,9 +772,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             case Soup:
                 lblSugar.setText("Spices");
                 lblTemperature.setText("Temperature");
-                optionDrink.setEnabled(true);
-                optionSugar.setEnabled(false);
-                optionIceCream.setEnabled(false);
+                optionDrink.setText("Bread");
+                optionDrink.setVisible(true);
+                optionSugar.setVisible(false);
+                optionIceCream.setVisible(false);
                 optionDrink.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
@@ -768,9 +783,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             case IcedTea:
                 lblSugar.setText("Sugar");
                 lblTemperature.setText("Freshness");
-                optionDrink.setEnabled(false);
-                optionSugar.setEnabled(true);
-                optionIceCream.setEnabled(false);
+                optionSugar.setText("Maple Syrup");
+                optionDrink.setVisible(false);
+                optionSugar.setVisible(true);
+                optionIceCream.setVisible(false);
                 optionDrink.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);

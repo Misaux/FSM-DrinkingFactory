@@ -113,20 +113,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
         theFSM.getSCInterface().getListeners().add(this);
 
-        Runnable r = () -> {
-            while (true) {
-                theFSM.runCycle();
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        };
-        t = new Thread(r);
-        t.start();
-
         clientMap = new HashMap<>() {{
             put("test", new Client("test"));
         }};
@@ -158,24 +144,24 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         contentPane.add(messagesToUser);
 
         optionDrink = new JCheckBox("");
-        optionDrink.setBounds(126, 175, 100,20);
+        optionDrink.setBounds(126, 175, 100, 20);
         optionDrink.setBackground(Color.DARK_GRAY);
         optionDrink.setEnabled(false);
-        optionDrink.addActionListener(e -> theFSM.setOptionDrink(((JCheckBox)e.getSource()).isSelected()));
+        optionDrink.addActionListener(e -> theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected()));
         contentPane.add(optionDrink);
 
         optionSugar = new JCheckBox("");
-        optionSugar.setBounds(126, 200, 100,20);
+        optionSugar.setBounds(126, 200, 100, 20);
         optionSugar.setBackground(Color.DARK_GRAY);
         optionSugar.setEnabled(false);
-        optionSugar.addActionListener(e -> theFSM.setOptionSugar(((JCheckBox)e.getSource()).isSelected()));
+        optionSugar.addActionListener(e -> theFSM.setOptionSugar(((JCheckBox) e.getSource()).isSelected()));
         contentPane.add(optionSugar);
 
         optionIceCream = new JCheckBox("");
-        optionIceCream.setBounds(126, 230, 100,20);
+        optionIceCream.setBounds(126, 225, 100, 20);
         optionIceCream.setBackground(Color.DARK_GRAY);
         optionIceCream.setEnabled(false);
-        optionIceCream.addActionListener(e -> theFSM.setOptionIceCream(((JCheckBox)e.getSource()).isSelected()));
+        optionIceCream.addActionListener(e -> theFSM.setOptionIceCream(((JCheckBox) e.getSource()).isSelected()));
         contentPane.add(optionIceCream);
 
         JLabel lblCoins = new JLabel("Coins");
@@ -257,7 +243,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sizeSlider.setMajorTickSpacing(1);
         sizeSlider.setBounds(301, 125, 200, 36);
         sizeSlider.addChangeListener(e -> {
-            switch (sizeSlider.getValue()){
+            switch (sizeSlider.getValue()) {
                 case 0:
                     theFSM.setDrinkSize("small");
                     break;
@@ -475,6 +461,20 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         Timer waterHeatTimer = new Timer(200, doOnTimer);
         waterHeatTimer.start();
 
+        Runnable r = () -> {
+            while (true) {
+                theFSM.runCycle();
+                try {
+                    this.progressBar.setValue((int) theFSM.getProgress());
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        };
+        t = new Thread(r);
+        t.start();
 
     }
 
@@ -521,7 +521,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         }
         if (currentHeatedWaterTemp >= currentTemperatureLevel && heaterState) {
             heaterState = false;
-            progressBar.setValue(33);
             theFSM.raiseHeatReached();
         }
         updateMessageToUser();
@@ -532,22 +531,18 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             System.out.println(currentWaterVolume);
             currentWaterVolume += 1;
         }
-        if (currentDrinkSelected == Drink.Espresso){
+        if (currentDrinkSelected == Drink.Espresso) {
             if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState) {
                 pouringState = false;
-                progressBar.setValue(100);
                 theFSM.raiseCupFilled();
                 takeCupButton.setVisible(true);
             }
-        }
-        else if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState) {
+        } else if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState) {
             pouringState = false;
             if (!theFSM.getDrinkName().equals("tea")) {
-                progressBar.setValue(100);
                 theFSM.raiseCupFilled();
                 takeCupButton.setVisible(true);
             } else {
-                progressBar.setValue(80);
                 theFSM.raiseCupFilled();
             }
         }
@@ -560,15 +555,15 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 System.out.println("card biped");
                 preparationInProgress(true);
                 if (clientMap.containsKey(currentCardHash)) {
-                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced)?0.1f:0), 0);
+                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced) ? 0.1f : 0), 0);
                 } else {
                     clientMap.put(currentCardHash, new Client(currentCardHash));
-                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced)?0.1f:0), 0);
+                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced) ? 0.1f : 0), 0);
                 }
                 takeOffStock(currentDrinkSelected);
                 theFSM.raisePaymentValidate();
             } else if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
-                payingAmount = currentDrinkSelected.getPrice() - ((cupPlaced)?0.1f:0);
+                payingAmount = currentDrinkSelected.getPrice() - ((cupPlaced) ? 0.1f : 0);
                 System.out.println("card not biped and money taken from money inserted");
                 setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
                 preparationInProgress(true);
@@ -617,6 +612,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         icedTeaButton.setEnabled(state);
         nfcBiiiipButton.setEnabled(state);
         cancelButton.setEnabled(state);
+
+        optionIceCream.setEnabled(state);
+        optionSugar.setEnabled(state);
+        optionDrink.setEnabled(state);
     }
 
     @Override
@@ -631,21 +630,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onDoResetMachineRaised() {
         onDoResetMoneyRaised();
-        /*
-        System.out.println("reset");
-        BufferedImage myPicture = null;
-        try {
-            myPicture = ImageIO.read(new File("./picts/vide2.jpg"));
-            System.out.println("catch");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        currentPicture.setIcon(new ImageIcon(myPicture));
-        cupPlaced=false;
-        System.out.println("image chnaged to void");
-        takeCupButton.setVisible(false);
-        addCupButton.setVisible(true);
-         */
         payingAmount = 0;
         cardBiped = false;
         currentDrinkSelected = null;
@@ -653,7 +637,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionDrink.setSelected(false);
         optionSugar.setSelected(false);
         optionIceCream.setSelected(false);
-        progressBar.setValue(0);
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);
         temperatureSlider.setValue(2);
@@ -669,23 +652,21 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onGrindBeansRaised() {
-        progressBar.setValue(33);
+
     }
 
     @Override
     public void onTakeTeaBagRaised() {
-        progressBar.setValue(33);
+
     }
 
     @Override
     public void onTakeOffTeaBagRaised() {
-        progressBar.setValue(100);
         takeCupButton.setVisible(true);
     }
 
     @Override
     public void onTakeCoffeePodRaised() {
-        progressBar.setValue(33);
     }
 
     @Override
@@ -697,7 +678,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onPutCupRaised() {
-        progressBar.setValue(66);
         if (!cupPlaced) {
             cupPlaced = true;
             BufferedImage myPicture = null;
@@ -725,7 +705,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onPutBeansRaised() {
-        progressBar.setValue(66);
     }
 
     @Override
@@ -754,7 +733,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onDisplayOptionsRaised() {
-        switch (currentDrinkSelected){
+        switch (currentDrinkSelected) {
             case Coffee:
             case Espresso:
                 lblSugar.setText("Sugar");
@@ -803,7 +782,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
     @Override
     public void onPourMilkRaised() {
-        
+
     }
 
     @Override

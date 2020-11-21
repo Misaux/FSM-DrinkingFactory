@@ -524,6 +524,20 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private long progress;
+		
+		public synchronized long getProgress() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return progress;
+			}
+		}
+		
+		public void setProgress(long value) {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				this.progress = value;
+			}
+		}
+		
 		protected void clearEvents() {
 			addMoney = false;
 			paying = false;
@@ -632,6 +646,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.setOptionSugar(false);
 		
 		sCInterface.setOptionIceCream(false);
+		
+		sCInterface.setProgress(0);
 	}
 	
 	public synchronized void enter() {
@@ -1048,6 +1064,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.setOptionIceCream(value);
 	}
 	
+	public synchronized long getProgress() {
+		return sCInterface.getProgress();
+	}
+	
+	public synchronized void setProgress(long value) {
+		sCInterface.setProgress(value);
+	}
+	
 	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr0_tr0() {
 		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
 	}
@@ -1251,6 +1275,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raiseDoResetMachine();
 		
 		sCInterface.raiseCheckStocks();
+		
+		sCInterface.setProgress(0);
 	}
 	
 	/* Entry action for state 'Cleaning'. */
@@ -1269,14 +1295,39 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raiseGrindBeans();
 	}
 	
+	/* Entry action for state 'sync'. */
+	private void entryAction_machine_management_Preparation_r1_step1_r1_sync() {
+		sCInterface.setProgress(sCInterface.getProgress() + 15);
+	}
+	
 	/* Entry action for state 'General'. */
 	private void entryAction_machine_management_Preparation_r1_step1_r2_General() {
 		sCInterface.raiseHeatWater();
 	}
 	
+	/* Entry action for state 'sync'. */
+	private void entryAction_machine_management_Preparation_r1_step1_r2_sync() {
+		sCInterface.setProgress(sCInterface.getProgress() + 15);
+	}
+	
+	/* Entry action for state 'sync'. */
+	private void entryAction_machine_management_Preparation_r1_step2_r1_sync() {
+		sCInterface.setProgress(sCInterface.getProgress() + 30);
+	}
+	
 	/* Entry action for state 'General'. */
 	private void entryAction_machine_management_Preparation_r1_step2_r2_General() {
 		sCInterface.raisePutCup();
+	}
+	
+	/* Entry action for state 'Tea1'. */
+	private void entryAction_machine_management_Preparation_r1_step3_r1_Tea1() {
+		sCInterface.setProgress(sCInterface.getProgress() + 10);
+	}
+	
+	/* Entry action for state 'sync'. */
+	private void entryAction_machine_management_Preparation_r1_step3_r1_sync() {
+		sCInterface.setProgress(sCInterface.getProgress() + 10);
 	}
 	
 	/* Entry action for state 'tea2_small'. */
@@ -1296,9 +1347,19 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raiseAddSugar();
 	}
 	
+	/* Entry action for state 'sync'. */
+	private void entryAction_machine_management_Preparation_r1_step3_r2_sync() {
+		sCInterface.setProgress(sCInterface.getProgress() + 10);
+	}
+	
 	/* Entry action for state 'soup option'. */
 	private void entryAction_machine_management_Preparation_r1_step3_r2_soup_option() {
 		timer.setTimer(this, 5, (3 * 1000), false);
+	}
+	
+	/* Entry action for state 'sync'. */
+	private void entryAction_machine_management_Preparation_r1_sync() {
+		sCInterface.setProgress(100);
 	}
 	
 	/* Exit action for state 'configuration'. */
@@ -1392,6 +1453,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step1_r1_sync_default() {
+		entryAction_machine_management_Preparation_r1_step1_r1_sync();
 		nextStateIndex = 3;
 		stateVector[3] = State.machine_management_Preparation_r1_step1_r1_sync;
 	}
@@ -1405,6 +1467,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step1_r2_sync_default() {
+		entryAction_machine_management_Preparation_r1_step1_r2_sync();
 		nextStateIndex = 4;
 		stateVector[4] = State.machine_management_Preparation_r1_step1_r2_sync;
 	}
@@ -1423,6 +1486,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step2_r1_sync_default() {
+		entryAction_machine_management_Preparation_r1_step2_r1_sync();
 		nextStateIndex = 3;
 		stateVector[3] = State.machine_management_Preparation_r1_step2_r1_sync;
 	}
@@ -1442,12 +1506,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state Tea1 */
 	private void enterSequence_machine_management_Preparation_r1_step3_r1_Tea1_default() {
+		entryAction_machine_management_Preparation_r1_step3_r1_Tea1();
 		nextStateIndex = 3;
 		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_Tea1;
 	}
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step3_r1_sync_default() {
+		entryAction_machine_management_Preparation_r1_step3_r1_sync();
 		nextStateIndex = 3;
 		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_sync;
 	}
@@ -1481,6 +1547,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_step3_r2_sync_default() {
+		entryAction_machine_management_Preparation_r1_step3_r2_sync();
 		nextStateIndex = 4;
 		stateVector[4] = State.machine_management_Preparation_r1_step3_r2_sync;
 	}
@@ -1500,6 +1567,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state sync */
 	private void enterSequence_machine_management_Preparation_r1_sync_default() {
+		entryAction_machine_management_Preparation_r1_sync();
 		nextStateIndex = 3;
 		stateVector[3] = State.machine_management_Preparation_r1_sync;
 	}

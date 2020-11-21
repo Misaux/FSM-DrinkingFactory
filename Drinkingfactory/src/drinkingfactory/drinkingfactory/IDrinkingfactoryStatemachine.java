@@ -88,6 +88,10 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public void setOptionIceCream(boolean value);
 		
+		public long getProgress();
+		
+		public void setProgress(long value);
+		
 	public List<SCInterfaceListener> getListeners();
 	}
 	

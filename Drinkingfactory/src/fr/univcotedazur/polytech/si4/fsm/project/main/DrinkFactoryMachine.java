@@ -149,7 +149,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionDrink.setForeground(Color.WHITE);
         optionDrink.setEnabled(true);
         optionDrink.setVisible(false);
-        optionDrink.addActionListener(e -> theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected()));
+        optionDrink.addActionListener(e->{
+            theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
+            if(optionDrink.isSelected()){
+                //then do something 
+            }
+        });
         contentPane.add(optionDrink);
 
         optionSugar = new JCheckBox("");
@@ -868,6 +873,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         takeCupButton.setVisible(false);
         cupPlaced = false;
         System.out.println("Cup taken");
+    }
+
+    public void addOptionPrice(){
+
     }
 
     @Override

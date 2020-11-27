@@ -140,7 +140,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         messagesToUser.setVerticalAlignment(SwingConstants.TOP);
         messagesToUser.setToolTipText("message to the user");
         messagesToUser.setBackground(Color.WHITE);
-        messagesToUser.setBounds(126, 34, 165, 130);
+        messagesToUser.setBounds(126, 34, 165, 150);
         contentPane.add(messagesToUser);
 
         optionDrink = new JCheckBox("");
@@ -149,9 +149,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionDrink.setForeground(Color.WHITE);
         optionDrink.setEnabled(true);
         optionDrink.setVisible(false);
-        optionDrink.addActionListener(e->{
+        optionDrink.addActionListener(e -> {
             theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
-            if(optionDrink.isSelected()){
+            if (optionDrink.isSelected()) {
                 //then do something 
             }
         });
@@ -167,7 +167,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         contentPane.add(optionSugar);
 
         optionIceCream = new JCheckBox("");
-        optionIceCream.setBounds(126, 225, 100, 20);
+        optionIceCream.setBounds(126, 225, 150, 20);
         optionIceCream.setBackground(Color.DARK_GRAY);
         optionIceCream.setForeground(Color.WHITE);
         optionIceCream.setEnabled(true);
@@ -514,10 +514,11 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             messagesToUser.setText("<html>Current amount: " + currentMoneyInserted + "€<br>" +
                     "Card Biped: " + cardBiped + "<br>" +
                     "Current Drink: " + ((currentDrinkSelected != null) ? currentDrinkSelected.getName() : "none") + "<br>" +
+                    "Drink Cost: " + ((currentDrinkSelected != null) ? currentDrinkSelected.getPrice() : "0.0") + "€<br>" +
                     ((cupPlaced) ? "Cup OK" : "No Cup") + "<br>" +
                     "Water Temp: " + currentHeatedWaterTemp + "<br>" +
                     "Paying: " + payingAmount + "€<br>" +
-                    ((currentDrinkSelected != null && payingAmount != currentDrinkSelected.getPrice() && theFSM.isStateActive(DrinkingfactoryStatemachine.State.machine_management_Preparation)) ? "Promo!!!<br>" : "") +
+                    ((currentDrinkSelected != null && payingAmount < currentDrinkSelected.getPrice() && theFSM.isStateActive(DrinkingfactoryStatemachine.State.machine_management_Preparation)) ? "Promo!!!<br>" : "") +
                     "Giving back: " + moneyGivingBack + "€<br>" +
                     "</html>");
         }
@@ -565,25 +566,55 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private void checkPayment() {
         if (currentDrinkSelected != null) {
             if (cardBiped) {
-                System.out.println("card biped");
                 preparationInProgress(true);
-                if (clientMap.containsKey(currentCardHash)) {
-                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced) ? 0.1f : 0), 0);
-                } else {
+                if (!clientMap.containsKey(currentCardHash)) {
                     clientMap.put(currentCardHash, new Client(currentCardHash));
-                    payingAmount = Math.max(currentDrinkSelected.getPrice() - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced) ? 0.1f : 0), 0);
                 }
+                calculatePayingAmount();
                 takeOffStock(currentDrinkSelected);
                 theFSM.raisePaymentValidate();
-            } else if (currentMoneyInserted >= currentDrinkSelected.getPrice()) {
-                payingAmount = currentDrinkSelected.getPrice() - ((cupPlaced) ? 0.1f : 0);
-                System.out.println("card not biped and money taken from money inserted");
-                setCurrentMoneyInserted(currentMoneyInserted - currentDrinkSelected.getPrice());
+            } else if (currentMoneyInserted >= calculatePayingAmount()) {
+                setCurrentMoneyInserted(currentMoneyInserted - payingAmount);
                 preparationInProgress(true);
                 takeOffStock(currentDrinkSelected);
                 theFSM.raisePaymentValidate();
             }
         }
+    }
+
+    private float calculatePayingAmount() {
+        payingAmount = currentDrinkSelected.getPrice();
+
+        if (optionDrink.isSelected()){
+            switch (currentDrinkSelected) {
+                case Coffee:
+                case Espresso:
+                case Tea:
+                    payingAmount += 0.1f;
+                    break;
+                case Soup:
+                    payingAmount += 0.3f;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (optionSugar.isSelected()) {
+            payingAmount += 0.1f;
+        }
+        if (optionIceCream.isSelected()) {
+            payingAmount += 0.6f;
+        }
+
+        if (cardBiped) {
+            payingAmount = Math.max(payingAmount - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced) ? 0.1f : 0), 0);
+        }
+        else {
+            payingAmount = payingAmount - ((cupPlaced) ? 0.1f : 0);
+        }
+        payingAmount = Math.round(payingAmount * 100) / 100f;
+
+        return payingAmount;
     }
 
     private void takeOffStock(Drink drink) {
@@ -625,6 +656,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         icedTeaButton.setEnabled(state);
         nfcBiiiipButton.setEnabled(state);
         cancelButton.setEnabled(state);
+        addCupButton.setVisible(state);
 
         optionIceCream.setEnabled(state);
         optionSugar.setEnabled(state);
@@ -875,7 +907,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         System.out.println("Cup taken");
     }
 
-    public void addOptionPrice(){
+    public void addOptionPrice() {
 
     }
 

@@ -66,7 +66,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private final JButton takeCupButton;
     private final JButton takeMoneyButton;
     private final JButton addCupButton;
-    private final JCheckBox optionDrink;
+    private final JCheckBox optionMilk;
+    private final JCheckBox optionBread;
     private final JCheckBox optionSugar;
     private final JCheckBox optionIceCream;
 
@@ -74,7 +75,11 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private int espressoStock = 2;
     private int teaStock = 8;
     private int soupStock = 10;
-    private int iceteaStock = 10;
+    private int icedTeaStock = 10;
+    private int milkStock = 1;
+    private int breadStock = 3;
+    private int syrupStock = 5;
+    private int vanillaStock = 2;
 
 
     //Labels
@@ -127,7 +132,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         setBackground(Color.DARK_GRAY);
         setTitle("Drinking Factory Machine");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 650, 650);
+        setBounds(100, 100, 650, 680);
         contentPane = new JPanel();
         contentPane.setBackground(Color.DARK_GRAY);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -143,19 +148,27 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         messagesToUser.setBounds(126, 34, 165, 150);
         contentPane.add(messagesToUser);
 
-        optionDrink = new JCheckBox("");
-        optionDrink.setBounds(126, 175, 100, 20);
-        optionDrink.setBackground(Color.DARK_GRAY);
-        optionDrink.setForeground(Color.WHITE);
-        optionDrink.setEnabled(true);
-        optionDrink.setVisible(false);
-        optionDrink.addActionListener(e -> {
+        optionMilk = new JCheckBox("");
+        optionMilk.setBounds(126, 175, 100, 20);
+        optionMilk.setBackground(Color.DARK_GRAY);
+        optionMilk.setForeground(Color.WHITE);
+        optionMilk.setEnabled(true);
+        optionMilk.setVisible(false);
+        optionMilk.addActionListener(e -> {
             theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
-            if (optionDrink.isSelected()) {
-                //then do something 
-            }
         });
-        contentPane.add(optionDrink);
+        contentPane.add(optionMilk);
+
+        optionBread = new JCheckBox("");
+        optionBread.setBounds(126, 250, 100, 20);
+        optionBread.setBackground(Color.DARK_GRAY);
+        optionBread.setForeground(Color.WHITE);
+        optionBread.setEnabled(true);
+        optionBread.setVisible(false);
+        optionBread.addActionListener(e -> {
+            theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
+        });
+        contentPane.add(optionBread);
 
         optionSugar = new JCheckBox("");
         optionSugar.setBounds(126, 200, 100, 20);
@@ -226,7 +239,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         progressBar.setValue(0);
         progressBar.setForeground(Color.LIGHT_GRAY);
         progressBar.setBackground(Color.DARK_GRAY);
-        progressBar.setBounds(12, 254, 622, 26);
+        progressBar.setBounds(12, 274, 622, 26);
         contentPane.add(progressBar);
 
         sugarSlider = new JSlider();
@@ -396,7 +409,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         contentPane.add(lblNfc);
 
         JSeparator separator = new JSeparator();
-        separator.setBounds(12, 292, 622, 15);
+        separator.setBounds(12, 312, 622, 15);
         contentPane.add(separator);
 
         takeCupButton = new JButton("Take cup");
@@ -435,7 +448,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             e.printStackTrace();
         }
         currentPicture = new JLabel(new ImageIcon(myPicture));
-        currentPicture.setBounds(175, 319, 286, 260);
+        currentPicture.setBounds(175, 339, 286, 260);
         contentPane.add(currentPicture);
 
         takeMoneyButton = new JButton("Take money");
@@ -546,7 +559,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             currentWaterVolume += 1;
         }
         if (currentDrinkSelected == Drink.Espresso) {
-            if (currentWaterVolume >= this.getSize(sizeSlider.getValue()) && pouringState) {
+            if (currentWaterVolume >= this.getSize(1) && pouringState) {
                 pouringState = false;
                 theFSM.raiseCupFilled();
                 takeCupButton.setVisible(true);
@@ -571,12 +584,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                     clientMap.put(currentCardHash, new Client(currentCardHash));
                 }
                 calculatePayingAmount();
-                takeOffStock(currentDrinkSelected);
+                takeOffStock();
                 theFSM.raisePaymentValidate();
             } else if (currentMoneyInserted >= calculatePayingAmount()) {
                 setCurrentMoneyInserted(currentMoneyInserted - payingAmount);
                 preparationInProgress(true);
-                takeOffStock(currentDrinkSelected);
+                takeOffStock();
                 theFSM.raisePaymentValidate();
             }
         }
@@ -585,19 +598,11 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private float calculatePayingAmount() {
         payingAmount = currentDrinkSelected.getPrice();
 
-        if (optionDrink.isSelected()){
-            switch (currentDrinkSelected) {
-                case Coffee:
-                case Espresso:
-                case Tea:
-                    payingAmount += 0.1f;
-                    break;
-                case Soup:
-                    payingAmount += 0.3f;
-                    break;
-                default:
-                    break;
-            }
+        if (optionMilk.isSelected()) {
+            payingAmount += 0.1f;
+        }
+        if (optionBread.isSelected()) {
+            payingAmount += 0.3f;
         }
         if (optionSugar.isSelected()) {
             payingAmount += 0.1f;
@@ -608,8 +613,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
         if (cardBiped) {
             payingAmount = Math.max(payingAmount - clientMap.get(currentCardHash).getPromo(currentDrinkSelected) - ((cupPlaced) ? 0.1f : 0), 0);
-        }
-        else {
+        } else {
             payingAmount = payingAmount - ((cupPlaced) ? 0.1f : 0);
         }
         payingAmount = Math.round(payingAmount * 100) / 100f;
@@ -617,8 +621,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         return payingAmount;
     }
 
-    private void takeOffStock(Drink drink) {
-        switch (drink) {
+    private void takeOffStock() {
+        switch (currentDrinkSelected) {
             case Tea:
                 teaStock--;
                 break;
@@ -629,13 +633,25 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 coffeeStock--;
                 break;
             case IcedTea:
-                iceteaStock--;
+                icedTeaStock--;
                 break;
             case Espresso:
                 espressoStock--;
                 break;
             default:
                 break;
+        }
+        if (optionBread.isSelected()) {
+            breadStock--;
+        }
+        if (optionMilk.isSelected()) {
+            milkStock--;
+        }
+        if (optionIceCream.isSelected()) {
+            vanillaStock--;
+        }
+        if (optionSugar.isSelected()) {
+            syrupStock--;
         }
     }
 
@@ -660,7 +676,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
         optionIceCream.setEnabled(state);
         optionSugar.setEnabled(state);
-        optionDrink.setEnabled(state);
+        optionMilk.setEnabled(state);
+        optionBread.setEnabled(state);
     }
 
     @Override
@@ -679,9 +696,14 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         cardBiped = false;
         currentDrinkSelected = null;
         preparationInProgress(false);
-        optionDrink.setSelected(false);
+        optionMilk.setSelected(false);
+        optionMilk.setVisible(false);
+        optionBread.setSelected(false);
+        optionBread.setVisible(false);
         optionSugar.setSelected(false);
+        optionSugar.setVisible(false);
         optionIceCream.setSelected(false);
+        optionIceCream.setVisible(false);
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);
         temperatureSlider.setValue(2);
@@ -771,8 +793,20 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         if (soupStock <= 0) {
             soupButton.setEnabled(false);
         }
-        if (iceteaStock <= 0) {
+        if (icedTeaStock <= 0) {
             icedTeaButton.setEnabled(false);
+        }
+        if (syrupStock <= 0) {
+            optionSugar.setEnabled(false);
+        }
+        if (vanillaStock <= 0) {
+            optionIceCream.setEnabled(false);
+        }
+        if (milkStock <= 0) {
+            optionMilk.setEnabled(false);
+        }
+        if (breadStock <= 0) {
+            optionBread.setEnabled(false);
         }
     }
 
@@ -783,52 +817,64 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             case Espresso:
                 lblSugar.setText("Sugar");
                 lblTemperature.setText("Temperature");
-                optionDrink.setText("Milk");
+                optionMilk.setText("Milk");
                 optionSugar.setText("Maple Syrup");
                 optionIceCream.setText("Vanilla Ice Cream");
 
-                optionDrink.setVisible(true);
+                optionMilk.setVisible(true);
+                optionBread.setVisible(false);
                 optionSugar.setVisible(true);
                 optionIceCream.setVisible(true);
-                optionDrink.setSelected(false);
+                optionMilk.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
+                optionBread.setSelected(false);
                 break;
             case Tea:
                 lblSugar.setText("Sugar");
                 lblTemperature.setText("Temperature");
-                optionDrink.setText("Milk");
+                optionMilk.setText("Milk");
                 optionSugar.setText("Maple Syrup");
-                optionDrink.setVisible(true);
+                optionMilk.setVisible(true);
+                optionBread.setVisible(false);
                 optionSugar.setVisible(true);
                 optionIceCream.setVisible(false);
-                optionDrink.setSelected(false);
+                optionMilk.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
+                optionBread.setSelected(false);
                 break;
             case Soup:
                 lblSugar.setText("Spices");
                 lblTemperature.setText("Temperature");
-                optionDrink.setText("Bread");
-                optionDrink.setVisible(true);
+                optionMilk.setText("Bread");
+                optionMilk.setVisible(true);
                 optionSugar.setVisible(false);
                 optionIceCream.setVisible(false);
-                optionDrink.setSelected(false);
+                optionBread.setVisible(true);
+                optionMilk.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
+                optionBread.setSelected(false);
                 break;
             case IcedTea:
                 lblSugar.setText("Sugar");
                 lblTemperature.setText("Freshness");
                 optionSugar.setText("Maple Syrup");
-                optionDrink.setVisible(false);
+                optionMilk.setVisible(false);
+                optionBread.setVisible(false);
                 optionSugar.setVisible(true);
                 optionIceCream.setVisible(false);
-                optionDrink.setSelected(false);
+                optionMilk.setSelected(false);
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
+                optionBread.setSelected(false);
                 break;
             default:
+                optionMilk.setSelected(false);
+                optionSugar.setSelected(false);
+                optionIceCream.setSelected(false);
+                optionBread.setSelected(false);
                 break;
         }
     }

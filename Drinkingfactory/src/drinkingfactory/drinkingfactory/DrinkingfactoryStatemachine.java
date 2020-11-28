@@ -112,6 +112,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private boolean soupSelected;
+		
+		
+		public void raiseSoupSelected() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				soupSelected = true;
+			}
+		}
+		
 		private boolean doResetMoney;
 		
 		
@@ -454,6 +463,42 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private boolean pourSoup;
+		
+		
+		public boolean isRaisedPourSoup() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return pourSoup;
+			}
+		}
+		
+		protected void raisePourSoup() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				pourSoup = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onPourSoupRaised();
+				}
+			}
+		}
+		
+		private boolean putSpice;
+		
+		
+		public boolean isRaisedPutSpice() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return putSpice;
+			}
+		}
+		
+		protected void raisePutSpice() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				putSpice = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onPutSpiceRaised();
+				}
+			}
+		}
+		
 		private String drinkName;
 		
 		public synchronized String getDrinkName() {
@@ -550,6 +595,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			coffeeSelected = false;
 			teaSelected = false;
 			espressoSelected = false;
+			soupSelected = false;
 		}
 		protected void clearOutEvents() {
 		
@@ -572,6 +618,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		pourSirup = false;
 		addBread = false;
 		addIceCream = false;
+		pourSoup = false;
+		putSpice = false;
 		}
 		
 	}
@@ -597,6 +645,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		machine_management_Preparation_r1_step2,
 		machine_management_Preparation_r1_step2_r1_Expresso,
 		machine_management_Preparation_r1_step2_r1_sync,
+		machine_management_Preparation_r1_step2_r1_Soup1,
 		machine_management_Preparation_r1_step2_r2_General,
 		machine_management_Preparation_r1_step3,
 		machine_management_Preparation_r1_step3_r1_Tea1,
@@ -604,10 +653,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		machine_management_Preparation_r1_step3_r1_tea2_small,
 		machine_management_Preparation_r1_step3_r1_tea2_medium,
 		machine_management_Preparation_r1_step3_r1_tea2_big,
+		machine_management_Preparation_r1_step3_r1_soup_option,
 		machine_management_Preparation_r1_step3_r2_General,
 		machine_management_Preparation_r1_step3_r2_sync,
 		machine_management_Preparation_r1_step3_r2_option,
-		machine_management_Preparation_r1_step3_r2_soup_option,
 		machine_management_Preparation_r1_sync,
 		$NullState$
 	};
@@ -708,6 +757,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			case machine_management_Preparation_r1_step2_r1_sync:
 				machine_management_Preparation_r1_step2_r1_sync_react(true);
 				break;
+			case machine_management_Preparation_r1_step2_r1_Soup1:
+				machine_management_Preparation_r1_step2_r1_Soup1_react(true);
+				break;
 			case machine_management_Preparation_r1_step2_r2_General:
 				machine_management_Preparation_r1_step2_r2_General_react(true);
 				break;
@@ -726,6 +778,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			case machine_management_Preparation_r1_step3_r1_tea2_big:
 				machine_management_Preparation_r1_step3_r1_tea2_big_react(true);
 				break;
+			case machine_management_Preparation_r1_step3_r1_soup_option:
+				machine_management_Preparation_r1_step3_r1_soup_option_react(true);
+				break;
 			case machine_management_Preparation_r1_step3_r2_General:
 				machine_management_Preparation_r1_step3_r2_General_react(true);
 				break;
@@ -734,9 +789,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				break;
 			case machine_management_Preparation_r1_step3_r2_option:
 				machine_management_Preparation_r1_step3_r2_option_react(true);
-				break;
-			case machine_management_Preparation_r1_step3_r2_soup_option:
-				machine_management_Preparation_r1_step3_r2_soup_option_react(true);
 				break;
 			case machine_management_Preparation_r1_sync:
 				machine_management_Preparation_r1_sync_react(true);
@@ -828,11 +880,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			return stateVector[3] == State.machine_management_Preparation_r1_step2_r1_Expresso;
 		case machine_management_Preparation_r1_step2_r1_sync:
 			return stateVector[3] == State.machine_management_Preparation_r1_step2_r1_sync;
+		case machine_management_Preparation_r1_step2_r1_Soup1:
+			return stateVector[3] == State.machine_management_Preparation_r1_step2_r1_Soup1;
 		case machine_management_Preparation_r1_step2_r2_General:
 			return stateVector[4] == State.machine_management_Preparation_r1_step2_r2_General;
 		case machine_management_Preparation_r1_step3:
 			return stateVector[3].ordinal() >= State.
-					machine_management_Preparation_r1_step3.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_step3_r2_soup_option.ordinal();
+					machine_management_Preparation_r1_step3.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_step3_r2_option.ordinal();
 		case machine_management_Preparation_r1_step3_r1_Tea1:
 			return stateVector[3] == State.machine_management_Preparation_r1_step3_r1_Tea1;
 		case machine_management_Preparation_r1_step3_r1_sync:
@@ -843,14 +897,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			return stateVector[3] == State.machine_management_Preparation_r1_step3_r1_tea2_medium;
 		case machine_management_Preparation_r1_step3_r1_tea2_big:
 			return stateVector[3] == State.machine_management_Preparation_r1_step3_r1_tea2_big;
+		case machine_management_Preparation_r1_step3_r1_soup_option:
+			return stateVector[3] == State.machine_management_Preparation_r1_step3_r1_soup_option;
 		case machine_management_Preparation_r1_step3_r2_General:
 			return stateVector[4] == State.machine_management_Preparation_r1_step3_r2_General;
 		case machine_management_Preparation_r1_step3_r2_sync:
 			return stateVector[4] == State.machine_management_Preparation_r1_step3_r2_sync;
 		case machine_management_Preparation_r1_step3_r2_option:
 			return stateVector[4] == State.machine_management_Preparation_r1_step3_r2_option;
-		case machine_management_Preparation_r1_step3_r2_soup_option:
-			return stateVector[4] == State.machine_management_Preparation_r1_step3_r2_soup_option;
 		case machine_management_Preparation_r1_sync:
 			return stateVector[3] == State.machine_management_Preparation_r1_sync;
 		default:
@@ -948,6 +1002,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raiseEspressoSelected();
 	}
 	
+	public synchronized void raiseSoupSelected() {
+		sCInterface.raiseSoupSelected();
+	}
+	
 	public synchronized boolean isRaisedDoResetMoney() {
 		return sCInterface.isRaisedDoResetMoney();
 	}
@@ -1024,6 +1082,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return sCInterface.isRaisedAddIceCream();
 	}
 	
+	public synchronized boolean isRaisedPourSoup() {
+		return sCInterface.isRaisedPourSoup();
+	}
+	
+	public synchronized boolean isRaisedPutSpice() {
+		return sCInterface.isRaisedPutSpice();
+	}
+	
 	public synchronized String getDrinkName() {
 		return sCInterface.getDrinkName();
 	}
@@ -1084,6 +1150,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return (sCInterface.getDrinkName()== null?"espresso" ==null :sCInterface.getDrinkName().equals("espresso"));
 	}
 	
+	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr4_tr4() {
+		return (sCInterface.getDrinkName()== null?"soup" ==null :sCInterface.getDrinkName().equals("soup"));
+	}
+	
 	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr0_tr0() {
 		return (sCInterface.getDrinkName()== null?"coffee" ==null :sCInterface.getDrinkName().equals("coffee"));
 	}
@@ -1096,6 +1166,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
 	}
 	
+	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr4_tr4() {
+		return (sCInterface.getDrinkName()== null?"soup" ==null :sCInterface.getDrinkName().equals("soup"));
+	}
+	
 	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr0_tr0() {
 		return (sCInterface.getDrinkName()== null?"espresso" ==null :sCInterface.getDrinkName().equals("espresso"));
 	}
@@ -1106,6 +1180,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr2_tr2() {
 		return (sCInterface.getDrinkName()== null?"coffee" ==null :sCInterface.getDrinkName().equals("coffee"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr4_tr4() {
+		return (sCInterface.getDrinkName()== null?"soup" ==null :sCInterface.getDrinkName().equals("soup"));
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step3_r1__choice_1_tr0_tr0() {
@@ -1122,10 +1200,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	private boolean check_machine_management_Preparation_r1_step3_r2__choice_0_tr0_tr0() {
 		return sCInterface.getOptionSugar();
-	}
-	
-	private boolean check_machine_management_Preparation_r1_step3_r2__choice_0_tr1_tr1() {
-		return ((sCInterface.getDrinkName()== null?"soup" ==null :sCInterface.getDrinkName().equals("soup")) && sCInterface.getOptionDrink());
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step3_r2__choice_1_tr0_tr0() {
@@ -1158,9 +1232,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		enterSequence_machine_management_Preparation_r1_step1_r1_Expresso_default();
 	}
 	
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr4() {
+		sCInterface.raisePutCup();
+		
+		enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
+	}
+	
 	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr3() {
-		exitSequence_machine_management_Preparation_r1_step1();
-		react_machine_management_Preparation_r1_e();
+		enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
 	}
 	
 	private void effect_machine_management_Preparation_r1_step2_r1__choice_0_tr0() {
@@ -1175,9 +1254,12 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		enterSequence_machine_management_Preparation_r1_step2_r1_sync_default();
 	}
 	
+	private void effect_machine_management_Preparation_r1_step2_r1__choice_0_tr4() {
+		enterSequence_machine_management_Preparation_r1_step2_r1_Soup1_default();
+	}
+	
 	private void effect_machine_management_Preparation_r1_step2_r1__choice_0_tr3() {
-		exitSequence_machine_management_Preparation_r1_step2();
-		react_machine_management_Preparation_r1_e();
+		enterSequence_machine_management_Preparation_r1_step2_r1_sync_default();
 	}
 	
 	private void effect_machine_management_Preparation_r1_step3_r1__choice_0_tr0() {
@@ -1192,9 +1274,12 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
 	}
 	
+	private void effect_machine_management_Preparation_r1_step3_r1__choice_0_tr4() {
+		enterSequence_machine_management_Preparation_r1_step3_r1_soup_option_default();
+	}
+	
 	private void effect_machine_management_Preparation_r1_step3_r1__choice_0_tr3() {
-		exitSequence_machine_management_Preparation_r1_step3();
-		react_machine_management_Preparation_r1_e();
+		enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
 	}
 	
 	private void effect_machine_management_Preparation_r1_step3_r1__choice_1_tr0() {
@@ -1222,10 +1307,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	private void effect_machine_management_Preparation_r1_step3_r2__choice_0_tr1() {
-		enterSequence_machine_management_Preparation_r1_step3_r2_soup_option_default();
-	}
-	
-	private void effect_machine_management_Preparation_r1_step3_r2__choice_0_tr2() {
 		enterSequence_machine_management_Preparation_r1_step3_r2_option_default();
 	}
 	
@@ -1315,6 +1396,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.setProgress(sCInterface.getProgress() + 30);
 	}
 	
+	/* Entry action for state 'Soup1'. */
+	private void entryAction_machine_management_Preparation_r1_step2_r1_Soup1() {
+		sCInterface.raisePourSoup();
+		
+		sCInterface.raisePutSpice();
+	}
+	
 	/* Entry action for state 'General'. */
 	private void entryAction_machine_management_Preparation_r1_step2_r2_General() {
 		sCInterface.raisePutCup();
@@ -1340,6 +1428,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		timer.setTimer(this, 4, (20 * 1000), false);
 	}
 	
+	/* Entry action for state 'soup option'. */
+	private void entryAction_machine_management_Preparation_r1_step3_r1_soup_option() {
+		timer.setTimer(this, 5, (3 * 1000), false);
+	}
+	
 	/* Entry action for state 'General'. */
 	private void entryAction_machine_management_Preparation_r1_step3_r2_General() {
 		sCInterface.raisePourWater();
@@ -1350,11 +1443,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	/* Entry action for state 'sync'. */
 	private void entryAction_machine_management_Preparation_r1_step3_r2_sync() {
 		sCInterface.setProgress(sCInterface.getProgress() + 10);
-	}
-	
-	/* Entry action for state 'soup option'. */
-	private void entryAction_machine_management_Preparation_r1_step3_r2_soup_option() {
-		timer.setTimer(this, 5, (3 * 1000), false);
 	}
 	
 	/* Entry action for state 'sync'. */
@@ -1388,7 +1476,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	/* Exit action for state 'soup option'. */
-	private void exitAction_machine_management_Preparation_r1_step3_r2_soup_option() {
+	private void exitAction_machine_management_Preparation_r1_step3_r1_soup_option() {
 		timer.unsetTimer(this, 5);
 	}
 	
@@ -1491,6 +1579,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		stateVector[3] = State.machine_management_Preparation_r1_step2_r1_sync;
 	}
 	
+	/* 'default' enter sequence for state Soup1 */
+	private void enterSequence_machine_management_Preparation_r1_step2_r1_Soup1_default() {
+		entryAction_machine_management_Preparation_r1_step2_r1_Soup1();
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step2_r1_Soup1;
+	}
+	
 	/* 'default' enter sequence for state General */
 	private void enterSequence_machine_management_Preparation_r1_step2_r2_General_default() {
 		entryAction_machine_management_Preparation_r1_step2_r2_General();
@@ -1538,6 +1633,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_tea2_big;
 	}
 	
+	/* 'default' enter sequence for state soup option */
+	private void enterSequence_machine_management_Preparation_r1_step3_r1_soup_option_default() {
+		entryAction_machine_management_Preparation_r1_step3_r1_soup_option();
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_soup_option;
+	}
+	
 	/* 'default' enter sequence for state General */
 	private void enterSequence_machine_management_Preparation_r1_step3_r2_General_default() {
 		entryAction_machine_management_Preparation_r1_step3_r2_General();
@@ -1556,13 +1658,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	private void enterSequence_machine_management_Preparation_r1_step3_r2_option_default() {
 		nextStateIndex = 4;
 		stateVector[4] = State.machine_management_Preparation_r1_step3_r2_option;
-	}
-	
-	/* 'default' enter sequence for state soup option */
-	private void enterSequence_machine_management_Preparation_r1_step3_r2_soup_option_default() {
-		entryAction_machine_management_Preparation_r1_step3_r2_soup_option();
-		nextStateIndex = 4;
-		stateVector[4] = State.machine_management_Preparation_r1_step3_r2_soup_option;
 	}
 	
 	/* 'default' enter sequence for state sync */
@@ -1722,6 +1817,12 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		stateVector[3] = State.$NullState$;
 	}
 	
+	/* Default exit sequence for state Soup1 */
+	private void exitSequence_machine_management_Preparation_r1_step2_r1_Soup1() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+	}
+	
 	/* Default exit sequence for state General */
 	private void exitSequence_machine_management_Preparation_r1_step2_r2_General() {
 		nextStateIndex = 4;
@@ -1768,6 +1869,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		stateVector[3] = State.$NullState$;
 	}
 	
+	/* Default exit sequence for state soup option */
+	private void exitSequence_machine_management_Preparation_r1_step3_r1_soup_option() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+		
+		exitAction_machine_management_Preparation_r1_step3_r1_soup_option();
+	}
+	
 	/* Default exit sequence for state General */
 	private void exitSequence_machine_management_Preparation_r1_step3_r2_General() {
 		nextStateIndex = 4;
@@ -1784,14 +1893,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	private void exitSequence_machine_management_Preparation_r1_step3_r2_option() {
 		nextStateIndex = 4;
 		stateVector[4] = State.$NullState$;
-	}
-	
-	/* Default exit sequence for state soup option */
-	private void exitSequence_machine_management_Preparation_r1_step3_r2_soup_option() {
-		nextStateIndex = 4;
-		stateVector[4] = State.$NullState$;
-		
-		exitAction_machine_management_Preparation_r1_step3_r2_soup_option();
 	}
 	
 	/* Default exit sequence for state sync */
@@ -1857,6 +1958,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_step2_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step2_r1_sync();
 			break;
+		case machine_management_Preparation_r1_step2_r1_Soup1:
+			exitSequence_machine_management_Preparation_r1_step2_r1_Soup1();
+			break;
 		case machine_management_Preparation_r1_step3_r1_Tea1:
 			exitSequence_machine_management_Preparation_r1_step3_r1_Tea1();
 			break;
@@ -1871,6 +1975,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			break;
 		case machine_management_Preparation_r1_step3_r1_tea2_big:
 			exitSequence_machine_management_Preparation_r1_step3_r1_tea2_big();
+			break;
+		case machine_management_Preparation_r1_step3_r1_soup_option:
+			exitSequence_machine_management_Preparation_r1_step3_r1_soup_option();
 			break;
 		case machine_management_Preparation_r1_sync:
 			exitSequence_machine_management_Preparation_r1_sync();
@@ -1897,9 +2004,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			break;
 		case machine_management_Preparation_r1_step3_r2_option:
 			exitSequence_machine_management_Preparation_r1_step3_r2_option();
-			break;
-		case machine_management_Preparation_r1_step3_r2_soup_option:
-			exitSequence_machine_management_Preparation_r1_step3_r2_soup_option();
 			break;
 		default:
 			break;
@@ -1921,6 +2025,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_step2_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step2_r1_sync();
 			break;
+		case machine_management_Preparation_r1_step2_r1_Soup1:
+			exitSequence_machine_management_Preparation_r1_step2_r1_Soup1();
+			break;
 		case machine_management_Preparation_r1_step3_r1_Tea1:
 			exitSequence_machine_management_Preparation_r1_step3_r1_Tea1();
 			break;
@@ -1935,6 +2042,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			break;
 		case machine_management_Preparation_r1_step3_r1_tea2_big:
 			exitSequence_machine_management_Preparation_r1_step3_r1_tea2_big();
+			break;
+		case machine_management_Preparation_r1_step3_r1_soup_option:
+			exitSequence_machine_management_Preparation_r1_step3_r1_soup_option();
 			break;
 		case machine_management_Preparation_r1_sync:
 			exitSequence_machine_management_Preparation_r1_sync();
@@ -1961,9 +2071,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			break;
 		case machine_management_Preparation_r1_step3_r2_option:
 			exitSequence_machine_management_Preparation_r1_step3_r2_option();
-			break;
-		case machine_management_Preparation_r1_step3_r2_soup_option:
-			exitSequence_machine_management_Preparation_r1_step3_r2_soup_option();
 			break;
 		default:
 			break;
@@ -2007,6 +2114,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_step2_r1_sync:
 			exitSequence_machine_management_Preparation_r1_step2_r1_sync();
 			break;
+		case machine_management_Preparation_r1_step2_r1_Soup1:
+			exitSequence_machine_management_Preparation_r1_step2_r1_Soup1();
+			break;
 		default:
 			break;
 		}
@@ -2041,6 +2151,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_step3_r1_tea2_big:
 			exitSequence_machine_management_Preparation_r1_step3_r1_tea2_big();
 			break;
+		case machine_management_Preparation_r1_step3_r1_soup_option:
+			exitSequence_machine_management_Preparation_r1_step3_r1_soup_option();
+			break;
 		default:
 			break;
 		}
@@ -2058,9 +2171,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_step3_r2_option:
 			exitSequence_machine_management_Preparation_r1_step3_r2_option();
 			break;
-		case machine_management_Preparation_r1_step3_r2_soup_option:
-			exitSequence_machine_management_Preparation_r1_step3_r2_soup_option();
-			break;
 		default:
 			break;
 		}
@@ -2077,7 +2187,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				if (check_machine_management_Preparation_r1_step1_r1__choice_0_tr2_tr2()) {
 					effect_machine_management_Preparation_r1_step1_r1__choice_0_tr2();
 				} else {
-					effect_machine_management_Preparation_r1_step1_r1__choice_0_tr3();
+					if (check_machine_management_Preparation_r1_step1_r1__choice_0_tr4_tr4()) {
+						effect_machine_management_Preparation_r1_step1_r1__choice_0_tr4();
+					} else {
+						effect_machine_management_Preparation_r1_step1_r1__choice_0_tr3();
+					}
 				}
 			}
 		}
@@ -2094,7 +2208,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				if (check_machine_management_Preparation_r1_step2_r1__choice_0_tr2_tr2()) {
 					effect_machine_management_Preparation_r1_step2_r1__choice_0_tr2();
 				} else {
-					effect_machine_management_Preparation_r1_step2_r1__choice_0_tr3();
+					if (check_machine_management_Preparation_r1_step2_r1__choice_0_tr4_tr4()) {
+						effect_machine_management_Preparation_r1_step2_r1__choice_0_tr4();
+					} else {
+						effect_machine_management_Preparation_r1_step2_r1__choice_0_tr3();
+					}
 				}
 			}
 		}
@@ -2111,7 +2229,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				if (check_machine_management_Preparation_r1_step3_r1__choice_0_tr2_tr2()) {
 					effect_machine_management_Preparation_r1_step3_r1__choice_0_tr2();
 				} else {
-					effect_machine_management_Preparation_r1_step3_r1__choice_0_tr3();
+					if (check_machine_management_Preparation_r1_step3_r1__choice_0_tr4_tr4()) {
+						effect_machine_management_Preparation_r1_step3_r1__choice_0_tr4();
+					} else {
+						effect_machine_management_Preparation_r1_step3_r1__choice_0_tr3();
+					}
 				}
 			}
 		}
@@ -2139,11 +2261,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		if (check_machine_management_Preparation_r1_step3_r2__choice_0_tr0_tr0()) {
 			effect_machine_management_Preparation_r1_step3_r2__choice_0_tr0();
 		} else {
-			if (check_machine_management_Preparation_r1_step3_r2__choice_0_tr1_tr1()) {
-				effect_machine_management_Preparation_r1_step3_r2__choice_0_tr1();
-			} else {
-				effect_machine_management_Preparation_r1_step3_r2__choice_0_tr2();
-			}
+			effect_machine_management_Preparation_r1_step3_r2__choice_0_tr1();
 		}
 	}
 	
@@ -2286,7 +2404,16 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 						
 						enterSequence_drink_management_configuration_default();
 					} else {
-						did_transition = false;
+						if (sCInterface.soupSelected) {
+							exitSequence_drink_management_configuration();
+							sCInterface.setDrinkName("soup");
+							
+							raiseDrinkSelected();
+							
+							enterSequence_drink_management_configuration_default();
+						} else {
+							did_transition = false;
+						}
 					}
 				}
 			}
@@ -2521,6 +2648,16 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return did_transition;
 	}
 	
+	private boolean machine_management_Preparation_r1_step2_r1_Soup1_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			exitSequence_machine_management_Preparation_r1_step2_r1_Soup1();
+			enterSequence_machine_management_Preparation_r1_step2_r1_sync_default();
+		}
+		return did_transition;
+	}
+	
 	private boolean machine_management_Preparation_r1_step2_r2_General_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
@@ -2619,6 +2756,22 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return did_transition;
 	}
 	
+	private boolean machine_management_Preparation_r1_step3_r1_soup_option_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (timeEvents[5]) {
+				exitSequence_machine_management_Preparation_r1_step3_r1_soup_option();
+				sCInterface.raiseAddBread();
+				
+				enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
+			} else {
+				did_transition = false;
+			}
+		}
+		return did_transition;
+	}
+	
 	private boolean machine_management_Preparation_r1_step3_r2_General_react(boolean try_transition) {
 		boolean did_transition = try_transition;
 		
@@ -2656,26 +2809,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			if (sCInterface.cupFilled) {
 				exitSequence_machine_management_Preparation_r1_step3_r2_option();
 				react_machine_management_Preparation_r1_step3_r2__choice_1();
-			} else {
-				did_transition = false;
-			}
-		}
-		if (did_transition==false) {
-			did_transition = machine_management_Preparation_r1_step3_react(try_transition);
-		}
-		return did_transition;
-	}
-	
-	private boolean machine_management_Preparation_r1_step3_r2_soup_option_react(boolean try_transition) {
-		boolean did_transition = try_transition;
-		
-		if (try_transition) {
-			if (timeEvents[5]) {
-				exitSequence_machine_management_Preparation_r1_step3_r2_soup_option();
-				sCInterface.raiseAddBread();
-				
-				enterSequence_machine_management_Preparation_r1_step3_r2_option_default();
-				machine_management_Preparation_r1_step3_react(false);
 			} else {
 				did_transition = false;
 			}

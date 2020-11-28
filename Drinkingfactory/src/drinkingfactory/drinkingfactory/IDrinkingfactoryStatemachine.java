@@ -30,6 +30,8 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public void raiseEspressoSelected();
 		
+		public void raiseSoupSelected();
+		
 		public boolean isRaisedDoResetMoney();
 		
 		public boolean isRaisedDoResetMachine();
@@ -67,6 +69,10 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public boolean isRaisedAddBread();
 		
 		public boolean isRaisedAddIceCream();
+		
+		public boolean isRaisedPourSoup();
+		
+		public boolean isRaisedPutSpice();
 		
 		public String getDrinkName();
 		
@@ -116,6 +122,8 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public void onPourSirupRaised();
 		public void onAddBreadRaised();
 		public void onAddIceCreamRaised();
+		public void onPourSoupRaised();
+		public void onPutSpiceRaised();
 		}
 	
 	public SCInterface getSCInterface();

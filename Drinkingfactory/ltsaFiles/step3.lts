@@ -1,0 +1,19 @@
+WATER = ( pourSyrupTrue -> Option
+		| pourSyrupFalse -> Option),
+
+Option = ( cupFilled -> Transition),
+Transition  = (addIceCreamTrue -> AddIceCream
+			  | addIceCreamFalse -> EndIceCream),
+
+AddIceCream = ( afterIceCream -> EndIceCream ),
+EndIceCream = ( joinDrink -> JoinDrinkWater),
+
+JoinDrinkWater = ( pourMilkTrue -> PourMilk
+				 | pourMilkFalse -> EndPourMilk),
+
+PourMilk = ( afterPourMilk -> EndPourMilk),
+EndPourMilk = ( addProgress -> STOP).
+				
+||WaterAndDrinks = (DRINK||WATER).
+
+||Start = (WATER).

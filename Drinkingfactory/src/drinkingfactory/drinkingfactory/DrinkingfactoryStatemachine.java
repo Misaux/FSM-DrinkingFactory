@@ -409,20 +409,20 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
-		private boolean pourSirup;
+		private boolean pourSyrup;
 		
 		
-		public boolean isRaisedPourSirup() {
+		public boolean isRaisedPourSyrup() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				return pourSirup;
+				return pourSyrup;
 			}
 		}
 		
-		protected void raisePourSirup() {
+		protected void raisePourSyrup() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				pourSirup = true;
+				pourSyrup = true;
 				for (SCInterfaceListener listener : listeners) {
-					listener.onPourSirupRaised();
+					listener.onPourSyrupRaised();
 				}
 			}
 		}
@@ -615,7 +615,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		checkStocks = false;
 		displayOptions = false;
 		pourMilk = false;
-		pourSirup = false;
+		pourSyrup = false;
 		addBread = false;
 		addIceCream = false;
 		pourSoup = false;
@@ -1070,8 +1070,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return sCInterface.isRaisedPourMilk();
 	}
 	
-	public synchronized boolean isRaisedPourSirup() {
-		return sCInterface.isRaisedPourSirup();
+	public synchronized boolean isRaisedPourSyrup() {
+		return sCInterface.isRaisedPourSyrup();
 	}
 	
 	public synchronized boolean isRaisedAddBread() {
@@ -1301,7 +1301,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	private void effect_machine_management_Preparation_r1_step3_r2__choice_0_tr0() {
-		sCInterface.raisePourSirup();
+		sCInterface.raisePourSyrup();
 		
 		enterSequence_machine_management_Preparation_r1_step3_r2_option_default();
 	}

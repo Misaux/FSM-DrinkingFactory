@@ -64,7 +64,7 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public boolean isRaisedPourMilk();
 		
-		public boolean isRaisedPourSirup();
+		public boolean isRaisedPourSyrup();
 		
 		public boolean isRaisedAddBread();
 		
@@ -119,7 +119,7 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		public void onCheckStocksRaised();
 		public void onDisplayOptionsRaised();
 		public void onPourMilkRaised();
-		public void onPourSirupRaised();
+		public void onPourSyrupRaised();
 		public void onAddBreadRaised();
 		public void onAddIceCreamRaised();
 		public void onPourSoupRaised();

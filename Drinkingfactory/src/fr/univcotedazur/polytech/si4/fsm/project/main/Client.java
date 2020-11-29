@@ -1,7 +1,5 @@
 package fr.univcotedazur.polytech.si4.fsm.project.main;
 
-import drinks.Drink;
-
 public class Client {
     private String cardHash;
     private int commandedDrinks;
@@ -11,22 +9,10 @@ public class Client {
         this.cardHash = cardHash;
     }
 
-    public float getTotalCash() {
-        return totalCash;
-    }
-
-    public int getCommandedDrinks() {
-        return commandedDrinks;
-    }
-
-    public String getCardHash() {
-        return cardHash;
-    }
-
-    public float getPromo(Drink drink){
+    public float getPromo(float cost){
         if(commandedDrinks < 10) {
             this.commandedDrinks += 1;
-            this.totalCash += drink.getPrice();
+            this.totalCash += cost;
             return 0;
         }
         else {

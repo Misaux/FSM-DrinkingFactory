@@ -121,6 +121,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private boolean icedTeaSelected;
+		
+		
+		public void raiseIcedTeaSelected() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				icedTeaSelected = true;
+			}
+		}
+		
 		private boolean doResetMoney;
 		
 		
@@ -499,6 +508,60 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private boolean lockDoor;
+		
+		
+		public boolean isRaisedLockDoor() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return lockDoor;
+			}
+		}
+		
+		protected void raiseLockDoor() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				lockDoor = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onLockDoorRaised();
+				}
+			}
+		}
+		
+		private boolean unlockDoor;
+		
+		
+		public boolean isRaisedUnlockDoor() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return unlockDoor;
+			}
+		}
+		
+		protected void raiseUnlockDoor() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				unlockDoor = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onUnlockDoorRaised();
+				}
+			}
+		}
+		
+		private boolean nitrogenInjection;
+		
+		
+		public boolean isRaisedNitrogenInjection() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return nitrogenInjection;
+			}
+		}
+		
+		protected void raiseNitrogenInjection() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				nitrogenInjection = true;
+				for (SCInterfaceListener listener : listeners) {
+					listener.onNitrogenInjectionRaised();
+				}
+			}
+		}
+		
 		private String drinkName;
 		
 		public synchronized String getDrinkName() {
@@ -596,6 +659,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			teaSelected = false;
 			espressoSelected = false;
 			soupSelected = false;
+			icedTeaSelected = false;
 		}
 		protected void clearOutEvents() {
 		
@@ -620,6 +684,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		addIceCream = false;
 		pourSoup = false;
 		putSpice = false;
+		lockDoor = false;
+		unlockDoor = false;
+		nitrogenInjection = false;
 		}
 		
 	}
@@ -658,6 +725,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		machine_management_Preparation_r1_step3_r2_sync,
 		machine_management_Preparation_r1_step3_r2_option,
 		machine_management_Preparation_r1_sync,
+		machine_management_Preparation_r1_cooling1,
 		$NullState$
 	};
 	
@@ -667,7 +735,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	private ITimer timer;
 	
-	private final boolean[] timeEvents = new boolean[6];
+	private final boolean[] timeEvents = new boolean[7];
 	
 	private boolean resetMachineInternal;
 	private boolean userActionInternal;
@@ -793,6 +861,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			case machine_management_Preparation_r1_sync:
 				machine_management_Preparation_r1_sync_react(true);
 				break;
+			case machine_management_Preparation_r1_cooling1:
+				machine_management_Preparation_r1_cooling1_react(true);
+				break;
 			default:
 				// $NullState$
 			}
@@ -861,7 +932,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			return stateVector[3] == State.machine_management_checkingPayment;
 		case machine_management_Preparation:
 			return stateVector[3].ordinal() >= State.
-					machine_management_Preparation.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_sync.ordinal();
+					machine_management_Preparation.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_cooling1.ordinal();
 		case machine_management_Preparation_r1_step1:
 			return stateVector[3].ordinal() >= State.
 					machine_management_Preparation_r1_step1.ordinal()&& stateVector[3].ordinal() <= State.machine_management_Preparation_r1_step1_r2_sync.ordinal();
@@ -907,6 +978,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			return stateVector[4] == State.machine_management_Preparation_r1_step3_r2_option;
 		case machine_management_Preparation_r1_sync:
 			return stateVector[3] == State.machine_management_Preparation_r1_sync;
+		case machine_management_Preparation_r1_cooling1:
+			return stateVector[3] == State.machine_management_Preparation_r1_cooling1;
 		default:
 			return false;
 		}
@@ -1006,6 +1079,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raiseSoupSelected();
 	}
 	
+	public synchronized void raiseIcedTeaSelected() {
+		sCInterface.raiseIcedTeaSelected();
+	}
+	
 	public synchronized boolean isRaisedDoResetMoney() {
 		return sCInterface.isRaisedDoResetMoney();
 	}
@@ -1090,6 +1167,18 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		return sCInterface.isRaisedPutSpice();
 	}
 	
+	public synchronized boolean isRaisedLockDoor() {
+		return sCInterface.isRaisedLockDoor();
+	}
+	
+	public synchronized boolean isRaisedUnlockDoor() {
+		return sCInterface.isRaisedUnlockDoor();
+	}
+	
+	public synchronized boolean isRaisedNitrogenInjection() {
+		return sCInterface.isRaisedNitrogenInjection();
+	}
+	
 	public synchronized String getDrinkName() {
 		return sCInterface.getDrinkName();
 	}
@@ -1139,7 +1228,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr0_tr0() {
-		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
+		return ((sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea")) || (sCInterface.getDrinkName()== null?"icedTea" ==null :sCInterface.getDrinkName().equals("icedTea")));
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr1_tr1() {
@@ -1163,7 +1252,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr2_tr2() {
-		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
+		return ((sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea")) || (sCInterface.getDrinkName()== null?"icedTea" ==null :sCInterface.getDrinkName().equals("icedTea")));
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr4_tr4() {
@@ -1175,7 +1264,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr1_tr1() {
-		return (sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea"));
+		return ((sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea")) || (sCInterface.getDrinkName()== null?"icedTea" ==null :sCInterface.getDrinkName().equals("icedTea")));
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step3_r1__choice_0_tr2_tr2() {
@@ -1208,6 +1297,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	private boolean check_machine_management_Preparation_r1__choice_0_tr0_tr0() {
 		return sCInterface.getOptionDrink();
+	}
+	
+	private boolean check_machine_management_Preparation_r1__choice_1_tr1_tr1() {
+		return (sCInterface.getDrinkName()== null?"icedTea" ==null :sCInterface.getDrinkName().equals("icedTea"));
 	}
 	
 	private void effect_machine_management_Preparation_tr0() {
@@ -1330,6 +1423,16 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		enterSequence_machine_management_Preparation_r1_sync_default();
 	}
 	
+	private void effect_machine_management_Preparation_r1__choice_1_tr1() {
+		sCInterface.raiseLockDoor();
+		
+		enterSequence_machine_management_Preparation_r1_cooling1_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1__choice_1_tr0() {
+		react_machine_management_Preparation_r1__choice_0();
+	}
+	
 	/* Entry action for state 'Payment'. */
 	private void entryAction_payment_management_Payment() {
 		sCInterface.raiseCheckPayment();
@@ -1428,9 +1531,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		timer.setTimer(this, 4, (20 * 1000), false);
 	}
 	
+	/* Entry action for state 'tea2_big'. */
+	private void entryAction_machine_management_Preparation_r1_step3_r1_tea2_big() {
+		timer.setTimer(this, 5, (30 * 1000), false);
+	}
+	
 	/* Entry action for state 'soup option'. */
 	private void entryAction_machine_management_Preparation_r1_step3_r1_soup_option() {
-		timer.setTimer(this, 5, (3 * 1000), false);
+		timer.setTimer(this, 6, (3 * 1000), false);
 	}
 	
 	/* Entry action for state 'General'. */
@@ -1448,6 +1556,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	/* Entry action for state 'sync'. */
 	private void entryAction_machine_management_Preparation_r1_sync() {
 		sCInterface.setProgress(100);
+	}
+	
+	/* Entry action for state 'cooling1'. */
+	private void entryAction_machine_management_Preparation_r1_cooling1() {
+		sCInterface.raiseNitrogenInjection();
+		
+		sCInterface.setProgress(95);
 	}
 	
 	/* Exit action for state 'configuration'. */
@@ -1475,9 +1590,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		timer.unsetTimer(this, 4);
 	}
 	
+	/* Exit action for state 'tea2_big'. */
+	private void exitAction_machine_management_Preparation_r1_step3_r1_tea2_big() {
+		timer.unsetTimer(this, 5);
+	}
+	
 	/* Exit action for state 'soup option'. */
 	private void exitAction_machine_management_Preparation_r1_step3_r1_soup_option() {
-		timer.unsetTimer(this, 5);
+		timer.unsetTimer(this, 6);
 	}
 	
 	/* 'default' enter sequence for state Payment */
@@ -1629,6 +1749,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* 'default' enter sequence for state tea2_big */
 	private void enterSequence_machine_management_Preparation_r1_step3_r1_tea2_big_default() {
+		entryAction_machine_management_Preparation_r1_step3_r1_tea2_big();
 		nextStateIndex = 3;
 		stateVector[3] = State.machine_management_Preparation_r1_step3_r1_tea2_big;
 	}
@@ -1665,6 +1786,13 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		entryAction_machine_management_Preparation_r1_sync();
 		nextStateIndex = 3;
 		stateVector[3] = State.machine_management_Preparation_r1_sync;
+	}
+	
+	/* 'default' enter sequence for state cooling1 */
+	private void enterSequence_machine_management_Preparation_r1_cooling1_default() {
+		entryAction_machine_management_Preparation_r1_cooling1();
+		nextStateIndex = 3;
+		stateVector[3] = State.machine_management_Preparation_r1_cooling1;
 	}
 	
 	/* 'default' enter sequence for region payment management */
@@ -1867,6 +1995,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	private void exitSequence_machine_management_Preparation_r1_step3_r1_tea2_big() {
 		nextStateIndex = 3;
 		stateVector[3] = State.$NullState$;
+		
+		exitAction_machine_management_Preparation_r1_step3_r1_tea2_big();
 	}
 	
 	/* Default exit sequence for state soup option */
@@ -1897,6 +2027,12 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Default exit sequence for state sync */
 	private void exitSequence_machine_management_Preparation_r1_sync() {
+		nextStateIndex = 3;
+		stateVector[3] = State.$NullState$;
+	}
+	
+	/* Default exit sequence for state cooling1 */
+	private void exitSequence_machine_management_Preparation_r1_cooling1() {
 		nextStateIndex = 3;
 		stateVector[3] = State.$NullState$;
 	}
@@ -1982,6 +2118,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		case machine_management_Preparation_r1_sync:
 			exitSequence_machine_management_Preparation_r1_sync();
 			break;
+		case machine_management_Preparation_r1_cooling1:
+			exitSequence_machine_management_Preparation_r1_cooling1();
+			break;
 		default:
 			break;
 		}
@@ -2048,6 +2187,9 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			break;
 		case machine_management_Preparation_r1_sync:
 			exitSequence_machine_management_Preparation_r1_sync();
+			break;
+		case machine_management_Preparation_r1_cooling1:
+			exitSequence_machine_management_Preparation_r1_cooling1();
 			break;
 		default:
 			break;
@@ -2283,6 +2425,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		}
 	}
 	
+	/* The reactions of state null. */
+	private void react_machine_management_Preparation_r1__choice_1() {
+		if (check_machine_management_Preparation_r1__choice_1_tr1_tr1()) {
+			effect_machine_management_Preparation_r1__choice_1_tr1();
+		} else {
+			effect_machine_management_Preparation_r1__choice_1_tr0();
+		}
+	}
+	
 	/* Default react sequence for initial entry  */
 	private void react_payment_management__entry_Default() {
 		enterSequence_payment_management_Payment_default();
@@ -2355,7 +2506,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* The reactions of state null. */
 	private void react_machine_management_Preparation_r1__sync2() {
-		react_machine_management_Preparation_r1__choice_0();
+		react_machine_management_Preparation_r1__choice_1();
 	}
 	
 	private boolean react() {
@@ -2412,7 +2563,16 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 							
 							enterSequence_drink_management_configuration_default();
 						} else {
-							did_transition = false;
+							if (sCInterface.icedTeaSelected) {
+								exitSequence_drink_management_configuration();
+								sCInterface.setDrinkName("icedTea");
+								
+								raiseDrinkSelected();
+								
+								enterSequence_drink_management_configuration_default();
+							} else {
+								did_transition = false;
+							}
 						}
 					}
 				}
@@ -2751,7 +2911,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			did_transition = false;
+			if (timeEvents[5]) {
+				exitSequence_machine_management_Preparation_r1_step3_r1_tea2_big();
+				sCInterface.raiseTakeOffTeaBag();
+				
+				enterSequence_machine_management_Preparation_r1_step3_r1_sync_default();
+			} else {
+				did_transition = false;
+			}
 		}
 		return did_transition;
 	}
@@ -2760,7 +2927,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (timeEvents[5]) {
+			if (timeEvents[6]) {
 				exitSequence_machine_management_Preparation_r1_step3_r1_soup_option();
 				sCInterface.raiseAddBread();
 				
@@ -2828,6 +2995,25 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 				sCInterface.raiseDoCleaning();
 				
 				react_machine_management_Preparation_r1_e();
+			} else {
+				did_transition = false;
+			}
+		}
+		if (did_transition==false) {
+			did_transition = machine_management_Preparation_react(try_transition);
+		}
+		return did_transition;
+	}
+	
+	private boolean machine_management_Preparation_r1_cooling1_react(boolean try_transition) {
+		boolean did_transition = try_transition;
+		
+		if (try_transition) {
+			if (sCInterface.heatReached) {
+				exitSequence_machine_management_Preparation_r1_cooling1();
+				sCInterface.raiseUnlockDoor();
+				
+				react_machine_management_Preparation_r1__choice_0();
 			} else {
 				did_transition = false;
 			}

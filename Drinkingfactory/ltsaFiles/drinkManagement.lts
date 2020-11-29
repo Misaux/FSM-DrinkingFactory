@@ -1,0 +1,8 @@
+Configuration = ( userAction -> Configuration
+				| userActionInternal -> Configuration
+				| resetMachineInternal -> After45s).
+
+After45s = ( waitFor45s -> Configuration ).
+
+||Start = (Configuration).
+		   

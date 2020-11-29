@@ -1,0 +1,4 @@
+Payment = ( addMoney -> Payment ).
+
+||Start = (Payment)
+

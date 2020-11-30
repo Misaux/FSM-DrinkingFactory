@@ -526,7 +526,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 theFSM.runCycle();
                 try {
                     this.progressBar.setValue((int) theFSM.getProgress());
-                    if (theFSM.isStateActive(DrinkingfactoryStatemachine.State.machine_management_Preparation_r1_sync)) {
+                    if (theFSM.isStateActive(DrinkingfactoryStatemachine.State.machine_management_Preparation_r1_step4_r1_sync)) {
                         takeCupButton.setVisible(true);
                     }
                     updateMessageToUser();

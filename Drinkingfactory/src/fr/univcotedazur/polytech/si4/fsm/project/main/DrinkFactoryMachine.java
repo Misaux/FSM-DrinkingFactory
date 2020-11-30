@@ -218,6 +218,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionMilk.setVisible(false);
         optionMilk.addActionListener(e -> {
             theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
+            onCheckPaymentRaised();
         });
         contentPane.add(optionMilk);
 
@@ -230,6 +231,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionBread.setText("Bread");
         optionBread.addActionListener(e -> {
             theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
+            onCheckPaymentRaised();
         });
         contentPane.add(optionBread);
 
@@ -240,7 +242,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionSugar.setEnabled(true);
         optionSugar.setVisible(false);
         optionSugar.setText("Maple Syrup");
-        optionSugar.addActionListener(e -> theFSM.setOptionSugar(((JCheckBox) e.getSource()).isSelected()));
+        optionSugar.addActionListener(e -> {
+            theFSM.setOptionSugar(((JCheckBox) e.getSource()).isSelected());
+            onCheckPaymentRaised();
+        });
         contentPane.add(optionSugar);
 
         optionIceCream = new JCheckBox("");
@@ -250,7 +255,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionIceCream.setEnabled(true);
         optionIceCream.setText("Vanilla Ice Cream");
         optionIceCream.setVisible(false);
-        optionIceCream.addActionListener(e -> theFSM.setOptionIceCream(((JCheckBox) e.getSource()).isSelected()));
+        optionIceCream.addActionListener(e -> {
+            theFSM.setOptionIceCream(((JCheckBox) e.getSource()).isSelected());
+            onCheckPaymentRaised();
+        });
         contentPane.add(optionIceCream);
 
         //Buttons Drink
@@ -895,6 +903,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionIceCream.setVisible(false);
         sugarSlider.setValue(1);
         sizeSlider.setValue(1);
+        sizeSlider.setMaximum(2);
         temperatureSlider.setValue(2);
         System.out.println("params reseted");
     }

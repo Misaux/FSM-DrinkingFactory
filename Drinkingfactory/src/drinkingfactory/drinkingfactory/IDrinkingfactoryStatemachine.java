@@ -106,6 +106,10 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public void setProgress(long value);
 		
+		public boolean getCupPlaced();
+		
+		public void setCupPlaced(boolean value);
+		
 	public List<SCInterfaceListener> getListeners();
 	}
 	

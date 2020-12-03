@@ -646,6 +646,20 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
+		private boolean cupPlaced;
+		
+		public synchronized boolean getCupPlaced() {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				return cupPlaced;
+			}
+		}
+		
+		public void setCupPlaced(boolean value) {
+			synchronized(DrinkingfactoryStatemachine.this) {
+				this.cupPlaced = value;
+			}
+		}
+		
 		protected void clearEvents() {
 			addMoney = false;
 			paying = false;
@@ -764,6 +778,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.setOptionIceCream(false);
 		
 		sCInterface.setProgress(0);
+		
+		sCInterface.setCupPlaced(false);
 	}
 	
 	public synchronized void enter() {
@@ -1219,6 +1235,14 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.setProgress(value);
 	}
 	
+	public synchronized boolean getCupPlaced() {
+		return sCInterface.getCupPlaced();
+	}
+	
+	public synchronized void setCupPlaced(boolean value) {
+		sCInterface.setCupPlaced(value);
+	}
+	
 	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr0_tr0() {
 		return ((sCInterface.getDrinkName()== null?"tea" ==null :sCInterface.getDrinkName().equals("tea")) || (sCInterface.getDrinkName()== null?"icedTea" ==null :sCInterface.getDrinkName().equals("icedTea")));
 	}
@@ -1233,6 +1257,10 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	private boolean check_machine_management_Preparation_r1_step1_r1__choice_0_tr4_tr4() {
 		return (sCInterface.getDrinkName()== null?"soup" ==null :sCInterface.getDrinkName().equals("soup"));
+	}
+	
+	private boolean check_machine_management_Preparation_r1_step1_r1__choice_1_tr0_tr0() {
+		return !sCInterface.getCupPlaced();
 	}
 	
 	private boolean check_machine_management_Preparation_r1_step2_r1__choice_0_tr0_tr0() {
@@ -1318,12 +1346,22 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr4() {
+		react_machine_management_Preparation_r1_step1_r1__choice_1();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr3() {
+		enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
+	}
+	
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_1_tr0() {
 		sCInterface.raisePutCup();
+		
+		sCInterface.setCupPlaced(true);
 		
 		enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
 	}
 	
-	private void effect_machine_management_Preparation_r1_step1_r1__choice_0_tr3() {
+	private void effect_machine_management_Preparation_r1_step1_r1__choice_1_tr1() {
 		enterSequence_machine_management_Preparation_r1_step1_r1_sync_default();
 	}
 	
@@ -1501,7 +1539,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'General'. */
 	private void entryAction_machine_management_Preparation_r1_step2_r2_General() {
-		sCInterface.raisePutCup();
+		if (!sCInterface.getCupPlaced()) {
+			sCInterface.raisePutCup();
+			
+			sCInterface.setCupPlaced(true);
+		}
 	}
 	
 	/* Entry action for state 'Tea1'. */
@@ -2309,6 +2351,15 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	}
 	
 	/* The reactions of state null. */
+	private void react_machine_management_Preparation_r1_step1_r1__choice_1() {
+		if (check_machine_management_Preparation_r1_step1_r1__choice_1_tr0_tr0()) {
+			effect_machine_management_Preparation_r1_step1_r1__choice_1_tr0();
+		} else {
+			effect_machine_management_Preparation_r1_step1_r1__choice_1_tr1();
+		}
+	}
+	
+	/* The reactions of state null. */
 	private void react_machine_management_Preparation_r1_step2_r1__choice_0() {
 		if (check_machine_management_Preparation_r1_step2_r1__choice_0_tr0_tr0()) {
 			effect_machine_management_Preparation_r1_step2_r1__choice_0_tr0();
@@ -2959,6 +3010,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		if (try_transition) {
 			if (sCInterface.cupGrabbed) {
 				exitSequence_machine_management_Preparation_r1_step4();
+				sCInterface.setCupPlaced(false);
+				
 				react_machine_management_Preparation_r1_e();
 			} else {
 				did_transition = false;

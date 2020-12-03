@@ -33,10 +33,10 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private boolean coolingState = false;
     private int count = 0;
     private boolean cardBiped = false;
-    private boolean cupPlaced = false;
     private Hashtable<Integer, JLabel> temperatureTable;
     private Hashtable<Integer, JLabel> freshnessTable;
     private Hashtable<Integer, JLabel> sizeTable;
+    private Hashtable<Integer, JLabel> sugarTable;
     private int currentTemperatureLevel;
     private Drink currentDrinkSelected;
     private float currentMoneyInserted = 0;
@@ -74,6 +74,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private final JCheckBox optionBread;
     private final JCheckBox optionSugar;
     private final JCheckBox optionIceCream;
+    private final JLabel lblSugar;
+    private final JLabel lblTemperature;
 
     // for testing purposes
     private int coffeeStock = 4;
@@ -85,12 +87,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private int breadStock = 3;
     private int syrupStock = 5;
     private int vanillaStock = 2;
-
-
-    //Labels
-    JLabel lblSugar;
-    JLabel lblTemperature;
-
+    private int sugarStock = 10;
 
     /**
      * @wbp.nonvisual location=311,475
@@ -157,7 +154,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         lblSugar.setForeground(Color.WHITE);
         lblSugar.setBackground(Color.DARK_GRAY);
         lblSugar.setHorizontalAlignment(SwingConstants.CENTER);
-        lblSugar.setBounds(380, 34, 44, 15);
+        lblSugar.setBounds(380, 14, 44, 15);
         contentPane.add(lblSugar);
 
         JLabel lblCoins = new JLabel("Coins");
@@ -377,13 +374,24 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         sugarSlider.setBackground(Color.DARK_GRAY);
         sugarSlider.setForeground(Color.WHITE);
         sugarSlider.setPaintTicks(true);
+        sugarSlider.setPaintLabels(true);
         sugarSlider.setMinorTickSpacing(1);
         sugarSlider.setMajorTickSpacing(1);
         sugarSlider.setMaximum(4);
-        sugarSlider.setBounds(301, 51, 200, 36);
+        sugarSlider.setBounds(301, 31, 200, 56);
         sugarSlider.addChangeListener(e -> {
             theFSM.raiseUserAction();
         });
+        sugarTable = new Hashtable<>();
+        sugarTable.put(0, new JLabel("0"));
+        sugarTable.put(1, new JLabel("1"));
+        sugarTable.put(2, new JLabel("2"));
+        sugarTable.put(3, new JLabel("3"));
+        sugarTable.put(4, new JLabel("4"));
+        for (JLabel l : sugarTable.values()) {
+            l.setForeground(Color.WHITE);
+        }
+        sugarSlider.setLabelTable(sugarTable);
         contentPane.add(sugarSlider);
 
         sizeSlider = new JSlider();
@@ -481,7 +489,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 ee.printStackTrace();
             }
             currentPicture.setIcon(new ImageIcon(myPicture));
-            cupPlaced = true;
+            theFSM.setCupPlaced(true);
             addCupButton.setVisible(false);
             takeCupButton.setVisible(true);
             updateMessageToUser();
@@ -611,7 +619,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                         "Card Biped: " + cardBiped + "<br>" +
                         "Current Drink: " + currentDrinkSelected.getName() + "<br>" +
                         "Drink Cost: " + currentDrinkSelected.getPrice() + "€<br>" +
-                        ((cupPlaced) ? "Cup OK" : "No Cup") + "<br>" +
+                        ((theFSM.getCupPlaced()) ? "Cup OK" : "No Cup") + "<br>" +
                         "Water Temp: " + currentHeatedWaterTemp + "<br>" +
                         "Paying: " + payingAmount + "€<br>" +
                         ((promoAmount != 0) ? "Promo!!!<br>" : "") +
@@ -622,7 +630,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                         "Card Biped: " + cardBiped + "<br>" +
                         "Current Drink: " + "none" + "<br>" +
                         "Drink Cost: " + "0.0" + "€<br>" +
-                        ((cupPlaced) ? "Cup OK" : "No Cup") + "<br>" +
+                        ((theFSM.getCupPlaced()) ? "Cup OK" : "No Cup") + "<br>" +
                         "Water Temp: " + currentHeatedWaterTemp + "<br>" +
                         "Paying: " + "0.0" + "€<br>" +
                         "Giving back: " + moneyGivingBack + "€<br>" +
@@ -732,7 +740,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             addCupButton.setVisible(true);
         }
         takeCupButton.setVisible(false);
-        cupPlaced = false;
+        theFSM.setCupPlaced(false);
         System.out.println("Cup taken");
     }
 
@@ -758,16 +766,16 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
 
         if (cardBiped) {
             promoAmount = clientMap.get(currentCardHash).getPromo(payingAmount);
-            payingAmount = Math.max(payingAmount - promoAmount - ((cupPlaced) ? 0.1f : 0), 0);
+            payingAmount = Math.max(payingAmount - promoAmount - ((theFSM.getCupPlaced()) ? 0.1f : 0), 0);
         } else {
-            payingAmount = payingAmount - ((cupPlaced) ? 0.1f : 0);
+            payingAmount = payingAmount - ((theFSM.getCupPlaced()) ? 0.1f : 0);
         }
         payingAmount = Math.round(payingAmount * 100) / 100f;
 
         return payingAmount;
     }
 
-    // Stock management
+    // Stock management simulation
     private void takeOffStock() {
         switch (currentDrinkSelected) {
             case Tea:
@@ -799,6 +807,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         }
         if (optionSugar.isSelected()) {
             syrupStock--;
+        }
+        else {
+            sugarStock -= sugarSlider.getValue();
         }
     }
 
@@ -946,8 +957,8 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onPutCupRaised() {
         // put a throwable cup from the machine
-        if (!cupPlaced) {
-            cupPlaced = true;
+        if (!theFSM.getCupPlaced()) {
+            theFSM.setCupPlaced(true);
             BufferedImage myPicture = null;
             try {
                 myPicture = ImageIO.read(new File("./picts/gobeletPolluant.jpg"));
@@ -967,7 +978,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onPourWaterRaised() {
         // start pouring some water
-        if (cupPlaced) {
+        if (theFSM.getCupPlaced()) {
             pouringState = true;
         }
     }
@@ -1026,6 +1037,9 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         }
         if (breadStock <= 0) {
             optionBread.setEnabled(false);
+        }
+        if (sugarStock <= 4) {
+            sugarSlider.setMaximum(sugarStock);
         }
     }
 

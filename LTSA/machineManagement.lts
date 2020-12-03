@@ -3,8 +3,8 @@ STANDBY = ( addMoney -> CheckingPayment
 		  | resetMachineInternal -> STANDBY ),
 CheckingPayment = ( paymentValidate -> Preparation
 				  | resetMachineInternal -> STANDBY
-				  | drinkSelected -> CheckingPayement
-				  | addMoney -> CheckingPayement),
+				  | drinkSelected -> CheckingPayment
+				  | addMoney -> CheckingPayment),
 
 Preparation = (step1end -> step2end -> step3end -> step4end -> Cleaning),
 

@@ -217,6 +217,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionMilk.addActionListener(e -> {
             theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
             onCheckPaymentRaised();
+            theFSM.raiseUserAction();
         });
         contentPane.add(optionMilk);
 
@@ -230,6 +231,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionBread.addActionListener(e -> {
             theFSM.setOptionDrink(((JCheckBox) e.getSource()).isSelected());
             onCheckPaymentRaised();
+            theFSM.raiseUserAction();
         });
         contentPane.add(optionBread);
 
@@ -243,6 +245,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionSugar.addActionListener(e -> {
             theFSM.setOptionSugar(((JCheckBox) e.getSource()).isSelected());
             onCheckPaymentRaised();
+            theFSM.raiseUserAction();
         });
         contentPane.add(optionSugar);
 
@@ -256,6 +259,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         optionIceCream.addActionListener(e -> {
             theFSM.setOptionIceCream(((JCheckBox) e.getSource()).isSelected());
             onCheckPaymentRaised();
+            theFSM.raiseUserAction();
         });
         contentPane.add(optionIceCream);
 
@@ -492,6 +496,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             theFSM.setCupPlaced(true);
             addCupButton.setVisible(false);
             takeCupButton.setVisible(true);
+            theFSM.raiseUserAction();
             updateMessageToUser();
         });
         contentPane.add(addCupButton);

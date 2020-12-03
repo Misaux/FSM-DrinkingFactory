@@ -67,12 +67,12 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			}
 		}
 		
-		private boolean heatReached;
+		private boolean tempReached;
 		
 		
-		public void raiseHeatReached() {
+		public void raiseTempReached() {
 			synchronized(DrinkingfactoryStatemachine.this) {
-				heatReached = true;
+				tempReached = true;
 			}
 		}
 		
@@ -653,7 +653,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 			resetMachine = false;
 			userAction = false;
 			cupGrabbed = false;
-			heatReached = false;
+			tempReached = false;
 			cupFilled = false;
 			coffeeSelected = false;
 			teaSelected = false;
@@ -1047,8 +1047,8 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		sCInterface.raiseCupGrabbed();
 	}
 	
-	public synchronized void raiseHeatReached() {
-		sCInterface.raiseHeatReached();
+	public synchronized void raiseTempReached() {
+		sCInterface.raiseTempReached();
 	}
 	
 	public synchronized void raiseCupFilled() {
@@ -2697,7 +2697,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.heatReached) {
+			if (sCInterface.tempReached) {
 				exitSequence_machine_management_Preparation_r1_step1_r2_General();
 				enterSequence_machine_management_Preparation_r1_step1_r2_sync_default();
 				machine_management_Preparation_r1_step1_react(false);
@@ -2938,7 +2938,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (sCInterface.heatReached) {
+			if (sCInterface.tempReached) {
 				exitSequence_machine_management_Preparation_r1_step4_r1_cooling1();
 				sCInterface.raiseUnlockDoor();
 				

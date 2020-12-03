@@ -47,6 +47,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private Map<String, Client> clientMap;
     private float payingAmount;
     private float promoAmount = 0;
+    int coolingTime = 0;
 
     //UI main component
     private JPanel contentPane;
@@ -669,7 +670,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         }
         if (currentHeatedWaterTemp >= currentTemperatureLevel && heaterState) {
             heaterState = false;
-            theFSM.raiseHeatReached();
+            theFSM.raiseTempReached();
         }
         updateMessageToUser();
     }
@@ -695,8 +696,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         updateMessageToUser();
     }
 
-    int coolingTime = 0;
-
     private void simulateCooling() {
         if (coolingState) {
             coolingTime += 1;
@@ -704,7 +703,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             if (coolingTime >= ((theFSM.getDrinkSize().equals("medium")) ? temperatureSlider.getValue() * 30 : temperatureSlider.getValue() * 50)) {
                 coolingTime = 0;
                 coolingState = false;
-                theFSM.raiseHeatReached();
+                theFSM.raiseTempReached();
             }
         }
     }

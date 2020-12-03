@@ -20,7 +20,7 @@ public interface IDrinkingfactoryStatemachine extends ITimerCallback,IStatemachi
 		
 		public void raiseCupGrabbed();
 		
-		public void raiseHeatReached();
+		public void raiseTempReached();
 		
 		public void raiseCupFilled();
 		

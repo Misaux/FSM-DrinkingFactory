@@ -2,7 +2,9 @@ STANDBY = ( addMoney -> CheckingPayment
 		  | drinkSelected -> CheckingPayment
 		  | resetMachineInternal -> STANDBY ),
 CheckingPayment = ( paymentValidate -> Preparation
-				  | resetMachineInternal -> STANDBY ),
+				  | resetMachineInternal -> STANDBY
+				  | drinkSelected -> CheckingPayement
+				  | addMoney -> CheckingPayement),
 
 Preparation = (step1end -> step2end -> step3end -> step4end -> Cleaning),
 
@@ -10,4 +12,4 @@ Cleaning = (after5s -> STANDBY).
 
 ||START = ( STANDBY ).
 
-assert PropStep = [] (step1end -> (<> step2end) && (<> step3end) && (<> step4end))
+assert PropStep = [] (step1end -> ([] step2end) && ([] step3end) && ([] step4end))

@@ -35,7 +35,7 @@
         <outgoingTransitions xmi:id="_dbeclQn_Eeumf_ctpfPVNg" target="_dbdOdwn_Eeumf_ctpfPVNg"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_dbdOdwn_Eeumf_ctpfPVNg" specification="entry / raise doResetMachine; raise checkStocks; progress = 0" name="Standby" incomingTransitions="_dbeclQn_Eeumf_ctpfPVNg _g6O9QAoREeuuiIvXtIA_fQ _yG4IEAoUEeuuiIvXtIA_fQ _JKITMCAMEeuRvqjSE-86QQ">
-        <outgoingTransitions xmi:id="_WzQl4AoUEeuuiIvXtIA_fQ" specification="[drinkSelected || addMoney] / raise userAction" target="_tePQYAoREeuuiIvXtIA_fQ"/>
+        <outgoingTransitions xmi:id="_WzQl4AoUEeuuiIvXtIA_fQ" specification="[drinkSelected || addMoney]" target="_tePQYAoREeuuiIvXtIA_fQ"/>
         <outgoingTransitions xmi:id="_JKITMCAMEeuRvqjSE-86QQ" specification="resetMachineInternal" target="_dbdOdwn_Eeumf_ctpfPVNg"/>
       </vertices>
       <vertices xsi:type="sgraph:State" xmi:id="_9G4vUAoIEeudecawTU06hQ" specification="entry / drinkName = &quot;none&quot;; drinkSize = &quot;none&quot;; raise doCleaning" name="Cleaning" incomingTransitions="_kDrYwCOfEeuTkabHSWpH6A">

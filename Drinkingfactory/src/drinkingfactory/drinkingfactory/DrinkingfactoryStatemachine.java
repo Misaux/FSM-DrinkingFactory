@@ -2628,8 +2628,6 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		if (try_transition) {
 			if ((drinkSelected || sCInterface.addMoney)) {
 				exitSequence_machine_management_Standby();
-				sCInterface.raiseUserAction();
-				
 				enterSequence_machine_management_checkingPayment_default();
 				react();
 			} else {

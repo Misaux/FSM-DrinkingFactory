@@ -1,15 +1,35 @@
+const N = 4
+range T = 0..N
+
+VAR = VAR[0],
+VAR[u:T] = (read[u]->VAR[u] | write[v:T]->VAR[v]).
+
+const TRUE = 1
+const FALSE = 0
+range BOOL = FALSE..TRUE
+
+BoolFunc = BoolFunc[FALSE],
+BoolFunc[i:BOOL] = (read[i]->BoolFunc[i] | write[u:BOOL] -> BoolFunc[u]).
+
+set VarAlpha = {drink.{read[T],write[T]}, cup.{read[BOOL],write[BOOL]}}
+
 STANDBY = ( addMoney -> CheckingPayment
 		  | drinkSelected -> CheckingPayment
 		  | resetMachineInternal -> STANDBY ),
 CheckingPayment = ( paymentValidate -> Preparation
-				  | resetMachineInternal -> STANDBY
-				  | drinkSelected -> CheckingPayment
-				  | addMoney -> CheckingPayment),
-
-Preparation = (step1end -> step2end -> step3end -> step4end -> Cleaning),
-
+				  | resetMachineInternal -> STANDBY),
+Preparation = (start1 -> end1 -> Cleaning),
 Cleaning = (after5s -> STANDBY).
 
-||START = ( STANDBY ).
+Step1_R1 = (start1 -> drink.read[i:T] -> (when (i == 0) after10s -> end1 -> Step1_R1 
+           | when (i == 1) end1 -> Step1_R1
+		   | when (i == 2) end1 -> Step1_R1
+		   | when (i == 3) cup.read[cupPlaced:BOOL] -> (when(cupPlaced == 0) putCup -> end1 -> Step1_R1 | end1 -> Step1_R1)
+		   | when (i == 4) end1 -> Step1_R1)).
+Step1_R2 = (start1 -> tempReached -> end1 -> Step1_R2).
 
-assert PropStep = [] (step1end -> ([] step2end) && ([] step3end) && ([] step4end))
+Payment = ( addMoney -> Payment ).
+
+||START = ( STANDBY || Payment || STEP1).
+
+||STEP1 = ( Step1_R1 || Step1_R2 ).

@@ -1478,11 +1478,11 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'configuration'. */
 	private void entryAction_drink_management_configuration() {
-		sCInterface.raiseCheckPayment();
+		sCInterface.raiseDisplayOptions();
 		
 		raiseUserActionInternal();
 		
-		sCInterface.raiseDisplayOptions();
+		sCInterface.raiseCheckPayment();
 	}
 	
 	/* Entry action for state 'configuration'. */

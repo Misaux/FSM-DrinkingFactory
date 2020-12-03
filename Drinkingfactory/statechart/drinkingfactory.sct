@@ -13,7 +13,7 @@
       <vertices xsi:type="sgraph:Entry" xmi:id="_jfCTQCOiEeuTkabHSWpH6A">
         <outgoingTransitions xmi:id="_0bHZ4COiEeuTkabHSWpH6A" specification="" target="_wQnIUCOiEeuTkabHSWpH6A"/>
       </vertices>
-      <vertices xsi:type="sgraph:State" xmi:id="_wQnIUCOiEeuTkabHSWpH6A" specification="entry / raise checkPayment; raise userActionInternal; raise displayOptions" name="configuration" incomingTransitions="_0bHZ4COiEeuTkabHSWpH6A _9iGMgCOiEeuTkabHSWpH6A _CtJ8ICOjEeuTkabHSWpH6A _IWI94COjEeuTkabHSWpH6A _EFeXADGmEeuyS7_qE9xBpQ _tnp2IDJVEeuD8rHnaXlKOg">
+      <vertices xsi:type="sgraph:State" xmi:id="_wQnIUCOiEeuTkabHSWpH6A" specification="entry / raise displayOptions; raise userActionInternal; raise checkPayment" name="configuration" incomingTransitions="_0bHZ4COiEeuTkabHSWpH6A _9iGMgCOiEeuTkabHSWpH6A _CtJ8ICOjEeuTkabHSWpH6A _IWI94COjEeuTkabHSWpH6A _EFeXADGmEeuyS7_qE9xBpQ _tnp2IDJVEeuD8rHnaXlKOg">
         <outgoingTransitions xmi:id="_9iGMgCOiEeuTkabHSWpH6A" specification="coffeeSelected / drinkName = &quot;coffee&quot;; raise drinkSelected" target="_wQnIUCOiEeuTkabHSWpH6A"/>
         <outgoingTransitions xmi:id="_CtJ8ICOjEeuTkabHSWpH6A" specification="teaSelected / drinkName = &quot;tea&quot;; raise drinkSelected" target="_wQnIUCOiEeuTkabHSWpH6A"/>
         <outgoingTransitions xmi:id="_IWI94COjEeuTkabHSWpH6A" specification="espressoSelected / drinkName = &quot;espresso&quot;; raise drinkSelected" target="_wQnIUCOiEeuTkabHSWpH6A"/>

@@ -426,6 +426,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                     break;
             }
             theFSM.raiseUserAction();
+            onCheckPaymentRaised();
         });
         sizeTable = new Hashtable<>();
         sizeTable.put(0, new JLabel("big"));

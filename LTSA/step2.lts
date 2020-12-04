@@ -7,3 +7,7 @@ Step2Tea = (endTea -> End2Drink),
 End2Drink = (joinCup -> STOP).
 Cup = (cupPlacedFalse -> STOP | cupPlacedTrue -> STOP).
 ||Start = (Step2Drink||Cup).
+
+
+assert PropExpresso = [] (step2Expresso -> (<> putBeans))
+assert PropSoup = [] (step2Soup -> (<> pourSoup && <> putSpice))

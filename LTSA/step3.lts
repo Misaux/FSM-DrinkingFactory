@@ -15,3 +15,16 @@ AddIceCream = ( afterIceCream -> EndIceCream ),
 EndIceCream = ( joinDrink -> STOP).
 				
 ||Start = (Step3Drink||SUGAR).
+
+
+assert PropSugar = [] (pourSyrupTrue -> (<> cupFilled))
+
+assert PropIceCream = [] (addIceCreamTrue -> (<> afterIceCream))
+assert PropNoIceCream = [] (addIceCreamFalse -> (<> joinDrink))
+
+assert PropExpresso = [] (expresso3 -> (<> endExpresso && <> joinWater))
+assert PropSoup = [] (soup3 -> (<> addBread && <> endSoup && <> joinWater))
+assert PropTea = [] (tea3 -> (<> smallSize || <> mediumSize || <> largeSize))
+assert PropCofee = [] (cofee3 -> (<> endCofee && <> joinWater))
+
+assert PropSmallSize = [] (smallSize -> (<> takeOffTeaBag))

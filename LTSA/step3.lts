@@ -1,45 +1,17 @@
-Step3Drink = (expresso3 -> Step3Expresso
-			 | soup3 -> Step3Soup
-			 | tea3 -> Step3Tea
-			 | cofee3 -> Step3Cofee),
-
+Step3Drink = (expresso3 -> Step3Expresso | soup3 -> Step3Soup | tea3 -> Step3Tea | cofee3 -> Step3Cofee),
 Step3Expresso = (endExpresso -> End3Drink),
-
 Step3Soup = (addBread -> BreadStep),
-
 BreadStep = (endSoup -> End3Drink),
-
-Step3Tea = (smallSize -> SmallTea
-		   | mediumSize -> MediumTea
-		   | largeSize -> LargeTea),
-
+Step3Tea = (smallSize -> SmallTea | mediumSize -> MediumTea | largeSize -> LargeTea),
 SmallTea = (takeOffTeaBag -> End3Drink),
-
 MediumTea = (takeOffTeaBag -> End3Drink),
-
 LargeTea = (takeOffTeaBag -> End3Drink),
-
-Step3Cofee (endCofee -> End3Drink),
-
-End3Drink = (joinWater -> JoinDrinkWater),
-
-
-SUGAR = ( pourSyrupTrue -> Option
-		| pourSyrupFalse -> Option),
-
+Step3Cofee = (endCofee -> End3Drink),
+End3Drink = (joinWater -> STOP).
+SUGAR = ( pourSyrupTrue -> Option | pourSyrupFalse -> Option), 
 Option = ( cupFilled -> Transition),
-Transition  = (addIceCreamTrue -> AddIceCream
-			  | addIceCreamFalse -> EndIceCream),
-
+Transition  = (addIceCreamTrue -> AddIceCream | addIceCreamFalse -> EndIceCream),
 AddIceCream = ( afterIceCream -> EndIceCream ),
-EndIceCream = ( joinDrink -> JoinDrinkWater),
-
-JoinDrinkWater = ( pourMilkTrue -> PourMilk
-				 | pourMilkFalse -> EndPourMilk),
-
-PourMilk = ( afterPourMilk -> EndPourMilk),
-EndPourMilk = ( addProgress -> STOP).
+EndIceCream = ( joinDrink -> STOP).
 				
-||WaterAndDrinks = (Step3Drink||SUGAR).
-
-||Start = (SUGAR).
+||Start = (Step3Drink||SUGAR).

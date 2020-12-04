@@ -1,1 +1,9 @@
-A
+Step2Drink = (step2Expresso -> Step2Expresso | step2Cofee -> Step2Cofee | step2Soup -> Step2Soup | step2Tea -> Step2Tea),
+Step2Expresso = (putBeans -> End2Drink),
+Step2Cofee = (endCofee -> End2Drink),
+Step2Soup = (pourSoup -> SoupPouring),
+SoupPouring = (putSpice -> End2Drink),
+Step2Tea = (endTea -> End2Drink),
+End2Drink = (joinCup -> STOP).
+Cup = (cupPlacedFalse -> STOP | cupPlacedTrue -> STOP).
+||Start = (Step2Drink||Cup).

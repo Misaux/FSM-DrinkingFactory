@@ -33,6 +33,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private boolean coolingState = false;
     private int count = 0;
     private boolean cardBiped = false;
+    private boolean usersCup = false;
     private Hashtable<Integer, JLabel> temperatureTable;
     private Hashtable<Integer, JLabel> freshnessTable;
     private Hashtable<Integer, JLabel> sizeTable;
@@ -88,6 +89,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     private int syrupStock = 5;
     private int vanillaStock = 2;
     private int sugarStock = 10;
+    private int spiceStock = 6;
 
     /**
      * @wbp.nonvisual location=311,475
@@ -126,7 +128,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         }};
 
         // for test purpose
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 8; i++) {
             clientMap.get("test").getPromo(0.35f);
         }
 
@@ -486,6 +488,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         addCupButton.setBackground(Color.DARK_GRAY);
         addCupButton.setBounds(45, 336, 96, 25);
         addCupButton.addActionListener(e -> {
+            usersCup = true;
             BufferedImage myPicture = null;
             try {
                 myPicture = ImageIO.read(new File("./picts/ownCup.jpg"));
@@ -739,7 +742,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         currentPicture.setIcon(new ImageIcon(emptyPicture));
         if (currentWaterVolume > 1) {
             currentWaterVolume = 0;
-            System.out.println("poured watered");
             theFSM.raiseCupGrabbed();
         } else {
             addCupButton.setVisible(true);
@@ -814,7 +816,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
             syrupStock--;
         }
         else {
-            sugarStock -= sugarSlider.getValue();
+            if (currentDrinkSelected != Drink.Soup) {
+                sugarStock -= sugarSlider.getValue();
+            }
+            else {
+                spiceStock -= sugarSlider.getValue();
+            }
         }
     }
 
@@ -837,6 +844,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionBread.setSelected(false);
                 sizeSlider.setMaximum(2);
                 temperatureSlider.setLabelTable(temperatureTable);
+                if (sugarStock <= 4){
+                    sugarSlider.setMaximum(sugarStock);
+                }
+                else {
+                    sugarSlider.setMaximum(4);
+                }
                 break;
             case Tea:
                 lblSugar.setText("Sugar");
@@ -844,6 +857,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionMilk.setVisible(true);
                 optionBread.setVisible(false);
                 optionSugar.setVisible(true);
+                if (sugarStock <= 4){
+                    sugarSlider.setMaximum(sugarStock);
+                }
+                else {
+                    sugarSlider.setMaximum(4);
+                }
                 optionIceCream.setVisible(false);
                 optionMilk.setSelected(false);
                 optionSugar.setSelected(false);
@@ -865,7 +884,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionBread.setSelected(false);
                 sizeSlider.setMaximum(2);
                 temperatureSlider.setLabelTable(temperatureTable);
-
+                if (spiceStock <= 4){
+                    sugarSlider.setMaximum(spiceStock);
+                }
+                else {
+                    sugarSlider.setMaximum(4);
+                }
                 break;
             case IcedTea:
                 lblSugar.setText("Sugar");
@@ -878,6 +902,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionSugar.setSelected(false);
                 optionIceCream.setSelected(false);
                 optionBread.setSelected(false);
+                if (sugarStock <= 4){
+                    sugarSlider.setMaximum(sugarStock);
+                }
+                else {
+                    sugarSlider.setMaximum(4);
+                }
                 sizeSlider.setMaximum(1);
                 temperatureSlider.setLabelTable(freshnessTable);
                 break;
@@ -887,6 +917,12 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
                 optionIceCream.setSelected(false);
                 sizeSlider.setMaximum(2);
                 optionBread.setSelected(false);
+                if (sugarStock <= 4){
+                    sugarSlider.setMaximum(sugarStock);
+                }
+                else {
+                    sugarSlider.setMaximum(4);
+                }
                 break;
         }
     }
@@ -906,6 +942,7 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
         payingAmount = 0;
         promoAmount = 0;
         cardBiped = false;
+        usersCup = false;
         currentDrinkSelected = null;
         preparationInProgress(false);
         optionMilk.setSelected(false);
@@ -963,7 +1000,6 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     public void onPutCupRaised() {
         // put a throwable cup from the machine
         if (!theFSM.getCupPlaced()) {
-            theFSM.setCupPlaced(true);
             BufferedImage myPicture = null;
             try {
                 myPicture = ImageIO.read(new File("./picts/gobeletPolluant.jpg"));
@@ -1081,11 +1117,32 @@ public class DrinkFactoryMachine extends JFrame implements IDrinkingfactoryState
     @Override
     public void onLockDoorRaised() {
         // lock the door before cooling
+        BufferedImage myPicture = null;
+        try {
+            myPicture = ImageIO.read(new File("./picts/Stainless-Steel-Doors-2.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentPicture.setIcon(new ImageIcon(myPicture));
+        takeCupButton.setVisible(false);
     }
 
     @Override
     public void onUnlockDoorRaised() {
         // unlock the door after cooling
+        BufferedImage myPicture = null;
+        try {
+            if (usersCup) {
+                myPicture = ImageIO.read(new File("./picts/ownCup.jpg"));
+            }
+            else {
+                myPicture = ImageIO.read(new File("./picts/gobeletPolluant.jpg"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        currentPicture.setIcon(new ImageIcon(myPicture));
+        takeCupButton.setVisible(false);
     }
 
     @Override

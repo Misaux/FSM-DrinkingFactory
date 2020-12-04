@@ -769,7 +769,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		clearOutEvents();
 		sCInterface.setDrinkName("");
 		
-		sCInterface.setDrinkSize("");
+		sCInterface.setDrinkSize("medium");
 		
 		sCInterface.setOptionDrink(false);
 		
@@ -1505,7 +1505,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 		
 		sCInterface.setDrinkName("none");
 		
-		sCInterface.setDrinkSize("none");
+		sCInterface.setDrinkSize("medium");
 		
 		sCInterface.raiseDoCleaning();
 	}
@@ -1519,7 +1519,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'sync'. */
 	private void entryAction_machine_management_Preparation_r1_step1_r1_sync() {
-		sCInterface.setProgress(sCInterface.getProgress() + 15);
+		sCInterface.setProgress(sCInterface.getProgress() + 10);
 	}
 	
 	/* Entry action for state 'General'. */
@@ -1529,12 +1529,12 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'sync'. */
 	private void entryAction_machine_management_Preparation_r1_step1_r2_sync() {
-		sCInterface.setProgress(sCInterface.getProgress() + 15);
+		sCInterface.setProgress(sCInterface.getProgress() + 10);
 	}
 	
 	/* Entry action for state 'sync'. */
 	private void entryAction_machine_management_Preparation_r1_step2_r1_sync() {
-		sCInterface.setProgress(sCInterface.getProgress() + 30);
+		sCInterface.setProgress(sCInterface.getProgress() + 20);
 	}
 	
 	/* Entry action for state 'General'. */
@@ -1553,7 +1553,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	
 	/* Entry action for state 'sync'. */
 	private void entryAction_machine_management_Preparation_r1_step3_r1_sync() {
-		sCInterface.setProgress(sCInterface.getProgress() + 10);
+		sCInterface.setProgress(sCInterface.getProgress() + 15);
 	}
 	
 	/* Entry action for state 'tea2_small'. */
@@ -1592,7 +1592,7 @@ public class DrinkingfactoryStatemachine implements IDrinkingfactoryStatemachine
 	private void entryAction_machine_management_Preparation_r1_step4_r1_cooling1() {
 		sCInterface.raiseNitrogenInjection();
 		
-		sCInterface.setProgress(95);
+		sCInterface.setProgress(sCInterface.getProgress() + 10);
 	}
 	
 	/* Entry action for state 'sync'. */

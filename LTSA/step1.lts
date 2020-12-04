@@ -1,0 +1,23 @@
+const TRUE = 1
+const FALSE = 0
+range BOOL = FALSE..TRUE
+
+BoolFunc = BoolFunc[FALSE],
+BoolFunc[i:BOOL] = (read[i]->BoolFunc[i] | write[u:BOOL] -> BoolFunc[u]).
+
+set VarAlpha = {cup.{read[BOOL],write[BOOL]}}
+
+Step1Drink = ( step1Expresso -> Step1Expresso
+			 | step1Coffe -> Step1Coffee
+			 | step1Soup -> Step1Soup
+			 | step1Tea -> Step1Tea
+			 | step1IcedTea -> Step1IcedTea),
+
+Step1Expresso = ( grindBeans -> after10s -> STOP),
+Step1Coffee = ( takeCoffeePod -> STOP),
+Step1Soup = ( cup.read[cupPlaced:BOOL] -> (when(cupPlaced == 0) putCup -> STOP)),
+Step1IcedTea = (takeTeaBag -> STOP),
+Step1Tea = ( takeTeaBag -> STOP).
+HeatWater = ( heatWater -> tempReached -> STOP).
+
+||START = ( Step1Drink || HeatWater ).

@@ -1,0 +1,15 @@
+Step4 = (tea4 -> Tea4
+		| transition -> MilkState),
+
+Tea4 = (lockDoor -> Cooling),
+Cooling = (unlockDoor -> MilkState),
+
+MilkState = ( pourMilk -> AfterMilk
+			| endStep4 -> EndStep4),
+AfterMilk = (endStep4 -> EndStep4),
+EndStep4 = (takeCup -> STOP).
+				
+||Start = (Step4).
+
+assert PropTea = [] (tea4 -> (<> lockDoor && <> unlockDoor))
+assert PropMilk = [] (pourMilk -> (<> endStep4 && <> takeCup))

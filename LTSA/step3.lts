@@ -21,6 +21,7 @@ assert PropSugar = [] (pourSyrupTrue -> (<> cupFilled))
 
 assert PropIceCream = [] (addIceCreamTrue -> (<> afterIceCream))
 assert PropNoIceCream = [] (addIceCreamFalse -> (<> joinDrink))
+assert PropSafetyIceCream = [] (addIceCreamFalse -> (!afterIceCream))
 
 assert PropExpresso = [] (expresso3 -> (<> endExpresso && <> joinWater))
 assert PropSoup = [] (soup3 -> (<> addBread && <> endSoup && <> joinWater))

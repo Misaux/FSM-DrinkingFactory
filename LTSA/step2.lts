@@ -10,4 +10,5 @@ Cup = (cupPlacedFalse -> STOP | cupPlacedTrue -> STOP).
 
 
 assert PropExpresso = [] (step2Expresso -> (<> putBeans))
+assert PropNoExpresso = [] (step2Cofee -> (! putBeans))
 assert PropSoup = [] (step2Soup -> (<> pourSoup && <> putSpice))
